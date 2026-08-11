@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة الحياة الواقعية</title>
+    <title>محاكي الحياة الواقعية - مطحس</title>
     <style>
         body {
-            background-color: #0e1117;
+            background-color: #0b0f19;
             color: #ffffff;
             font-family: Tahoma, sans-serif;
             margin: 0;
@@ -16,201 +16,270 @@
             height: 100vh;
             overflow: hidden;
         }
-        .room-container {
-            width: 850px;
-            height: 550px;
-            background: #161b22;
-            border: 3px solid #30363d;
-            border-radius: 20px;
+        .game-wrapper {
+            width: 900px;
+            height: 600px;
+            background: #111827;
+            border: 3px solid #1f2937;
+            border-radius: 16px;
             display: flex;
             position: relative;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.9);
         }
-        /* العدادات الطولية على الجوانب */
-        .side-panel {
-            width: 120px;
-            background: #21262d;
+        /* عدادات المزاج والطاقة الطولية على الجوانب */
+        .gauge-sidebar {
+            width: 110px;
+            background: #1f2937;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-around;
-            border-left: 2px solid #30363d;
-            border-right: 2px solid #30363d;
+            justify-content: center;
+            gap: 10px;
         }
-        .gauge-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-        .vertical-bar {
-            width: 20px;
-            height: 150px;
-            background: #0d1117;
+        .vertical-track {
+            width: 18px;
+            height: 180px;
+            background: #0b0f19;
             border-radius: 10px;
             overflow: hidden;
             display: flex;
             flex-direction: column-reverse;
-            border: 1px solid #484f58;
+            border: 1px solid #374151;
         }
-        .fill {
+        .fill-bar {
             width: 100%;
-            background: #238636;
-            transition: height 0.3s;
+            background: #10b981;
+            transition: height 0.2s;
         }
-        /* الشخصية ومنتصف الشاشة */
-        .center-stage {
+        /* الشاشة الرئيسية (العرض في النص + القوائم الجانبية) */
+        .main-display {
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 15px;
+            justify-content: space-between;
+        }
+        .screen-box {
+            flex: 1;
+            background: #0b0f19;
+            border: 2px solid #1f2937;
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 25px;
-            gap: 20px;
-        }
-        .character-avatar {
-            width: 140px;
-            height: 140px;
-            background: #30363d;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 60px;
-            border: 4px solid #58a6ff;
-            box-shadow: 0 0 20px rgba(88, 166, 255, 0.3);
-        }
-        .dialogue-box {
-            width: 100%;
-            background: #0d1117;
-            border: 2px solid #30363d;
-            border-radius: 12px;
-            padding: 18px;
-            font-size: 18px;
+            position: relative;
+            padding: 20px;
             text-align: center;
-            min-height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #c9d1d9;
         }
-        /* الأزرار والأماكن (الثلاجة، الجوال، إلخ) */
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+        /* محتوى العرض الثابت (صور / نصوص واضحة) */
+        .visual-content {
+            font-size: 70px;
+            margin-bottom: 10px;
+        }
+        .visual-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #60a5fa;
+            margin-bottom: 5px;
+        }
+        .visual-desc {
+            font-size: 15px;
+            color: #9ca3af;
+            max-width: 500px;
+        }
+        /* لوحة خيارات الجوال (تظهر فقط عند فتح الجوال) */
+        .phone-menu {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
             width: 100%;
+            max-width: 350px;
+            margin-top: 10px;
         }
-        .action-btn {
-            background: #21262d;
-            color: #58a6ff;
-            border: 2px solid #30363d;
-            padding: 12px;
+        .phone-btn {
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .phone-btn:hover {
+            background: #2563eb;
+        }
+        /* الأزرار الأساسية تحت */
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            height: 60px;
+        }
+        .ctrl-btn {
+            background: #1f2937;
+            color: #ffffff;
+            border: 2px solid #374151;
             border-radius: 10px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
             transition: 0.2s;
-            text-align: center;
         }
-        .action-btn:hover {
-            background: #30363d;
-            border-color: #58a6ff;
-            color: #ffffff;
+        .ctrl-btn:hover {
+            background: #374151;
+            border-color: #60a5fa;
+            color: #60a5fa;
         }
     </style>
 </head>
 <body>
 
-<div class="room-container">
-    <!-- عداد الطاقة الطولي على اليسار -->
-    <div class="side-panel">
-        <div class="gauge-box">
-            <span>⚡ الطاقة</span>
-            <div class="vertical-bar">
-                <div class="fill" id="energyFill" style="height: 80%;"></div>
+<div class="game-wrapper">
+    <!-- طاقة الجسم (يسار) -->
+    <div class="gauge-sidebar">
+        <span style="font-size: 13px;">⚡ الطاقة</span>
+        <div class="vertical-track">
+            <div class="fill-bar" id="energyFill" style="height: 85%;"></div>
+        </div>
+        <strong id="energyNum" style="font-size: 14px;">85%</strong>
+    </div>
+
+    <!-- الشاشة المركزية -->
+    <div class="main-display">
+        <div class="screen-box" id="screenBox">
+            <!-- العرض الافتراضي: الرجال جالس على الكنبة -->
+            <div id="defaultView">
+                <div class="visual-content">🛋️👨🏻</div>
+                <div class="visual-title">الجلسة في الصالة</div>
+                <div class="visual-desc">الرجل جالس مرتاح على الكنبة. اختر أحد الأماكن أو الأدوات من الأسفل للتفاعل.</div>
             </div>
-            <strong id="energyText">80%</strong>
+
+            <!-- لوحة الجوال وقائمة الخيارات -->
+            <div id="phoneView" style="display: none; width: 100%;">
+                <div class="visual-content" style="font-size: 50px;">📱</div>
+                <div class="visual-title" id="phoneTitle">شاشة الجوال</div>
+                <div class="visual-desc" id="phoneDesc" style="margin-bottom: 15px;">اختر التطبيق المطلوب من القائمة:</div>
+                <div class="phone-menu" id="phoneMenu" style="display: flex;">
+                    <button class="phone-btn" onclick="openBank()">🏦 البنك (رصيد الحساب)</button>
+                    <button class="phone-btn" onclick="openMessages()">💬 الرسائل</button>
+                    <button class="phone-btn" onclick="closePhoneView()">⬅️ الرجوع للوضع العادي</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- الأزرار الرئيسية -->
+        <div class="controls-grid">
+            <button class="ctrl-btn" onclick="showSofa()">🛋️ الكنبة</button>
+            <button class="ctrl-btn" onclick="showPhoneHome()">📱 الجوال</button>
+            <button class="ctrl-btn" onclick="showFridge()">🧊 الثلاجة</button>
+            <button class="ctrl-btn" onclick="showCars()">🚗 المعارض</button>
         </div>
     </div>
 
-    <!-- منطقة الشخصية والأحداث في المنتصف -->
-    <div class="center-stage">
-        <div class="character-avatar" id="avatarIcon">👨🏻‍🦱</div>
-        <div class="dialogue-box" id="gameText">
-            أهلاً بك يا طويل العمر. توك راجع البيت وتعبان، وش تبغى تسوي الحين؟ اختر المكان المناسب:
+    <!-- المزاج العام (يمين) -->
+    <div class="gauge-sidebar">
+        <span style="font-size: 13px;">🧠 المزاج</span>
+        <div class="vertical-track">
+            <div class="fill-bar" id="moodFill" style="height: 75%; background: #3b82f6;"></div>
         </div>
-        
-        <div class="action-grid" id="actionGrid">
-            <button class="action-btn" onclick="openFridge()">🧊 الثلاجة (أكل)</button>
-            <button class="action-btn" onclick="openPhone()">📱 الجوال (تواصل)</button>
-            <button class="action-btn" onclick="openTable()">☕ الطاولة (روقان)</button>
-            <button class="action-btn" onclick="openCar()">🚗 المعارض (طلعة)</button>
-        </div>
-    </div>
-
-    <!-- عداد المزاج الطولي على اليمين -->
-    <div class="side-panel">
-        <div class="gauge-box">
-            <span>🧠 المزاج</span>
-            <div class="vertical-bar">
-                <div class="fill" id="moodFill" style="height: 70%; background: #1f6feb;"></div>
-            </div>
-            <strong id="moodText">70%</strong>
-        </div>
+        <strong id="moodNum" style="font-size: 14px;">75%</strong>
     </div>
 </div>
 
 <script>
-    let stats = {
-        energy: 80,
-        mood: 70
+    let state = {
+        energy: 85,
+        mood: 75,
+        balance: 4250 // الفلوس بالريال
     };
 
-    function updateGauges() {
-        if(stats.energy > 100) stats.energy = 100;
-        if(stats.energy < 0) stats.energy = 0;
-        if(stats.mood > 100) stats.mood = 100;
-        if(stats.mood < 0) stats.mood = 0;
-
-        document.getElementById('energyFill').style.height = stats.energy + '%';
-        document.getElementById('energyText').innerText = stats.energy + '%';
-        
-        document.getElementById('moodFill').style.height = stats.mood + '%';
-        document.getElementById('moodText').innerText = stats.mood + '%';
+    function updateUI() {
+        document.getElementById('energyFill').style.height = state.energy + '%';
+        document.getElementById('energyNum').innerText = state.energy + '%';
+        document.getElementById('moodFill').style.height = state.mood + '%';
+        document.getElementById('moodNum').innerText = state.mood + '%';
     }
 
-    function openFridge() {
-        stats.energy += 15;
-        stats.mood += 5;
-        updateGauges();
-        document.getElementById('avatarIcon').innerText = '🍔';
-        document.getElementById('gameText').innerText = "فتحْت الثلاجة ولقيت أكل خفيف ولذيذ، تغديت وشحنت طاقتك شوي!";
+    function resetScreen() {
+        document.getElementById('defaultView').style.display = 'block';
+        document.getElementById('phoneView').style.display = 'none';
     }
 
-    function openPhone() {
-        stats.energy -= 10;
-        stats.mood += 20;
-        updateGauges();
-        document.getElementById('avatarIcon').innerText = '📱';
-        document.getElementById('gameText').innerText = "مسكت جوالك ودقيت على خويك تسولف معه وتغير جو، تعدل مزاجك وصرت رايق.";
+    // 1. الكنبة / القهوة
+    function showSofa() {
+        resetScreen();
+        state.mood += 5;
+        if(state.mood > 100) state.mood = 100;
+        updateUI();
+        document.getElementById('defaultView').innerHTML = `
+            ☕👨🏻
+            <div class="visual-title">جلسة رايقة مع القهوة</div>
+            <div class="visual-desc">الرجل جالس على الكنبة وماسك كوب القهوة بيده يروق بهدوء تام.</div>
+        `;
     }
 
-    function openTable() {
-        stats.energy -= 5;
-        stats.mood += 15;
-        updateGauges();
-        document.getElementById('avatarIcon').innerText = '☕';
-        document.getElementById('gameText').innerText = "صلحت لك قهوة مضبوطة وقعدت على الطاولة تروق وتفكر بهدوء.";
+    // 2. الجوال والقوائم
+    function showPhoneHome() {
+        document.getElementById('defaultView').style.display = 'none';
+        document.getElementById('phoneView').style.display = 'flex';
+        document.getElementById('phoneTitle').innerText = 'شاشة الجوال';
+        document.getElementById('phoneDesc').innerText = 'اختر التطبيق المطلوب:';
+        document.getElementById('phoneMenu').innerHTML = `
+            <button class="phone-btn" onclick="openBank()">🏦 البنك (رصيد الحساب)</button>
+            <button class="phone-btn" onclick="openMessages()">💬 الرسائل</button>
+            <button class="phone-btn" onclick="resetScreen(); showSofa();">⬅️ إغلاق الجوال</button>
+        `;
     }
 
-    function openCar() {
-        stats.energy -= 20;
-        stats.mood += 25;
-        updateGauges();
-        document.getElementById('avatarIcon').innerText = '🚗';
-        document.getElementById('gameText').innerText = "طلعت المعارض وتمشيت بالسيارة أخذت فرة وشميت هوا، الجو كان خيال!";
+    function openBank() {
+        document.getElementById('phoneTitle').innerText = 'تطبيق البنك';
+        document.getElementById('phoneDesc').innerHTML = `💳 رصيدك الحالي في الحساب:<br><strong style="font-size: 22px; color: #10b981;">${state.balance} ريال</strong>`;
+        document.getElementById('phoneMenu').innerHTML = `
+            <button class="phone-btn" onclick="showPhoneHome()">🔙 رجوع لقائمة الجوال</button>
+        `;
+    }
+
+    function openMessages() {
+        document.getElementById('phoneTitle').innerText = 'الرسائل النصية';
+        document.getElementById('phoneDesc').innerText = 'لا توجد رسائل جديدة، الصندوق نظيف.';
+        document.getElementById('phoneMenu').innerHTML = `
+            <button class="phone-btn" onclick="showPhoneHome()">🔙 رجوع لقائمة الجوال</button>
+        `;
+    }
+
+    function closePhoneView() {
+        resetScreen();
+        showSofa();
+    }
+
+    // 3. الثلاجة (أكل متنوع)
+    function showFridge() {
+        resetScreen();
+        state.energy += 10;
+        if(state.energy > 100) state.energy = 100;
+        updateUI();
+        document.getElementById('defaultView').innerHTML = `
+            🥗🥛🍎
+            <div class="visual-title">الثلاجة المليانة</div>
+            <div class="visual-desc">ثلاجة كاملة تحتوي على خيارات متنوعة وصحية: فواكه طازجة، سلطة، وخيارات خفيفة ومفيدة. أكلت وشحنت طاقتك!</div>
+        `;
+    }
+
+    // 4. المعارض (سيارات)
+    function showCars() {
+        resetScreen();
+        state.mood += 10;
+        if(state.mood > 100) state.mood = 100;
+        updateUI();
+        document.getElementById('defaultView').innerHTML = `
+            🚗🚙🚘
+            <div class="visual-title">معرض السيارات</div>
+            <div class="visual-desc">تتفرج على مجموعة سيارات متنوعة ومعروضة قدامك على الشاشة لتحديد سيارة الأحلام.</div>
+        `;
     }
 </script>
 
