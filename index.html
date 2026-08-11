@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاكي الحياة - نظام مطحس</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Tahoma, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .os-container {
+            width: 800px;
+            height: 500px;
+            background: #1e1e1e;
+            border: 3px solid #333;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+        .header {
+            background: #252526;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #333;
+        }
+        .stats {
+            display: flex;
+            gap: 15px;
+            font-size: 14px;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .log-box {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 8px;
+            height: 150px;
+            overflow-y: auto;
+            font-size: 14px;
+            border: 1px solid #444;
+        }
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        button {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #005999;
+        }
+    </style>
+</head>
+<body>
+
+<div class="os-container">
+    <div class="header">
+        <h3>نظام مطحس OS</h3>
+        <div class="stats">
+            <span>العمر: <strong id="age">14</strong> سنة</span>
+            <span>الفلوس: <strong id="money">100</strong> ريال</span>
+            <span>الصحة: <strong id="health">100</strong>%</span>
+        </div>
+    </div>
+    
+    <div class="content">
+        <div class="log-box" id="logBox">
+            أهلاً بك يا مطحس في محاكي الحياة! ابدأ اختياراتك من الأزرار تحت.
+        </div>
+        
+        <div class="actions">
+            <button onclick="doAction('work')">روح اشتغل / ادرس</button>
+            <button onclick="doAction('sleep')">نام وريح</button>
+            <button onclick="doAction('play')">العب إكس بوكس</button>
+            <button onclick="doAction('eat')">كل وجبة</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let stats = {
+        age: 14,
+        money: 100,
+        health: 100
+    };
+
+    function updateUI() {
+        document.getElementById('age').innerText = stats.age;
+        document.getElementById('money').innerText = stats.money;
+        document.getElementById('health').innerText = stats.health;
+    }
+
+    function log(message) {
+        const box = document.getElementById('logBox');
+        box.innerHTML += `<br>• ${message}`;
+        box.scrollTop = box.scrollHeight;
+    }
+
+    function doAction(type) {
+        if (type === 'work') {
+            stats.money += 50;
+            stats.health -= 5;
+            log("اشتغلت وتعبت شوي، بس ربحت 50 ريال!");
+        } else if (type === 'sleep') {
+            stats.health = Math.min(100, stats.health + 20);
+            log("نمت وصحتك صارت ممتازة.");
+        } else if (type === 'play') {
+            stats.money -= 10;
+            log("لعبت إكس بوكس وونست نفسك (راحت 10 ريال).");
+        } else if (type === 'eat') {
+            stats.money -= 15;
+            stats.health = Math.min(100, stats.health + 10);
+            log("كلت وجبة بروست محترمة وصحتك تحسنت.");
+        }
+        updateUI();
+    }
+</script>
+
+</body>
+</html>
