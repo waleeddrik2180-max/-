@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محاكي الحياة - نظام مطحس</title>
+    <title>لعبة القرارات الواقعية</title>
     <style>
         body {
-            background-color: #121212;
-            color: #ffffff;
+            background-color: #0d1117;
+            color: #c9d1d9;
             font-family: Tahoma, sans-serif;
             margin: 0;
             display: flex;
@@ -15,129 +15,154 @@
             align-items: center;
             height: 100vh;
         }
-        .os-container {
-            width: 800px;
-            height: 500px;
-            background: #1e1e1e;
-            border: 3px solid #333;
-            border-radius: 12px;
+        .game-card {
+            width: 750px;
+            background: #161b22;
+            border: 2px solid #30363d;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
             display: flex;
             flex-direction: column;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            overflow: hidden;
+            gap: 25px;
         }
-        .header {
-            background: #252526;
-            padding: 10px 20px;
+        .status-bar {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #333;
-        }
-        .stats {
-            display: flex;
-            gap: 15px;
-            font-size: 14px;
-        }
-        .content {
-            flex: 1;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .log-box {
-            background: #2d2d2d;
-            padding: 15px;
+            justify-content: space-around;
+            background: #21262d;
+            padding: 12px;
             border-radius: 8px;
-            height: 150px;
-            overflow-y: auto;
-            font-size: 14px;
-            border: 1px solid #444;
+            font-size: 16px;
+            font-weight: bold;
+            border: 1px solid #30363d;
         }
-        .actions {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+        .story-box {
+            background: #0d1117;
+            padding: 25px;
+            border-radius: 10px;
+            min-height: 110px;
+            font-size: 18px;
+            line-height: 1.6;
+            border: 1px solid #30363d;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
         button {
-            background: #007acc;
+            background: #238636;
             color: white;
             border: none;
-            padding: 12px;
-            border-radius: 6px;
+            padding: 15px;
+            border-radius: 8px;
             font-size: 16px;
             cursor: pointer;
             transition: 0.2s;
+            font-weight: bold;
+            text-align: right;
         }
         button:hover {
-            background: #005999;
+            background: #2ea043;
+        }
+        button.secondary {
+            background: #1f6feb;
+        }
+        button.secondary:hover {
+            background: #388bfd;
         }
     </style>
 </head>
 <body>
 
-<div class="os-container">
-    <div class="header">
-        <h3>نظام مطحس OS</h3>
-        <div class="stats">
-            <span>العمر: <strong id="age">14</strong> سنة</span>
-            <span>الفلوس: <strong id="money">100</strong> ريال</span>
-            <span>الصحة: <strong id="health">100</strong>%</span>
-        </div>
+<div class="game-card">
+    <!-- مؤشرات الحالة (المزاج والطاقة) -->
+    <div class="status-bar">
+        <span>🧠 المزاج العام: <strong id="mood">80</strong>%</span>
+        <span>⚡ الطاقة: <strong id="energy">90</strong>%</span>
     </div>
     
-    <div class="content">
-        <div class="log-box" id="logBox">
-            أهلاً بك يا مطحس في محاكي الحياة! ابدأ اختياراتك من الأزرار تحت.
-        </div>
-        
-        <div class="actions">
-            <button onclick="doAction('work')">روح اشتغل / ادرس</button>
-            <button onclick="doAction('sleep')">نام وريح</button>
-            <button onclick="doAction('play')">العب إكس بوكس</button>
-            <button onclick="doAction('eat')">كل وجبة</button>
-        </div>
+    <!-- صندوق القصة والشخصية -->
+    <div class="story-box" id="storyText">
+        جارِ تحميل القصة...
+    </div>
+    
+    <!-- الأزرار والخيارات -->
+    <div class="choices" id="choicesBox">
+        <!-- تتعبأ تلقائياً بالبرمجة -->
     </div>
 </div>
 
 <script>
     let stats = {
-        age: 14,
-        money: 100,
-        health: 100
+        mood: 80,
+        energy: 90
     };
 
-    function updateUI() {
-        document.getElementById('age').innerText = stats.age;
-        document.getElementById('money').innerText = stats.money;
-        document.getElementById('health').innerText = stats.health;
-    }
-
-    function log(message) {
-        const box = document.getElementById('logBox');
-        box.innerHTML += `<br>• ${message}`;
-        box.scrollTop = box.scrollHeight;
-    }
-
-    function doAction(type) {
-        if (type === 'work') {
-            stats.money += 50;
-            stats.health -= 5;
-            log("اشتغلت وتعبت شوي، بس ربحت 50 ريال!");
-        } else if (type === 'sleep') {
-            stats.health = Math.min(100, stats.health + 20);
-            log("نمت وصحتك صارت ممتازة.");
-        } else if (type === 'play') {
-            stats.money -= 10;
-            log("لعبت إكس بوكس وونست نفسك (راحت 10 ريال).");
-        } else if (type === 'eat') {
-            stats.money -= 15;
-            stats.health = Math.min(100, stats.health + 10);
-            log("كلت وجبة بروست محترمة وصحتك تحسنت.");
+    // سيناريوهات اللعبة الواقعية الهادئة
+    const scenes = [
+        {
+            text: "رجعت البيت متأخر والدوام كرفك كرف، والمدام جهزت العشاء بس زعلانة شوي ليش تأخرت. وش بتسوي؟",
+            choices: [
+                { text: "تعتذر منها وتجلس تسولف معها وتتعشى بهدوء.", mood: +15, energy: -10, next: 1 },
+                { text: "تقول لها أنا تعبان وتدخل تنام فوراً بدون كلام.", mood: -20, energy: +20, next: 2 }
+            ]
+        },
+        {
+            ,
+            text: "الصباح بدري، جوالك يدق مزعج وأنت وراك مشوار مهم لإصلاح مكيف الصالة الحار. كيف تبدأ يومك؟",
+            choices: [
+                { text: "تقوم بنشاط وتصلح المكيف عشان تروق البيت.", mood: +10, energy: -20, next: 2 },
+                { text: "تطنيش وترجع تغطي وجهك وتكمل نومك.", mood: -10, energy: +15, next: 0 }
+            ]
+        },
+        {
+            text: "الجو رايق بالليل وقررت تفتح طاقة الفلل شوي وتجلس مع نفسك تضبط امورك وتخطط للأسبوع.",
+            choices: [
+                { text: "تقعد تفكر بهدوء وتشرب قهوة مضبوطة.", mood: +20, energy: -5, next: 0 },
+                { text: "تشغل إكس بوكس وتغير جو شوي تفصل عن التفكير.", mood: +25, energy: -15, next: 1 }
+            ]
         }
-        updateUI();
+    ];
+
+    let currentScene = 0;
+
+    function updateGame() {
+        // حماية الحدود عشان ما تصفّر الأرقام مرة
+        if (stats.mood > 100) stats.mood = 100;
+        if (stats.mood < 0) stats.mood = 0;
+        if (stats.energy > 100) stats.energy = 100;
+        if (stats.energy < 0) stats.energy = 0;
+
+        document.getElementById('mood').innerText = stats.mood;
+        document.getElementById('energy').innerText = stats.energy;
+
+        const scene = scenes[currentScene];
+        document.getElementById('storyText').innerText = scene.text;
+
+        const choicesBox = document.getElementById('choicesBox');
+        choicesBox.innerHTML = '';
+
+        scene.choices.forEach((choice, index) => {
+            const btn = document.createElement('button');
+            btn.innerText = `• ${choice.text}`;
+            if(index === 1) btn.className = 'secondary';
+            btn.onclick = () => {
+                stats.mood += choice.mood;
+                stats.energy += choice.energy;
+                currentScene = choice.next;
+                updateGame();
+            };
+            choicesBox.appendChild(btn);
+        });
     }
+
+    // تشغيل اللعبة لأول مرة
+    updateGame();
 </script>
 
 </body>
