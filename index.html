@@ -1,1 +1,243 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أمواج الخليج - مطاعم ومطابخ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        header {
+            background-color: #000000;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #b81414;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .logo h1 { color: #fff; font-size: 26px; font-weight: bold; }
+        .logo span { color: #ff4d4d; display: block; font-size: 14px; font-weight: normal; }
+        
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1599599810692-b5a65d625a0c?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover; background-position: center;
+            height: 60vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center; padding: 20px;
+        }
+        .hero h2 { font-size: 40px; margin-bottom: 10px; }
+        .hero h2 span { color: #ff4d4d; }
+        .hero p { font-size: 16px; max-width: 500px; color: #ddd; margin-bottom: 25px; }
+        
+        .btn-group { display: flex; gap: 15px; }
+        .btn {
+            background-color: #b81414; color: white; padding: 12px 28px;
+            border: none; border-radius: 5px; font-size: 16px; cursor: pointer;
+            text-decoration: none; transition: 0.3s; font-weight: bold;
+        }
+        .btn:hover { background-color: #ff4d4d; transform: translateY(-2px); }
+        .btn-alt { background-color: transparent; border: 2px solid #b81414; }
+        .btn-alt:hover { background-color: #b81414; }
 
+        .menu-section { padding: 50px 20px; max-width: 1100px; margin: 0 auto; }
+        .category { margin-bottom: 40px; }
+        .category-title {
+            font-size: 28px; color: #fff; border-right: 5px solid #b81414;
+            padding-right: 15px; margin-bottom: 20px; display: inline-block;
+        }
+        .menu-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+        .menu-item {
+            background-color: #000; border-radius: 8px; padding: 15px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            border: 1px solid #333; transition: 0.3s;
+        }
+        .menu-item:hover { transform: translateY(-5px); border-color: #ff4d4d; }
+        .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .item-name { font-size: 18px; font-weight: bold; color: #fff; }
+        .item-price { font-size: 18px; font-weight: bold; color: #ff4d4d; }
+        .item-desc { font-size: 13px; color: #aaa; margin-bottom: 10px; flex-grow: 1; }
+        .item-cal { font-size: 11px; color: #666; text-align: left; border-top: 1px solid #222; padding-top: 5px;}
+
+        footer {
+            background-color: #000; text-align: center; padding: 25px;
+            color: #777; border-top: 1px solid #222; font-size: 14px;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <h1>أمواج الخليج</h1>
+            <span>للمطاعم والمطابخ - المدينة المنورة</span>
+        </div>
+        <div>
+            <a href="tel:014832050" class="btn">اتصل الآن</a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h2>مذاق الخليج <span>على أصوله</span></h2>
+        <p>من قلب المدينة المنورة، نقدم لكم أشهى المأكولات الخليجية والشعبية بأجود المكونات والنكهة الأصيلة.</p>
+        <div class="btn-group">
+            <a href="#menu" class="btn">استعرض القائمة</a>
+            <a href="https://wa.me/966592244050" class="btn btn-alt" target="_blank">اطلب عبر واتساب</a>
+        </div>
+    </section>
+
+    <main id="menu" class="menu-section">
+
+        <!-- قسم الولائم -->
+        <section class="category">
+            <h3 class="category-title">قسم الولائم</h3>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">ربع تيس مندي</span>
+                        <span class="item-price">٣٢٠ ريال</span>
+                    </div>
+                    <div class="item-desc">ربع تيس طازج مطهو على طريقة المندي الأصيلة.</div>
+                    <div class="item-cal">٢٧١٦ سعرة</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">نفر تيس مندي</span>
+                        <span class="item-price">٨٠ ريال</span>
+                    </div>
+                    <div class="item-desc">نفر لحم تيس طازج مندي.</div>
+                    <div class="item-cal">٦٨١ سعرة</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">نفر لحم مظبي</span>
+                        <span class="item-price">٨٥ ريال</span>
+                    </div>
+                    <div class="item-desc">نفر لحم تيس طازج مظبي على الحجر.</div>
+                    <div class="item-cal">٦٨١ سعرة</div>
+                </div>
+                 <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">نفر لحم مضغوط</span>
+                        <span class="item-price">٨٠ ريال</span>
+                    </div>
+                    <div class="item-desc">نفر لحم تيس طازج مضغوط بالقدر الخاص.</div>
+                    <div class="item-cal">٦٨١ سعرة</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم الدجاج -->
+        <section class="category">
+            <h3 class="category-title">قسم الدجاج</h3>
+            <div class="menu-grid">
+                 <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">حبة دجاج مندي</span>
+                        <span class="item-price">٤٤ ريال</span>
+                    </div>
+                    <div class="item-desc">دجاجة كاملة مشوية على الحطب (مندي).</div>
+                    <div class="item-cal">١١٢٨ سعرة</div>
+                </div>
+                 <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">حبة دجاج شواية</span>
+                        <span class="item-price">٤٢ ريال</span>
+                    </div>
+                    <div class="item-desc">دجاجة كاملة مشوية على الشواية.</div>
+                    <div class="item-cal">١٠٥٨ سعرة</div>
+                </div>
+                 <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">حبة دجاج مظبي</span>
+                        <span class="item-price">٤٤ ريال</span>
+                    </div>
+                    <div class="item-desc">دجاجة كاملة مظبي على الحجر.</div>
+                    <div class="item-cal">٩١٥ سعرة</div>
+                </div>
+                 <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">نص دجاجة مندي</span>
+                        <span class="item-price">٢٢ ريال</span>
+                    </div>
+                    <div class="item-desc">نصف دجاجة مندي مع الأرز.</div>
+                    <div class="item-cal">٥٦٤ سعرة</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم الإيدامات والمقبلات -->
+         <section class="category">
+            <h3 class="category-title">قسم الإيدامات</h3>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">مشكل خضار كبير</span>
+                        <span class="item-price">١٢ ريال</span>
+                    </div>
+                    <div class="item-desc">صينية مشكل خضار طازجة بحجم عائلي.</div>
+                    <div class="item-cal">٣٤٧ سعرة</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">ملوخية</span>
+                        <span class="item-price">١٠ ريال</span>
+                    </div>
+                    <div class="item-desc">طبق ملوخية طازجة محضرة يومياً.</div>
+                    <div class="item-cal">٢١٠ سعرة</div>
+                </div>
+                 <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">طحينة</span>
+                        <span class="item-price">٣ ريال</span>
+                    </div>
+                    <div class="item-desc">مقبلات الطحينة الشهيرة بجانب المندي.</div>
+                     <div class="item-cal">٩٨ سعرة</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- قسم الحلويات والمشروبات -->
+         <section class="category">
+            <h3 class="category-title">الحلويات والمشروبات</h3>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">كنافة بالقشطة</span>
+                        <span class="item-price">١٢ ريال</span>
+                    </div>
+                    <div class="item-desc">كنافة طازجة محشوة بالقشطة اللذيذة.</div>
+                    <div class="item-cal">٤١٧ سعرة</div>
+                </div>
+                 <div class="menu-item">
+                    <div class="item-header">
+                        <span class="item-name">بيبسي (حجم عائلي)</span>
+                        <span class="item-price">٧ ريال</span>
+                    </div>
+                    <div class="item-desc">مشروب غازي بارد (٢.٢٥ لتر).</div>
+                    <div class="item-cal">٥٢٥ سعرة</div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>جميع حقوق الطبع والنشر محفوظة © 2024 لمطاعم أمواج الخليج - المدينة المنورة</p>
+        <p style="font-size:11px; margin-top:5px;">بيانات السعرات الحرارية تقريبية وقد تختلف.</p>
+    </footer>
+
+</body>
+</html>
