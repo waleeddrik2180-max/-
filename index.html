@@ -12,9 +12,10 @@
             font-family: 'Tajawal', sans-serif;
         }
         body {
-            background-color: #1a1a1a;
+            background-color: #121212;
             color: #ffffff;
             line-height: 1.6;
+            padding-bottom: 90px;
         }
         header {
             background-color: #000000;
@@ -23,56 +24,71 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 3px solid #b81414;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-        .logo h1 { color: #fff; font-size: 26px; font-weight: bold; }
-        .logo span { color: #ff4d4d; display: block; font-size: 14px; font-weight: normal; }
+        .logo h1 { color: #fff; font-size: 24px; font-weight: bold; }
+        .logo span { color: #ff4d4d; display: block; font-size: 13px; }
         
         .hero {
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1599599810692-b5a65d625a0c?auto=format&fit=crop&w=1200&q=80');
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80');
             background-size: cover; background-position: center;
-            height: 60vh; display: flex; flex-direction: column;
+            height: 45vh; display: flex; flex-direction: column;
             justify-content: center; align-items: center; text-align: center; padding: 20px;
         }
-        .hero h2 { font-size: 40px; margin-bottom: 10px; }
+        .hero h2 { font-size: 34px; margin-bottom: 10px; }
         .hero h2 span { color: #ff4d4d; }
-        .hero p { font-size: 16px; max-width: 500px; color: #ddd; margin-bottom: 25px; }
-        
-        .btn-group { display: flex; gap: 15px; }
-        .btn {
-            background-color: #b81414; color: white; padding: 12px 28px;
-            border: none; border-radius: 5px; font-size: 16px; cursor: pointer;
-            text-decoration: none; transition: 0.3s; font-weight: bold;
-        }
-        .btn:hover { background-color: #ff4d4d; transform: translateY(-2px); }
-        .btn-alt { background-color: transparent; border: 2px solid #b81414; }
-        .btn-alt:hover { background-color: #b81414; }
+        .hero p { font-size: 15px; max-width: 500px; color: #ccc; margin-bottom: 15px; }
 
-        .menu-section { padding: 50px 20px; max-width: 1100px; margin: 0 auto; }
+        .menu-section { padding: 40px 20px; max-width: 1100px; margin: 0 auto; }
         .category { margin-bottom: 40px; }
         .category-title {
-            font-size: 28px; color: #fff; border-right: 5px solid #b81414;
-            padding-right: 15px; margin-bottom: 20px; display: inline-block;
+            font-size: 24px; color: #fff; border-right: 5px solid #b81414;
+            padding-right: 12px; margin-bottom: 20px; display: inline-block;
         }
         .menu-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
         }
-        .menu-item {
-            background-color: #000; border-radius: 8px; padding: 15px;
+        .menu-card {
+            background-color: #1c1c1c; border-radius: 10px; overflow: hidden;
             display: flex; flex-direction: column; justify-content: space-between;
             border: 1px solid #333; transition: 0.3s;
         }
-        .menu-item:hover { transform: translateY(-5px); border-color: #ff4d4d; }
-        .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .item-name { font-size: 18px; font-weight: bold; color: #fff; }
-        .item-price { font-size: 18px; font-weight: bold; color: #ff4d4d; }
-        .item-desc { font-size: 13px; color: #aaa; margin-bottom: 10px; flex-grow: 1; }
-        .item-cal { font-size: 11px; color: #666; text-align: left; border-top: 1px solid #222; padding-top: 5px;}
+        .menu-card:hover { border-color: #ff4d4d; transform: translateY(-3px); }
+        .card-img {
+            width: 100%; height: 150px; object-fit: cover;
+            border-bottom: 1px solid #333;
+        }
+        .card-content { padding: 15px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
+        .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .item-name { font-size: 17px; font-weight: bold; color: #fff; }
+        .item-price { font-size: 17px; font-weight: bold; color: #ff4d4d; }
+        
+        .add-btn {
+            background-color: #b81414; color: white; border: none; padding: 10px;
+            border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px;
+            transition: 0.2s; width: 100%; margin-top: 10px;
+        }
+        .add-btn:hover { background-color: #ff4d4d; }
+
+        .cart-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background-color: #000; border-top: 2px solid #b81414;
+            padding: 15px 30px; display: flex; justify-content: space-between;
+            align-items: center; box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        .cart-info { font-size: 16px; font-weight: bold; color: #fff; }
+        .checkout-btn {
+            background-color: #25d366; color: white; padding: 10px 25px;
+            border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 15px;
+        }
 
         footer {
-            background-color: #000; text-align: center; padding: 25px;
-            color: #777; border-top: 1px solid #222; font-size: 14px;
+            background-color: #000; text-align: center; padding: 20px;
+            color: #777; border-top: 1px solid #222; font-size: 13px; margin-bottom: 60px;
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
@@ -82,59 +98,83 @@
     <header>
         <div class="logo">
             <h1>أمواج الخليج</h1>
-            <span>للمطاعم والمطابخ - المدينة المنورة</span>
-        </div>
-        <div>
-            <a href="tel:014832050" class="btn">اتصل الآن</a>
+            <span>مطاعم ومطابخ - المدينة المنورة</span>
         </div>
     </header>
 
     <section class="hero">
         <h2>مذاق الخليج <span>على أصوله</span></h2>
-        <p>من قلب المدينة المنورة، نقدم لكم أشهى المأكولات الخليجية والشعبية بأجود المكونات والنكهة الأصيلة.</p>
-        <div class="btn-group">
-            <a href="#menu" class="btn">استعرض القائمة</a>
-            <a href="https://wa.me/966592244050" class="btn btn-alt" target="_blank">اطلب عبر واتساب</a>
-        </div>
+        <p>تصفح المنيو المعتمد، اختر ما يعجبك، واطلب بكل سهولة!</p>
     </section>
 
-    <main id="menu" class="menu-section">
+    <main class="menu-section">
 
-        <!-- قسم الولائم -->
+        <!-- قسم الولائم واللحوم -->
         <section class="category">
-            <h3 class="category-title">قسم الولائم</h3>
+            <h3 class="category-title">قسم الولائم واللحوم</h3>
             <div class="menu-grid">
-                <div class="menu-item">
-                    <div class="item-header">
-                        <span class="item-name">ربع تيس مندي</span>
-                        <span class="item-price">٣٢٠ ريال</span>
+                <div class="menu-card">
+                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=500&q=80" alt="برمة لحم" class="card-img">
+                    <div class="card-content">
+                        <div>
+                            <div class="item-header"><span class="item-name">برمة لحم</span><span class="item-price">٦٨ ريال</span></div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('برمة لحم', 68)">إضافة للسلة</button>
                     </div>
-                    <div class="item-desc">ربع تيس طازج مطهو على طريقة المندي الأصيلة.</div>
-                    <div class="item-cal">٢٧١٦ سعرة</div>
                 </div>
-                <div class="menu-item">
-                    <div class="item-header">
-                        <span class="item-name">نفر تيس مندي</span>
-                        <span class="item-price">٨٠ ريال</span>
+                <div class="menu-card">
+                    <img src="https://images.unsplash.com/photo-1574484284002-7a2d9c6efa7b?auto=format&fit=crop&w=500&q=80" alt="نفر لحم مضغوط" class="card-img">
+                    <div class="card-content">
+                        <div>
+                            <div class="item-header"><span class="item-name">نفر لحم مضغوط</span><span class="item-price">٦٤.٨٠ ريال</span></div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('نفر لحم مضغوط', 64.80)">إضافة للسلة</button>
                     </div>
-                    <div class="item-desc">نفر لحم تيس طازج مندي.</div>
-                    <div class="item-cal">٦٨١ سعرة</div>
                 </div>
-                <div class="menu-item">
-                    <div class="item-header">
-                        <span class="item-name">نفر لحم مظبي</span>
-                        <span class="item-price">٨٥ ريال</span>
+                <div class="menu-card">
+                    <img src="https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=500&q=80" alt="نفر لحم مندي" class="card-img">
+                    <div class="card-content">
+                        <div>
+                            <div class="item-header"><span class="item-name">نفر لحم مندي</span><span class="item-price">٦٨.٨٠ ريال</span></div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('نفر لحم مندي', 68.80)">إضافة للسلة</button>
                     </div>
-                    <div class="item-desc">نفر لحم تيس طازج مظبي على الحجر.</div>
-                    <div class="item-cal">٦٨١ سعرة</div>
                 </div>
-                 <div class="menu-item">
-                    <div class="item-header">
-                        <span class="item-name">نفر لحم مضغوط</span>
-                        <span class="item-price">٨٠ ريال</span>
+                <div class="menu-card">
+                    <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=500&q=80" alt="تيس عزايم" class="card-img">
+                    <div class="card-content">
+                        <div>
+                            <div class="item-header"><span class="item-name">تيس عزايم</span><span class="item-price">١٤٣٠ ريال</span></div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('تيس عزايم', 1430)">إضافة للسلة</button>
                     </div>
-                    <div class="item-desc">نفر لحم تيس طازج مضغوط بالقدر الخاص.</div>
-                    <div class="item-cal">٦٨١ سعرة</div>
+                </div>
+                <div class="menu-card">
+                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=500&q=80" alt="تيس مندي" class="card-img">
+                    <div class="card-content">
+                        <div>
+                            <div class="item-header"><span class="item-name">تيس مندي</span><span class="item-price">١٢٩٠ ريال</span></div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('تيس مندي', 1290)">إضافة للسلة</button>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <img src="https://images.unsplash.com/photo-1574484284002-7a2d9c6efa7b?auto=format&fit=crop&w=500&q=80" alt="نص تيس مندي" class="card-img">
+                    <div class="card-content">
+                        <div>
+                            <div class="item-header"><span class="item-name">نص تيس مندي</span><span class="item-price">٦٥٠ ريال</span></div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('نص تيس مندي', 650)">إضافة للسلة</button>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <img src="https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=500&q=80" alt="ربع تيس مندي" class="card-img">
+                    <div class="card-content">
+                        <div>
+                            <div class="item-header"><span class="item-name">ربع تيس مندي</span><span class="item-price">٣٤٥ ريال</span></div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('ربع تيس مندي', 345)">إضافة للسلة</button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -143,101 +183,159 @@
         <section class="category">
             <h3 class="category-title">قسم الدجاج</h3>
             <div class="menu-grid">
-                 <div class="menu-item">
-                    <div class="item-header">
-                        <span class="item-name">حبة دجاج مندي</span>
-                        <span class="item-price">٤٤ ريال</span>
+                <div class="menu-card">
+                    <img src="https://images.unsplash.com/photo-1626509809489-35c307e5ab46?auto=format&fit=crop&w=500&q=80" alt="دجاج مندي" class="card-img">
+                    <div class="card-content">
+                        <div>
+                            <div class="item-header"><span class="item-name">حبة دجاج مندي</span><span class="item-price">٤٢ ريال</span></div>
+                            <div class="item-header" style="margin-top: 5px;"><span class="item-name" style="font-size:14px; color:#aaa;">نص دجاجة مندي</span><span class="item-price" style="font-size:14px;">٢١ ريال</span></div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('حبة/نص دجاج مندي', 42)">إضافة للسلة</button>
                     </div>
-                    <div class="item-desc">دجاجة كاملة مشوية على الحطب (مندي).</div>
-                    <div class="item-cal">١١٢٨ سعرة</div>
                 </div>
-                 <div class="menu-item">
-                    <div class="item-header">
-                        <span class="item-name">حبة دجاج شواية</span>
-                        <span class="item-price">٤٢ ريال</span>
+                <div class="menu-card">
+                    <img src="https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=500&q=80" alt="دجاج مضغوط" class="card-img">
+                    <div class="card-content">
+                        <div>
+                            <div class="item-header"><span class="item-name">حبة دجاج مضغوط</span><span class="item-price">٤٢ ريال</span></div>
+                            <div class="item-header" style="margin-top: 5px;"><span class="item-name" style="font-size:14px; color:#aaa;">نص دجاجة مضغوط</span><span class="item-price" style="font-size:14px;">٢١ ريال</span></div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('حبة/نص دجاج مضغوط', 42)">إضافة للسلة</button>
                     </div>
-                    <div class="item-desc">دجاجة كاملة مشوية على الشواية.</div>
-                    <div class="item-cal">١٠٥٨ سعرة</div>
                 </div>
-                 <div class="menu-item">
-                    <div class="item-header">
-                        <span class="item-name">حبة دجاج مظبي</span>
-                        <span class="item-price">٤٤ ريال</span>
+                <div class="menu-card">
+                    <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=500&q=80" alt="دجاج شواية" class="card-img">
+                    <div class="card-content">
+                        <div>
+                            <div class="item-header"><span class="item-name">حبة دجاج شواية</span><span class="item-price">٤٢ ريال</span></div>
+                            <div class="item-header" style="margin-top: 5px;"><span class="item-name" style="font-size:14px; color:#aaa;">نص دجاجة شواية</span><span class="item-price" style="font-size:14px;">٢١ ريال</span></div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('حبة/نص دجاج شواية', 42)">إضافة للسلة</button>
                     </div>
-                    <div class="item-desc">دجاجة كاملة مظبي على الحجر.</div>
-                    <div class="item-cal">٩١٥ سعرة</div>
                 </div>
-                 <div class="menu-item">
-                    <div class="item-header">
-                        <span class="item-name">نص دجاجة مندي</span>
-                        <span class="item-price">٢٢ ريال</span>
+                <div class="menu-card">
+                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=500&q=80" alt="دجاج مظبي" class="card-img">
+                    <div class="card-content">
+                        <div>
+                            <div class="item-header"><span class="item-name">حبة دجاج مظبي</span><span class="item-price">٤٢ ريال</span></div>
+                            <div class="item-header" style="margin-top: 5px;"><span class="item-name" style="font-size:14px; color:#aaa;">نص دجاج مظبي شعبي</span><span class="item-price" style="font-size:14px;">٢١ ريال</span></div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('حبة/نص دجاج مظبي', 42)">إضافة للسلة</button>
                     </div>
-                    <div class="item-desc">نصف دجاجة مندي مع الأرز.</div>
-                    <div class="item-cal">٥٦٤ سعرة</div>
                 </div>
             </div>
         </section>
 
-        <!-- قسم الإيدامات والمقبلات -->
-         <section class="category">
+        <!-- قسم الإيدامات -->
+        <section class="category">
             <h3 class="category-title">قسم الإيدامات</h3>
             <div class="menu-grid">
-                <div class="menu-item">
-                    <div class="item-header">
-                        <span class="item-name">مشكل خضار كبير</span>
-                        <span class="item-price">١٢ ريال</span>
+                <div class="menu-card">
+                    <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=500&q=80" alt="مشكل خضار" class="card-img">
+                    <div class="card-content">
+                        <div>
+                            <div class="item-header"><span class="item-name">مشكل خضار (كبير / صغير)</span><span class="item-price">٦ - ١٢ ريال</span></div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('مشكل خضار', 12)">إضافة للسلة</button>
                     </div>
-                    <div class="item-desc">صينية مشكل خضار طازجة بحجم عائلي.</div>
-                    <div class="item-cal">٣٤٧ سعرة</div>
                 </div>
-                <div class="menu-item">
-                    <div class="item-header">
-                        <span class="item-name">ملوخية</span>
-                        <span class="item-price">١٠ ريال</span>
+                <div class="menu-card">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80" alt="ملوخية" class="card-img">
+                    <div class="card-content">
+                        <div>
+                            <div class="item-header"><span class="item-name">ملوخية (كبير / صغير)</span><span class="item-price">٥ - ١٠ ريال</span></div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('ملوخية', 10)">إضافة للسلة</button>
                     </div>
-                    <div class="item-desc">طبق ملوخية طازجة محضرة يومياً.</div>
-                    <div class="item-cal">٢١٠ سعرة</div>
                 </div>
-                 <div class="menu-item">
-                    <div class="item-header">
-                        <span class="item-name">طحينة</span>
-                        <span class="item-price">٣ ريال</span>
+                <div class="menu-card">
+                    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=500&q=80" alt="مسقعة" class="card-img">
+                    <div class="card-content">
+                        <div>
+                            <div class="item-header"><span class="item-name">مسقعة (كبير / صغير)</span><span class="item-price">٥ - ١٠ ريال</span></div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('مسقعة', 10)">إضافة للسلة</button>
                     </div>
-                    <div class="item-desc">مقبلات الطحينة الشهيرة بجانب المندي.</div>
-                     <div class="item-cal">٩٨ سعرة</div>
                 </div>
             </div>
         </section>
-        
-        <!-- قسم الحلويات والمشروبات -->
-         <section class="category">
-            <h3 class="category-title">الحلويات والمشروبات</h3>
+
+        <!-- قسم الحلى والسلطات والمشروبات -->
+        <section class="category">
+            <h3 class="category-title">قسم الحلى والسلطات والمشروبات</h3>
             <div class="menu-grid">
-                <div class="menu-item">
-                    <div class="item-header">
-                        <span class="item-name">كنافة بالقشطة</span>
-                        <span class="item-price">١٢ ريال</span>
+                <div class="menu-card">
+                    <img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=500&q=80" alt="كنافة بالقشطة" class="card-img">
+                    <div class="card-content">
+                        <div>
+                            <div class="item-header"><span class="item-name">كنافة بالقشطة</span><span class="item-price">٨ ريال</span></div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('كنافة بالقشطة', 8)">إضافة للسلة</button>
                     </div>
-                    <div class="item-desc">كنافة طازجة محشوة بالقشطة اللذيذة.</div>
-                    <div class="item-cal">٤١٧ سعرة</div>
                 </div>
-                 <div class="menu-item">
-                    <div class="item-header">
-                        <span class="item-name">بيبسي (حجم عائلي)</span>
-                        <span class="item-price">٧ ريال</span>
+                <div class="menu-card">
+                    <img src="https://images.unsplash.com/photo-1579372786545-d24232daf58c?auto=format&fit=crop&w=500&q=80" alt="أم علي" class="card-img">
+                    <div class="card-content">
+                        <div>
+                            <div class="item-header"><span class="item-name">أم علي</span><span class="item-price">٨ ريال</span></div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('أم علي', 8)">إضافة للسلة</button>
                     </div>
-                    <div class="item-desc">مشروب غازي بارد (٢.٢٥ لتر).</div>
-                    <div class="item-cal">٥٢٥ سعرة</div>
+                </div>
+                <div class="menu-card">
+                    <img src="https://images.unsplash.com/photo-1527661591475-527312dd65f5?auto=format&fit=crop&w=500&q=80" alt="كريم كارامل" class="card-img">
+                    <div class="card-content">
+                        <div>
+                            <div class="item-header"><span class="item-name">كريم كارامل / مهلبية</span><span class="item-price">٣ ريال</span></div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('حلى خفيف', 3)">إضافة للسلة</button>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=500&q=80" alt="مشروبات غازية" class="card-img">
+                    <div class="card-content">
+                        <div>
+                            <div class="item-header"><span class="item-name">مشروبات غازية (بيبسي وغيرها)</span><span class="item-price">٢ - ٧ ريال</span></div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('مشروبات غازية', 3)">إضافة للسلة</button>
+                    </div>
                 </div>
             </div>
         </section>
 
     </main>
 
+    <!-- شريط السلة التفاعلي -->
+    <div class="cart-bar">
+        <div class="cart-info" id="cartSummary">السلة فارغة (0 أصناف) - 0 ريال</div>
+        <a href="#" class="checkout-btn" onclick="checkoutWhatsApp()">إرسال الطلب عبر واتساب</a>
+    </div>
+
     <footer>
-        <p>جميع حقوق الطبع والنشر محفوظة © 2024 لمطاعم أمواج الخليج - المدينة المنورة</p>
-        <p style="font-size:11px; margin-top:5px;">بيانات السعرات الحرارية تقريبية وقد تختلف.</p>
+        <p>جميع حقوق الطبع والنشر محفوظة © لمطاعم أمواج الخليج - المدينة المنورة</p>
     </footer>
+
+    <script>
+        let cartTotal = 0;
+        let cartCount = 0;
+        let cartItems = [];
+
+        function addToCart(name, price) {
+            cartCount++;
+            cartTotal += price;
+            cartItems.push(name);
+            document.getElementById('cartSummary').innerText = `المختار (${cartCount} أصناف) - ${cartTotal.toFixed(2)} ريال`;
+        }
+
+        function checkoutWhatsApp() {
+            if(cartCount === 0) {
+                alert('السلة فارغة! اختر بعض الأطباق أولاً.');
+                return;
+            }
+            let message = `السلام عليكم، أرغب في طلب الأطباق التالية:%0A- ${cartItems.join('%0A- ')}%0A%0Aالإجمالي: ${cartTotal.toFixed(2)} ريال`;
+            window.open(`https://wa.me/966592244050?text=${message}`, '_blank');
+        }
+    </script>
 
 </body>
 </html>
