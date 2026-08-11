@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة القرارات الواقعية</title>
+    <title>تحديات العرسان - لعبة القرارات</title>
     <style>
         body {
-            background-color: #0d1117;
-            color: #c9d1d9;
+            background-color: #1a1a2e;
+            color: #e94560;
             font-family: Tahoma, sans-serif;
             margin: 0;
             display: flex;
@@ -15,154 +15,139 @@
             align-items: center;
             height: 100vh;
         }
-        .game-card {
-            width: 750px;
-            background: #161b22;
-            border: 2px solid #30363d;
-            border-radius: 16px;
+        .box {
+            width: 700px;
+            background: #16213e;
+            border: 2px solid #0f3460;
+            border-radius: 15px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            gap: 20px;
         }
-        .status-bar {
+        .stats-row {
             display: flex;
             justify-content: space-around;
-            background: #21262d;
+            background: #0f3460;
             padding: 12px;
             border-radius: 8px;
             font-size: 16px;
-            font-weight: bold;
-            border: 1px solid #30363d;
+            color: #fff;
         }
-        .story-box {
-            background: #0d1117;
-            padding: 25px;
+        .main-screen {
+            background: #1a1a2e;
+            padding: 20px;
             border-radius: 10px;
-            min-height: 110px;
+            min-height: 100px;
             font-size: 18px;
+            color: #fff;
             line-height: 1.6;
-            border: 1px solid #30363d;
             text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 1px solid #0f3460;
         }
-        .choices {
+        .btn-group {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
-        button {
-            background: #238636;
+        .choice-btn {
+            background: #e94560;
             color: white;
             border: none;
-            padding: 15px;
+            padding: 14px;
             border-radius: 8px;
             font-size: 16px;
             cursor: pointer;
-            transition: 0.2s;
             font-weight: bold;
             text-align: right;
+            transition: 0.2s;
         }
-        button:hover {
-            background: #2ea043;
-        }
-        button.secondary {
-            background: #1f6feb;
-        }
-        button.secondary:hover {
-            background: #388bfd;
+        .choice-btn:hover {
+            background: #ff6b81;
         }
     </style>
 </head>
 <body>
 
-<div class="game-card">
-    <!-- مؤشرات الحالة (المزاج والطاقة) -->
-    <div class="status-bar">
-        <span>🧠 المزاج العام: <strong id="mood">80</strong>%</span>
-        <span>⚡ الطاقة: <strong id="energy">90</strong>%</span>
+<div class="box">
+    <div class="stats-row">
+        <span>✨ التوازن الأسري: <strong id="balance">75</strong>%</span>
+        <span>⚡ طاقة اليوم: <strong id="energy">85</strong>%</span>
     </div>
     
-    <!-- صندوق القصة والشخصية -->
-    <div class="story-box" id="storyText">
-        جارِ تحميل القصة...
+    <div class="main-screen" id="textField">
+        جاري بدء القصة...
     </div>
     
-    <!-- الأزرار والخيارات -->
-    <div class="choices" id="choicesBox">
-        <!-- تتعبأ تلقائياً بالبرمجة -->
-    </div>
+    <div class="btn-group" id="buttonsField"></div>
 </div>
 
 <script>
-    let stats = {
-        mood: 80,
-        energy: 90
+    let player = {
+        balance: 75,
+        energy: 85
     };
 
-    // سيناريوهات اللعبة الواقعية الهادئة
-    const scenes = [
+    const storyChapters = [
         {
-            text: "رجعت البيت متأخر والدوام كرفك كرف، والمدام جهزت العشاء بس زعلانة شوي ليش تأخرت. وش بتسوي؟",
+            text: "الساعة 11 بالليل، والبيت هادئ فجأة انقطع الواي فاي والمدام تسأل عن سبب المشكلة وأنت جوالك فاصل نت بعد.",
             choices: [
-                { text: "تعتذر منها وتجلس تسولف معها وتتعشى بهدوء.", mood: +15, energy: -10, next: 1 },
-                { text: "تقول لها أنا تعبان وتدخل تنام فوراً بدون كلام.", mood: -20, energy: +20, next: 2 }
+                { text: "تقوم فوراً وتشوف المودم وتحاول تصلحه عشان تروق الأجواء.", balance: +15, energy: -15, next: 1 },
+                { text: "تقول لها بكرة نتفاهم وتطنش وتكمل جلستك.", balance: -20, energy: +10, next: 2 }
             ]
         },
         {
-            ,
-            text: "الصباح بدري، جوالك يدق مزعج وأنت وراك مشوار مهم لإصلاح مكيف الصالة الحار. كيف تبدأ يومك؟",
+            text: "طلعت البلكونة تشم هوا والجو خيال، وجتك فكرة تطلب عشاء خفيف وتجلسون تسولفون بعيد عن جو الجوالات.",
             choices: [
-                { text: "تقوم بنشاط وتصلح المكيف عشان تروق البيت.", mood: +10, energy: -20, next: 2 },
-                { text: "تطنيش وترجع تغطي وجهك وتكمل نومك.", mood: -10, energy: +15, next: 0 }
+                { text: "تطلب عشاء سريع وتفاجئها بسهرة هادية.", balance: +20, energy: -10, next: 2 },
+                { text: "تكنسل الفكرة وتدخل تنام من التعب.", balance: -10, energy: +20, next: 0 }
             ]
         },
         {
-            text: "الجو رايق بالليل وقررت تفتح طاقة الفلل شوي وتجلس مع نفسك تضبط امورك وتخطط للأسبوع.",
+            text: "بداية يوم جديد والنشاط قليل، وراك مشاوير كثيرة لازم تخلصها قبل الظهر.",
             choices: [
-                { text: "تقعد تفكر بهدوء وتشرب قهوة مضبوطة.", mood: +20, energy: -5, next: 0 },
-                { text: "تشغل إكس بوكس وتغير جو شوي تفصل عن التفكير.", mood: +25, energy: -15, next: 1 }
+                { text: "تشرب قهوة ثقيلة وتشد حيلك تخلص كل شي.", balance: +10, energy: -25, next: 0 },
+                { text: "تأجل بعض المشاوير وتريح بالبيت شوي.", balance: -5, energy: +15, next: 1 }
             ]
         }
     ];
 
-    let currentScene = 0;
+    let currentStep = 0;
 
-    function updateGame() {
-        // حماية الحدود عشان ما تصفّر الأرقام مرة
-        if (stats.mood > 100) stats.mood = 100;
-        if (stats.mood < 0) stats.mood = 0;
-        if (stats.energy > 100) stats.energy = 100;
-        if (stats.energy < 0) stats.energy = 0;
+    function renderGame() {
+        if (player.balance > 100) player.balance = 100;
+        if (player.balance < 0) player.balance = 0;
+        if (player.energy > 100) player.energy = 100;
+        if (player.energy < 0) player.energy = 0;
 
-        document.getElementById('mood').innerText = stats.mood;
-        document.getElementById('energy').innerText = stats.energy;
+        document.getElementById('balance').innerText = player.balance;
+        document.getElementById('energy').innerText = player.energy;
 
-        const scene = scenes[currentScene];
-        document.getElementById('storyText').innerText = scene.text;
+        const chapter = storyChapters[currentStep];
+        document.getElementById('textField').innerText = chapter.text;
 
-        const choicesBox = document.getElementById('choicesBox');
-        choicesBox.innerHTML = '';
+        const btnContainer = document.getElementById('buttonsField');
+        btnContainer.innerHTML = '';
 
-        scene.choices.forEach((choice, index) => {
-            const btn = document.createElement('button');
-            btn.innerText = `• ${choice.text}`;
-            if(index === 1) btn.className = 'secondary';
-            btn.onclick = () => {
-                stats.mood += choice.mood;
-                stats.energy += choice.energy;
-                currentScene = choice.next;
-                updateGame();
+        chapter.choices.forEach((opt) => {
+            const b = document.createElement('button');
+            b.className = 'choice-btn';
+            b.innerText = `▫️ ${opt.text}`;
+            b.onclick = () => {
+                player.balance += opt.balance;
+                player.energy += opt.energy;
+                currentStep = opt.next;
+                renderGame();
             };
-            choicesBox.appendChild(btn);
+            btnContainer.appendChild(b);
         });
     }
 
-    // تشغيل اللعبة لأول مرة
-    updateGame();
+    renderGame();
 </script>
 
 </body>
