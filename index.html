@@ -3,169 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>يوميات واقعية - لعبة القرارات</title>
+    <title>لعبة الحياة الواقعية</title>
     <style>
         body {
-            background-color: #0b0f19;
-            color: #d1d5db;
+            background-color: #0e1117;
+            color: #ffffff;
             font-family: Tahoma, sans-serif;
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            overflow: hidden;
         }
-        .game-wrapper {
-            width: 780px;
-            background: #111827;
-            border: 2px solid #1f2937;
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+        .room-container {
+            width: 850px;
+            height: 550px;
+            background: #161b22;
+            border: 3px solid #30363d;
+            border-radius: 20px;
+            display: flex;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+        }
+        /* العدادات الطولية على الجوانب */
+        .side-panel {
+            width: 120px;
+            background: #21262d;
+            padding: 20px;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            border-left: 2px solid #30363d;
+            border-right: 2px solid #30363d;
+        }
+        .gauge-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .vertical-bar {
+            width: 20px;
+            height: 150px;
+            background: #0d1117;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column-reverse;
+            border: 1px solid #484f58;
+        }
+        .fill {
+            width: 100%;
+            background: #238636;
+            transition: height 0.3s;
+        }
+        /* الشخصية ومنتصف الشاشة */
+        .center-stage {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
             gap: 20px;
         }
-        .status-panel {
-            display: flex;
-            justify-content: space-around;
-            background: #1f2937;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: bold;
-            color: #ffffff;
-        }
-        .narrative-box {
-            background: #0b0f19;
-            padding: 25px;
-            border-radius: 12px;
-            min-height: 120px;
-            font-size: 18px;
-            color: #f3f4f6;
-            line-height: 1.7;
-            text-align: center;
+        .character-avatar {
+            width: 140px;
+            height: 140px;
+            background: #30363d;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid #374151;
+            font-size: 60px;
+            border: 4px solid #58a6ff;
+            box-shadow: 0 0 20px rgba(88, 166, 255, 0.3);
         }
-        .options-box {
+        .dialogue-box {
+            width: 100%;
+            background: #0d1117;
+            border: 2px solid #30363d;
+            border-radius: 12px;
+            padding: 18px;
+            font-size: 18px;
+            text-align: center;
+            min-height: 70px;
             display: flex;
-            flex-direction: column;
-            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            color: #c9d1d9;
         }
-        .choice-btn {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 15px;
+        /* الأزرار والأماكن (الثلاجة، الجوال، إلخ) */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            width: 100%;
+        }
+        .action-btn {
+            background: #21262d;
+            color: #58a6ff;
+            border: 2px solid #30363d;
+            padding: 12px;
             border-radius: 10px;
             font-size: 16px;
-            cursor: pointer;
             font-weight: bold;
-            text-align: right;
+            cursor: pointer;
             transition: 0.2s;
+            text-align: center;
         }
-        .choice-btn:hover {
-            background: #1d4ed8;
+        .action-btn:hover {
+            background: #30363d;
+            border-color: #58a6ff;
+            color: #ffffff;
         }
     </style>
 </head>
 <body>
 
-<div class="game-wrapper">
-    <div class="status-panel">
-        <span>⚡ المزاج: <strong id="mood">80</strong>%</span>
-        <span>🔋 الطاقة: <strong id="energy">90</strong>%</span>
-        <span>💰 الحالة المادية: <strong id="cash">150</strong> ريال</span>
+<div class="room-container">
+    <!-- عداد الطاقة الطولي على اليسار -->
+    <div class="side-panel">
+        <div class="gauge-box">
+            <span>⚡ الطاقة</span>
+            <div class="vertical-bar">
+                <div class="fill" id="energyFill" style="height: 80%;"></div>
+            </div>
+            <strong id="energyText">80%</strong>
+        </div>
     </div>
-    
-    <div class="narrative-box" id="storyArea">
-        جاري تحميل تفاصيل اليوم...
+
+    <!-- منطقة الشخصية والأحداث في المنتصف -->
+    <div class="center-stage">
+        <div class="character-avatar" id="avatarIcon">👨🏻‍🦱</div>
+        <div class="dialogue-box" id="gameText">
+            أهلاً بك يا طويل العمر. توك راجع البيت وتعبان، وش تبغى تسوي الحين؟ اختر المكان المناسب:
+        </div>
+        
+        <div class="action-grid" id="actionGrid">
+            <button class="action-btn" onclick="openFridge()">🧊 الثلاجة (أكل)</button>
+            <button class="action-btn" onclick="openPhone()">📱 الجوال (تواصل)</button>
+            <button class="action-btn" onclick="openTable()">☕ الطاولة (روقان)</button>
+            <button class="action-btn" onclick="openCar()">🚗 المعارض (طلعة)</button>
+        </div>
     </div>
-    
-    <div class="options-box" id="optionsArea"></div>
+
+    <!-- عداد المزاج الطولي على اليمين -->
+    <div class="side-panel">
+        <div class="gauge-box">
+            <span>🧠 المزاج</span>
+            <div class="vertical-bar">
+                <div class="fill" id="moodFill" style="height: 70%; background: #1f6feb;"></div>
+            </div>
+            <strong id="moodText">70%</strong>
+        </div>
+    </div>
 </div>
 
 <script>
-    let playerState = {
-        mood: 80,
-        energy: 90,
-        cash: 150
+    let stats = {
+        energy: 80,
+        mood: 70
     };
 
-    // القصة الموسعة والواقعية بقرارات متعددة
-    const storyNodes = {
-        start: {
-            text: "توه طالع من الدوام وراسك يلف من التعب، داق عليك صديقك يقول 'جالس بالشباب في الكافية تعال نغير جو'، وش بتسوي؟",
-            options: [
-                { text: "أروح معهم وأغير جو وأطلب قهوة مضبطة.", mood: +20, energy: -15, cash: -30, next: "cafe_night" },
-                { text: "أعتذر منهم وأرجع البيت أبغى أريح.", mood: -10, energy: +10, cash: 0, next: "go_home" }
-            ]
-        },
-        cafe_night: {
-            text: "قعدت مع الشباب وسولفتوا لين متأخر، الجو كان حلو وفصلت عن هموم اليوم تماماً، بس رجعت البيت متأخر والظهر منتهي.",
-            options: [
-                { text: "أدخل أنام فوراً عشان ألحق أصحى بدري بكرة.", mood: +10, energy: +30, cash: 0, next: "morning_routine" },
-                { text: "أقعد أطالع جوالي وألعب شوي لين الفجر.", mood: -15, energy: -20, cash: 0, next: "late_gaming" }
-            ]
-        },
-        go_home: {
-            text: "وصلت البيت بدري، البيت هادئ وتقدر تاخذ راحتك بالجلسة لحالك بدون إزعاج.",
-            options: [
-                { text: "أطلب عشاء خفيف وأقعد أخطط لمشاوير بكرة.", mood: +15, energy: -5, cash: -40, next: "morning_routine" },
-                { text: "أفتح اللعبة وأفصل عن العالم.", mood: +20, energy: -15, cash: 0, next: "late_gaming" }
-            ]
-        },
-        morning_routine: {
-            text: "بدأ يوم جديد، الشمس طالعة وعندك كذا مشوار لازم تخلصه بس تحس إنك رايق وجاهز.",
-            options: [
-                { text: "أطلع أتمشى بالسيارة أشم هوا وأخلص مشاويري بهدوء.", mood: +25, energy: -20, cash: -20, next: "start" },
-                { text: "أجلس بالبيت أصلح قهوتي وأروق على راقي.", mood: +15, energy: -10, cash: -15, next: "start" }
-            ]
-        },
-        late_gaming: {
-            text: "سهرت لقت متأخر وصحيت اليوم الثاني والعين مبوشة والراس ثقيل من السهر.",
-            options: [
-                { text: "آخذ قهوة ثقيلة وأحاول أعدل يومي بالغصب.", mood: -10, energy: -10, cash: -20, next: "start" },
-                { text: "أسحب على كل شي وأرجع أنام.", mood: -20, energy: +40, cash: 0, next: "start" }
-            ]
-        }
-    };
+    function updateGauges() {
+        if(stats.energy > 100) stats.energy = 100;
+        if(stats.energy < 0) stats.energy = 0;
+        if(stats.mood > 100) stats.mood = 100;
+        if(stats.mood < 0) stats.mood = 0;
 
-    function renderStage(nodeKey) {
-        const node = storyNodes[nodeKey];
+        document.getElementById('energyFill').style.height = stats.energy + '%';
+        document.getElementById('energyText').innerText = stats.energy + '%';
         
-        // ضبط الحدود عشان ما تتخطى 100 أو تنزل تحت الصفر
-        playerState.mood = Math.max(0, Math.min(100, playerState.mood));
-        playerState.energy = Math.max(0, Math.min(100, playerState.energy));
-
-        document.getElementById('mood').innerText = playerState.mood;
-        document.getElementById('energy').innerText = playerState.energy;
-        document.getElementById('cash').innerText = playerState.cash;
-
-        document.getElementById('storyArea').innerText = node.text;
-
-        const optionsContainer = document.getElementById('optionsArea');
-        optionsContainer.innerHTML = '';
-
-        node.options.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = 'choice-btn';
-            btn.innerText = `▫️ ${opt.text}`;
-            btn.onclick = () => {
-                playerState.mood += opt.mood;
-                playerState.energy += opt.energy;
-                playerState.cash += opt.cash;
-                renderStage(opt.next);
-            };
-            optionsContainer.appendChild(btn);
-        });
+        document.getElementById('moodFill').style.height = stats.mood + '%';
+        document.getElementById('moodText').innerText = stats.mood + '%';
     }
 
-    // تشغيل اللعبة من البداية
-    renderStage('start');
+    function openFridge() {
+        stats.energy += 15;
+        stats.mood += 5;
+        updateGauges();
+        document.getElementById('avatarIcon').innerText = '🍔';
+        document.getElementById('gameText').innerText = "فتحْت الثلاجة ولقيت أكل خفيف ولذيذ، تغديت وشحنت طاقتك شوي!";
+    }
+
+    function openPhone() {
+        stats.energy -= 10;
+        stats.mood += 20;
+        updateGauges();
+        document.getElementById('avatarIcon').innerText = '📱';
+        document.getElementById('gameText').innerText = "مسكت جوالك ودقيت على خويك تسولف معه وتغير جو، تعدل مزاجك وصرت رايق.";
+    }
+
+    function openTable() {
+        stats.energy -= 5;
+        stats.mood += 15;
+        updateGauges();
+        document.getElementById('avatarIcon').innerText = '☕';
+        document.getElementById('gameText').innerText = "صلحت لك قهوة مضبوطة وقعدت على الطاولة تروق وتفكر بهدوء.";
+    }
+
+    function openCar() {
+        stats.energy -= 20;
+        stats.mood += 25;
+        updateGauges();
+        document.getElementById('avatarIcon').innerText = '🚗';
+        document.getElementById('gameText').innerText = "طلعت المعارض وتمشيت بالسيارة أخذت فرة وشميت هوا، الجو كان خيال!";
+    }
 </script>
 
 </body>
