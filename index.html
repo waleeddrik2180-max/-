@@ -12,7 +12,7 @@
             font-family: 'Tajawal', sans-serif;
         }
         body {
-            background-color: #121212;
+            background-color: #0b0b0b;
             color: #ffffff;
             line-height: 1.6;
             padding-bottom: 90px;
@@ -32,44 +32,55 @@
         .logo span { color: #ff4d4d; display: block; font-size: 13px; }
         
         .hero {
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80');
-            background-size: cover; background-position: center;
-            height: 45vh; display: flex; flex-direction: column;
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), #151515;
+            height: 35vh; display: flex; flex-direction: column;
             justify-content: center; align-items: center; text-align: center; padding: 20px;
+            border-bottom: 1px solid #222;
         }
-        .hero h2 { font-size: 34px; margin-bottom: 10px; }
+        .hero h2 { font-size: 32px; margin-bottom: 10px; }
         .hero h2 span { color: #ff4d4d; }
-        .hero p { font-size: 15px; max-width: 500px; color: #ccc; margin-bottom: 15px; }
+        .hero p { font-size: 15px; max-width: 500px; color: #aaa; }
 
-        .menu-section { padding: 40px 20px; max-width: 1100px; margin: 0 auto; }
+        .menu-section { padding: 40px 20px; max-width: 1000px; margin: 0 auto; }
         .category { margin-bottom: 40px; }
         .category-title {
-            font-size: 24px; color: #fff; border-right: 5px solid #b81414;
+            font-size: 22px; color: #fff; border-right: 5px solid #b81414;
             padding-right: 12px; margin-bottom: 20px; display: inline-block;
         }
         .menu-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 20px;
         }
         .menu-card {
-            background-color: #1c1c1c; border-radius: 10px; overflow: hidden;
+            background-color: #161616; border-radius: 10px; overflow: hidden;
             display: flex; flex-direction: column; justify-content: space-between;
-            border: 1px solid #333; transition: 0.3s;
+            border: 1px solid #262626; transition: 0.3s;
         }
         .menu-card:hover { border-color: #ff4d4d; transform: translateY(-3px); }
-        .card-img {
-            width: 100%; height: 150px; object-fit: cover;
-            border-bottom: 1px solid #333;
+        
+        .item-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            background-color: #222;
         }
-        .card-content { padding: 15px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
-        .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .item-name { font-size: 17px; font-weight: bold; color: #fff; }
-        .item-price { font-size: 17px; font-weight: bold; color: #ff4d4d; }
+
+        .item-content {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .item-name { font-size: 16px; font-weight: bold; color: #fff; }
+        .item-price { font-size: 16px; font-weight: bold; color: #ff4d4d; }
         
         .add-btn {
             background-color: #b81414; color: white; border: none; padding: 10px;
             border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px;
-            transition: 0.2s; width: 100%; margin-top: 10px;
+            transition: 0.2s; width: 100%;
         }
         .add-btn:hover { background-color: #ff4d4d; }
 
@@ -80,10 +91,10 @@
             align-items: center; box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
             z-index: 1000;
         }
-        .cart-info { font-size: 16px; font-weight: bold; color: #fff; }
+        .cart-info { font-size: 15px; font-weight: bold; color: #fff; }
         .checkout-btn {
             background-color: #25d366; color: white; padding: 10px 25px;
-            border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 15px;
+            border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 14px;
         }
 
         footer {
@@ -104,202 +115,200 @@
 
     <section class="hero">
         <h2>مذاق الخليج <span>على أصوله</span></h2>
-        <p>تصفح المنيو المعتمد، اختر ما يعجبك، واطلب بكل سهولة!</p>
+        <p>المنيو الإلكتروني المعتمد - تصفح واختر طلبك بكل سهولة</p>
     </section>
 
     <main class="menu-section">
 
-        <!-- قسم الولائم واللحوم -->
+        <!-- قسم الأطباق الرئيسية والأرز واللحوم -->
         <section class="category">
-            <h3 class="category-title">قسم الولائم واللحوم</h3>
+            <h3 class="category-title">الأطباق الرئيسية واللحوم والدجاج</h3>
             <div class="menu-grid">
+                
                 <div class="menu-card">
-                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=500&q=80" alt="برمة لحم" class="card-img">
-                    <div class="card-content">
-                        <div>
-                            <div class="item-header"><span class="item-name">برمة لحم</span><span class="item-price">٦٨ ريال</span></div>
-                        </div>
-                        <button class="add-btn" onclick="addToCart('برمة لحم', 68)">إضافة للسلة</button>
+                    <img src="meat-feast.jpg" alt="وليمة لحم ملكية" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">وليمة لحم ملكية</span><span class="item-price">١٨0 ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('وليمة لحم ملكية', 180)">إضافة للسلة</button>
                     </div>
                 </div>
+
                 <div class="menu-card">
-                    <img src="https://images.unsplash.com/photo-1574484284002-7a2d9c6efa7b?auto=format&fit=crop&w=500&q=80" alt="نفر لحم مضغوط" class="card-img">
-                    <div class="card-content">
-                        <div>
-                            <div class="item-header"><span class="item-name">نفر لحم مضغوط</span><span class="item-price">٦٤.٨٠ ريال</span></div>
-                        </div>
-                        <button class="add-btn" onclick="addToCart('نفر لحم مضغوط', 64.80)">إضافة للسلة</button>
+                    <img src="meat-plate.jpg" alt="كبسة لحم مفرد" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">كبسة لحم مفرد</span><span class="item-price">٥٥ ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('كبسة لحم مفرد', 55)">إضافة للسلة</button>
                     </div>
                 </div>
+
                 <div class="menu-card">
-                    <img src="https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=500&q=80" alt="نفر لحم مندي" class="card-img">
-                    <div class="card-content">
-                        <div>
-                            <div class="item-header"><span class="item-name">نفر لحم مندي</span><span class="item-price">٦٨.٨٠ ريال</span></div>
-                        </div>
-                        <button class="add-btn" onclick="addToCart('نفر لحم مندي', 68.80)">إضافة للسلة</button>
+                    <img src="chicken-rice.jpg" alt="دجاج مع أرز" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">وجبة دجاج مع أرز شعيرية</span><span class="item-price">٢٨ ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('وجبة دجاج مع أرز شعيرية', 28)">إضافة للسلة</button>
                     </div>
                 </div>
+
                 <div class="menu-card">
-                    <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=500&q=80" alt="تيس عزايم" class="card-img">
-                    <div class="card-content">
-                        <div>
-                            <div class="item-header"><span class="item-name">تيس عزايم</span><span class="item-price">١٤٣٠ ريال</span></div>
-                        </div>
-                        <button class="add-btn" onclick="addToCart('تيس عزايم', 1430)">إضافة للسلة</button>
+                    <img src="mandi-chicken.jpg" alt="مظبي دجاج بالفرن" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">مظبي دجاج بالفرن</span><span class="item-price">٣٢ ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('مظبي دجاج بالفرن', 32)">إضافة للسلة</button>
                     </div>
                 </div>
+
                 <div class="menu-card">
-                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=500&q=80" alt="تيس مندي" class="card-img">
-                    <div class="card-content">
-                        <div>
-                            <div class="item-header"><span class="item-name">تيس مندي</span><span class="item-price">١٢٩٠ ريال</span></div>
-                        </div>
-                        <button class="add-btn" onclick="addToCart('تيس مندي', 1290)">إضافة للسلة</button>
+                    <img src="chicken-plate.jpg" alt="دجاج بخاري" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">كبسة دجاج بخاري</span><span class="item-price">٣٠ ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('كبسة دجاج بخاري', 30)">إضافة للسلة</button>
                     </div>
                 </div>
-                <div class="menu-card">
-                    <img src="https://images.unsplash.com/photo-1574484284002-7a2d9c6efa7b?auto=format&fit=crop&w=500&q=80" alt="نص تيس مندي" class="card-img">
-                    <div class="card-content">
-                        <div>
-                            <div class="item-header"><span class="item-name">نص تيس مندي</span><span class="item-price">٦٥٠ ريال</span></div>
-                        </div>
-                        <button class="add-btn" onclick="addToCart('نص تيس مندي', 650)">إضافة للسلة</button>
-                    </div>
-                </div>
-                <div class="menu-card">
-                    <img src="https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=500&q=80" alt="ربع تيس مندي" class="card-img">
-                    <div class="card-content">
-                        <div>
-                            <div class="item-header"><span class="item-name">ربع تيس مندي</span><span class="item-price">٣٤٥ ريال</span></div>
-                        </div>
-                        <button class="add-btn" onclick="addToCart('ربع تيس مندي', 345)">إضافة للسلة</button>
-                    </div>
-                </div>
+
             </div>
         </section>
 
-        <!-- قسم الدجاج -->
+        <!-- قسم الإدامات والمقبلات الساخنة -->
         <section class="category">
-            <h3 class="category-title">قسم الدجاج</h3>
+            <h3 class="category-title">الإدامات والصواني</h3>
             <div class="menu-grid">
+
                 <div class="menu-card">
-                    <img src="https://images.unsplash.com/photo-1626509809489-35c307e5ab46?auto=format&fit=crop&w=500&q=80" alt="دجاج مندي" class="card-img">
-                    <div class="card-content">
-                        <div>
-                            <div class="item-header"><span class="item-name">حبة دجاج مندي</span><span class="item-price">٤٢ ريال</span></div>
-                            <div class="item-header" style="margin-top: 5px;"><span class="item-name" style="font-size:14px; color:#aaa;">نص دجاجة مندي</span><span class="item-price" style="font-size:14px;">٢١ ريال</span></div>
-                        </div>
-                        <button class="add-btn" onclick="addToCart('حبة/نص دجاج مندي', 42)">إضافة للسلة</button>
+                    <img src="bamia.jpg" alt="إدام باميا باللحم" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">إدام باميا باللحم</span><span class="item-price">٢٠ ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('إدام باميا باللحم', 20)">إضافة للسلة</button>
                     </div>
                 </div>
+
                 <div class="menu-card">
-                    <img src="https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=500&q=80" alt="دجاج مضغوط" class="card-img">
-                    <div class="card-content">
-                        <div>
-                            <div class="item-header"><span class="item-name">حبة دجاج مضغوط</span><span class="item-price">٤٢ ريال</span></div>
-                            <div class="item-header" style="margin-top: 5px;"><span class="item-name" style="font-size:14px; color:#aaa;">نص دجاجة مضغوط</span><span class="item-price" style="font-size:14px;">٢١ ريال</span></div>
-                        </div>
-                        <button class="add-btn" onclick="addToCart('حبة/نص دجاج مضغوط', 42)">إضافة للسلة</button>
+                    <img src="molokhia.jpg" alt="ملوخية طازجة" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">ملوخية طازجة</span><span class="item-price">١٥ ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('ملوخية طازجة', 15)">إضافة للسلة</button>
                     </div>
                 </div>
+
                 <div class="menu-card">
-                    <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=500&q=80" alt="دجاج شواية" class="card-img">
-                    <div class="card-content">
-                        <div>
-                            <div class="item-header"><span class="item-name">حبة دجاج شواية</span><span class="item-price">٤٢ ريال</span></div>
-                            <div class="item-header" style="margin-top: 5px;"><span class="item-name" style="font-size:14px; color:#aaa;">نص دجاجة شواية</span><span class="item-price" style="font-size:14px;">٢١ ريال</span></div>
-                        </div>
-                        <button class="add-btn" onclick="addToCart('حبة/نص دجاج شواية', 42)">إضافة للسلة</button>
+                    <img src="chicken-mix.jpg" alt="إدام دجاج مشكل" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">إدام دجاج بالبطاطس والخضار</span><span class="item-price">٢٢ ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('إدام دجاج بالبطاطس والخضار', 22)">إضافة للسلة</button>
                     </div>
                 </div>
+
                 <div class="menu-card">
-                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=500&q=80" alt="دجاج مظبي" class="card-img">
-                    <div class="card-content">
-                        <div>
-                            <div class="item-header"><span class="item-name">حبة دجاج مظبي</span><span class="item-price">٤٢ ريال</span></div>
-                            <div class="item-header" style="margin-top: 5px;"><span class="item-name" style="font-size:14px; color:#aaa;">نص دجاج مظبي شعبي</span><span class="item-price" style="font-size:14px;">٢١ ريال</span></div>
-                        </div>
-                        <button class="add-btn" onclick="addToCart('حبة/نص دجاج مظبي', 42)">إضافة للسلة</button>
+                    <img src="mousaka.jpg" alt="مسقعة بالفرن" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">صينية مسقعة بالجبن</span><span class="item-price">١٨ ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('صينية مسقعة بالجبن', 18)">إضافة للسلة</button>
                     </div>
                 </div>
+
+                <div class="menu-card">
+                    <img src="mix-veggies.jpg" alt="إدام خضار مشكلة" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">إدام خضار مشكلة (باذنجان وباميا)</span><span class="item-price">١٦ ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('إدام خضار مشكلة', 16)">إضافة للسلة</button>
+                    </div>
+                </div>
+
+                <div class="menu-card">
+                    <img src="marag.jpg" alt="مرق لحم" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">مرق لحم بالبصل</span><span class="item-price">١٠ ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('مرق لحم بالبصل', 10)">إضافة للسلة</button>
+                    </div>
+                </div>
+
             </div>
         </section>
 
-        <!-- قسم الإيدامات -->
+        <!-- قسم المشروبات والمقبلات والحلى -->
         <section class="category">
-            <h3 class="category-title">قسم الإيدامات</h3>
+            <h3 class="category-title">المشروبات والمقبلات والحلى</h3>
             <div class="menu-grid">
+                
                 <div class="menu-card">
-                    <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=500&q=80" alt="مشكل خضار" class="card-img">
-                    <div class="card-content">
-                        <div>
-                            <div class="item-header"><span class="item-name">مشكل خضار (كبير / صغير)</span><span class="item-price">٦ - ١٢ ريال</span></div>
-                        </div>
-                        <button class="add-btn" onclick="addToCart('مشكل خضار', 12)">إضافة للسلة</button>
+                    <img src="pepsi-bottle.jpg" alt="بيبسي عائلي" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">بيبسي عائلي</span><span class="item-price">٧ ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('بيبسي عائلي', 7)">إضافة للسلة</button>
                     </div>
                 </div>
-                <div class="menu-card">
-                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80" alt="ملوخية" class="card-img">
-                    <div class="card-content">
-                        <div>
-                            <div class="item-header"><span class="item-name">ملوخية (كبير / صغير)</span><span class="item-price">٥ - ١٠ ريال</span></div>
-                        </div>
-                        <button class="add-btn" onclick="addToCart('ملوخية', 10)">إضافة للسلة</button>
-                    </div>
-                </div>
-                <div class="menu-card">
-                    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=500&q=80" alt="مسقعة" class="card-img">
-                    <div class="card-content">
-                        <div>
-                            <div class="item-header"><span class="item-name">مسقعة (كبير / صغير)</span><span class="item-price">٥ - ١٠ ريال</span></div>
-                        </div>
-                        <button class="add-btn" onclick="addToCart('مسقعة', 10)">إضافة للسلة</button>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- قسم الحلى والسلطات والمشروبات -->
-        <section class="category">
-            <h3 class="category-title">قسم الحلى والسلطات والمشروبات</h3>
-            <div class="menu-grid">
                 <div class="menu-card">
-                    <img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=500&q=80" alt="كنافة بالقشطة" class="card-img">
-                    <div class="card-content">
-                        <div>
-                            <div class="item-header"><span class="item-name">كنافة بالقشطة</span><span class="item-price">٨ ريال</span></div>
-                        </div>
-                        <button class="add-btn" onclick="addToCart('كنافة بالقشطة', 8)">إضافة للسلة</button>
+                    <img src="pepsi-can.jpg" alt="بيبسي علبة" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">بيبسي علبة</span><span class="item-price">٣ ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('بيبسي علبة', 3)">إضافة للسلة</button>
                     </div>
                 </div>
+
                 <div class="menu-card">
-                    <img src="https://images.unsplash.com/photo-1579372786545-d24232daf58c?auto=format&fit=crop&w=500&q=80" alt="أم علي" class="card-img">
-                    <div class="card-content">
-                        <div>
-                            <div class="item-header"><span class="item-name">أم علي</span><span class="item-price">٨ ريال</span></div>
-                        </div>
-                        <button class="add-btn" onclick="addToCart('أم علي', 8)">إضافة للسلة</button>
+                    <img src="laban-large.jpg" alt="لبن طازج كبير" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">لبن طازج (كبير)</span><span class="item-price">٤ ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('لبن طازج كبير', 4)">إضافة للسلة</button>
                     </div>
                 </div>
+
                 <div class="menu-card">
-                    <img src="https://images.unsplash.com/photo-1527661591475-527312dd65f5?auto=format&fit=crop&w=500&q=80" alt="كريم كارامل" class="card-img">
-                    <div class="card-content">
-                        <div>
-                            <div class="item-header"><span class="item-name">كريم كارامل / مهلبية</span><span class="item-price">٣ ريال</span></div>
-                        </div>
-                        <button class="add-btn" onclick="addToCart('حلى خفيف', 3)">إضافة للسلة</button>
+                    <img src="laban-small.jpg" alt="لبن طازج صغير" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">لبن طازج (صغير)</span><span class="item-price">٢ ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('لبن طازج صغير', 2)">إضافة للسلة</button>
                     </div>
                 </div>
+
                 <div class="menu-card">
-                    <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=500&q=80" alt="مشروبات غازية" class="card-img">
-                    <div class="card-content">
-                        <div>
-                            <div class="item-header"><span class="item-name">مشروبات غازية (بيبسي وغيرها)</span><span class="item-price">٢ - ٧ ريال</span></div>
-                        </div>
-                        <button class="add-btn" onclick="addToCart('مشروبات غازية', 3)">إضافة للسلة</button>
+                    <img src="daqous.jpg" alt="دقوس أحمر" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">دقوس أحمر خاص</span><span class="item-price">٣ ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('دقوس أحمر', 3)">إضافة للسلة</button>
                     </div>
                 </div>
+
+                <div class="menu-card">
+                    <img src="salad-yogurt.jpg" alt="سلطة خيار باللبن" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">سلطة خيار باللبن</span><span class="item-price">٤ ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('سلطة خيار باللبن', 4)">إضافة للسلة</button>
+                    </div>
+                </div>
+
+                <div class="menu-card">
+                    <img src="shatta.jpg" alt="شطة حارة" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">شطة حارة</span><span class="item-price">٣ ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('شطة حارة', 3)">إضافة للسلة</button>
+                    </div>
+                </div>
+
+                <div class="menu-card">
+                    <img src="tahina.jpg" alt="طحينة" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">صوص الطحينة</span><span class="item-price">٣ ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('طحينة', 3)">إضافة للسلة</button>
+                    </div>
+                </div>
+
+                <div class="menu-card">
+                    <img src="muhalabiya.jpg" alt="مهلبية بالفستق" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">مهلبية بالفستق</span><span class="item-price">٨ ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('مهلبية بالفستق', 8)">إضافة للسلة</button>
+                    </div>
+                </div>
+
+                <div class="menu-card">
+                    <img src="creme-caramel.jpg" alt="كريم كارامل" class="item-img">
+                    <div class="item-content">
+                        <div class="item-header"><span class="item-name">كريم كارامل</span><span class="item-price">٦ ريال</span></div>
+                        <button class="add-btn" onclick="addToCart('كريم كارامل', 6)">إضافة للسلة</button>
+                    </div>
+                </div>
+
             </div>
         </section>
 
