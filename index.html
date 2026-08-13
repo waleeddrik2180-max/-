@@ -2,40 +2,81 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>THE NEON VOID</title>
+    <title>مغامرة الفضاء السريع</title>
     <style>
-        body { margin: 0; background: #000; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
-        canvas { display: block; }
-        #ui { position: absolute; top: 20px; left: 20px; color: #fff; pointer-events: none; font-size: 24px; text-shadow: 0 0 10px #fff; }
-        #start { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 20px 50px; background: transparent; border: 2px solid #fff; color: #fff; cursor: pointer; font-size: 20px; text-transform: uppercase; letter-spacing: 2px; }
-        #start:hover { background: #fff; color: #000; }
+        body { margin: 0; background: #050505; color: white; overflow: hidden; font-family: 'Arial', sans-serif; }
+        #gameCanvas { display: block; margin: 0 auto; background: #000; }
+        .ui { position: absolute; top: 20px; width: 100%; text-align: center; pointer-events: none; }
+        #startBtn { position: absolute; top: 70%; left: 50%; transform: translate(-50%, -50%); padding: 15px 30px; cursor: pointer; background: #ff0055; border: none; color: white; font-size: 20px; border-radius: 10px; }
     </style>
 </head>
 <body>
-    <div id="ui">SCORE: 0</div>
-    <button id="start">INITIATE</button>
-    <canvas id="c"></canvas>
+
+    <div class="ui">
+        <h1>النقاط: <span id="score">0</span></h1>
+    </div>
+    <button id="startBtn">ابدأ المغامرة</button>
+    <canvas id="gameCanvas"></canvas>
 
     <script>
-        const c = document.getElementById('c'), ctx = c.getContext('2d'), ui = document.getElementById('ui'), btn = document.getElementById('start');
-        c.width = window.innerWidth; c.height = window.innerHeight;
-        let s = 0, g = false, p = {x: c.width/2, y: c.height-100, v: 0}, o = [];
-        window.onmousemove = e => p.x = e.clientX;
-        window.ontouchmove = e => p.x = e.touches[0].clientX;
-        btn.onclick = () => { s = 0; o = []; g = true; btn.style.display = 'none'; loop(); };
-        function loop() {
-            if (!g) return;
-            ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.fillRect(0,0,c.width,c.height);
-            if (Math.random() < 0.1) o.push({x: Math.random()*c.width, y: -20, s: 2+s/500, c: `hsl(${Math.random()*360},100%,50%)`});
-            ctx.fillStyle = '#fff'; ctx.fillRect(p.x-25, p.y-25, 50, 50);
-            o.forEach((e, i) => {
-                e.y += e.s;
-                ctx.fillStyle = e.c; ctx.fillRect(e.x, e.y, 30, 30);
-                if (Math.abs(e.x - p.x) < 40 && Math.abs(e.y - p.y) < 40) { g = false; btn.innerText = 'RETRY'; btn.style.display = 'block'; }
-                if (e.y > c.height) { o.splice(i, 1); s += 10; ui.innerText = 'SCORE: ' + s; }
-            });
-            requestAnimationFrame(loop);
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('score');
+        const startBtn = document.getElementById('startBtn');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let player = { x: canvas.width/2, y: canvas.height - 100, size: 40 };
+        let obstacles = [];
+        let score = 0;
+        let gameActive = false;
+
+        window.addEventListener('mousemove', e => player.x = e.clientX - 20);
+        window.addEventListener('touchmove', e => player.x = e.touches[0].clientX - 20);
+
+        function drawPlayer() {
+            ctx.fillStyle = '#00f2ff';
+            ctx.fillRect(player.x, player.y, player.size, player.size);
+            ctx.strokeStyle = 'white';
+            ctx.strokeRect(player.x, player.y, player.size, player.size);
         }
+
+        function update() {
+            if (!gameActive) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawPlayer();
+
+            if (Math.random() < 0.05) {
+                obstacles.push({ x: Math.random() * canvas.width, y: -50, size: 50, speed: 5 + (score/100) });
+            }
+
+            obstacles.forEach((obs, i) => {
+                obs.y += obs.speed;
+                // رسم وهمي للعمق
+                ctx.fillStyle = '#ff0055';
+                ctx.fillRect(obs.x, obs.y, obs.size, obs.size);
+                
+                if (obs.y > canvas.height) {
+                    obstacles.splice(i, 1);
+                    score += 10;
+                    scoreEl.innerText = score;
+                }
+
+                if (obs.y + obs.size > player.y && obs.x < player.x + player.size && obs.x + obs.size > player.x) {
+                    gameActive = false;
+                    startBtn.style.display = 'block';
+                    startBtn.innerText = 'خسرت! العب مرة أخرى';
+                }
+            });
+            requestAnimationFrame(update);
+        }
+
+        startBtn.onclick = () => {
+            score = 0; obstacles = []; gameActive = true;
+            startBtn.style.display = 'none';
+            update();
+        };
     </script>
 </body>
 </html>
