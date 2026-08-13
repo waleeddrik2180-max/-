@@ -3,332 +3,299 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أمواج الخليج - مطاعم ومطابخ</title>
+    <title>منصة التحدي والسرعة الخارقة</title>
     <style>
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Tajawal', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
         body {
-            background-color: #0b0b0b;
+            background: linear-gradient(135deg, #0f172a, #1e1b4b);
             color: #ffffff;
-            line-height: 1.6;
-            padding-bottom: 90px;
-        }
-        header {
-            background-color: #000000;
-            padding: 20px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 3px solid #b81414;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        .logo h1 { color: #fff; font-size: 24px; font-weight: bold; }
-        .logo span { color: #ff4d4d; display: block; font-size: 13px; }
-        
-        .hero {
-            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), #151515;
-            height: 35vh; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; text-align: center; padding: 20px;
-            border-bottom: 1px solid #222;
-        }
-        .hero h2 { font-size: 32px; margin-bottom: 10px; }
-        .hero h2 span { color: #ff4d4d; }
-        .hero p { font-size: 15px; max-width: 500px; color: #aaa; }
-
-        .menu-section { padding: 40px 20px; max-width: 1000px; margin: 0 auto; }
-        .category { margin-bottom: 40px; }
-        .category-title {
-            font-size: 22px; color: #fff; border-right: 5px solid #b81414;
-            padding-right: 12px; margin-bottom: 20px; display: inline-block;
-        }
-        .menu-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-        }
-        .menu-card {
-            background-color: #161616; border-radius: 10px; overflow: hidden;
-            display: flex; flex-direction: column; justify-content: space-between;
-            border: 1px solid #262626; transition: 0.3s;
-        }
-        .menu-card:hover { border-color: #ff4d4d; transform: translateY(-3px); }
-        
-        .item-img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            background-color: #222;
-        }
-
-        .item-content {
-            padding: 15px;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            flex-grow: 1;
-            justify-content: space-between;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
 
-        .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .item-name { font-size: 16px; font-weight: bold; color: #fff; }
-        .item-price { font-size: 16px; font-weight: bold; color: #ff4d4d; }
-        
-        .add-btn {
-            background-color: #b81414; color: white; border: none; padding: 10px;
-            border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px;
-            transition: 0.2s; width: 100%;
-        }
-        .add-btn:hover { background-color: #ff4d4d; }
-
-        .cart-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background-color: #000; border-top: 2px solid #b81414;
-            padding: 15px 30px; display: flex; justify-content: space-between;
-            align-items: center; box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
-            z-index: 1000;
-        }
-        .cart-info { font-size: 15px; font-weight: bold; color: #fff; }
-        .checkout-btn {
-            background-color: #25d366; color: white; padding: 10px 25px;
-            border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 14px;
+        .container {
+            text-align: center;
+            background: rgba(30, 41, 59, 0.7);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 600px;
+            width: 90%;
         }
 
-        footer {
-            background-color: #000; text-align: center; padding: 20px;
-            color: #777; border-top: 1px solid #222; font-size: 13px; margin-bottom: 60px;
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            color: #94a3b8;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            background: rgba(15, 23, 42, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .stat-item span {
+            color: #38bdf8;
+        }
+
+        #gameCanvas {
+            background: #020617;
+            border-radius: 12px;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+            border: 2px solid #334155;
+            display: block;
+            margin: 0 auto 20px auto;
+            cursor: pointer;
+        }
+
+        .btn {
+            background: linear-gradient(90deg, #0284c7, #4f46e5);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .controls-hint {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #64748b;
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <header>
-        <div class="logo">
-            <h1>أمواج الخليج</h1>
-            <span>مطاعم ومطابخ - المدينة المنورة</span>
+    <div class="container">
+        <h1>الـعـاصـفـة الـضـوئـيـة</h1>
+        <p>تجنب العوائق الحمراء واجمع الأجرام الزرقاء لكسب النقاط!</p>
+        
+        <div class="stats">
+            <div class="stat-item">النقاط: <span id="score">0</span></div>
+            <div class="stat-item">أعلى نتيجة: <span id="highScore">0</span></div>
         </div>
-    </header>
 
-    <section class="hero">
-        <h2>مذاق الخليج <span>على أصوله</span></h2>
-        <p>المنيو الإلكتروني المعتمد - تصفح واختر طلبك بكل سهولة</p>
-    </section>
+        <canvas id="gameCanvas" width="500" height="350"></canvas>
 
-    <main class="menu-section">
-
-        <!-- قسم الأطباق الرئيسية (اللحوم والدجاج) -->
-        <section class="category">
-            <h3 class="category-title">قسم اللحوم والدجاج</h3>
-            <div class="menu-grid">
-                
-                <div class="menu-card">
-                    <img src="meat-feast.jpg" alt="وليمة لحم" class="item-img">
-                    <div class="item-content">
-                        <div class="item-header"><span class="item-name">وليمة لحم</span><span class="item-price">١٤٣.٧٥ ريال</span></div>
-                        <button class="add-btn" onclick="addToCart('وليمة لحم', 143.75)">إضافة للسلة</button>
-                    </div>
-                </div>
-
-                <div class="menu-card">
-                    <img src="meat-plate.jpg" alt="نفر لحم مندي" class="item-img">
-                    <div class="item-content">
-                        <div class="item-header"><span class="item-name">نفر لحم مندي</span><span class="item-price">٦٩.٠٠ ريال</span></div>
-                        <button class="add-btn" onclick="addToCart('نفر لحم مندي', 69.00)">إضافة للسلة</button>
-                    </div>
-                </div>
-
-                <div class="menu-card">
-                    <img src="chicken-rice.jpg" alt="حبة دجاج مندي" class="item-img">
-                    <div class="item-content">
-                        <div class="item-header"><span class="item-name">حبة دجاج مندي</span><span class="item-price">٤٢.٠٠ ريال</span></div>
-                        <button class="add-btn" onclick="addToCart('حبة دجاج مندي', 42.00)">إضافة للسلة</button>
-                    </div>
-                </div>
-
-                <div class="menu-card">
-                    <img src="mandi-chicken.jpg" alt="نفر دجاج مندي" class="item-img">
-                    <div class="item-content">
-                        <div class="item-header"><span class="item-name">نفر دجاج مندي</span><span class="item-price">٢١.٠٠ ريال</span></div>
-                        <button class="add-btn" onclick="addToCart('نفر دجاج مندي', 21.00)">إضافة للسلة</button>
-                    </div>
-                </div>
-
-                <div class="menu-card">
-                    <img src="chicken-plate.jpg" alt="حبة دجاج مظبي" class="item-img">
-                    <div class="item-content">
-                        <div class="item-header"><span class="item-name">حبة دجاج مظبي / شواية</span><span class="item-price">٤٢.٠٠ ريال</span></div>
-                        <button class="add-btn" onclick="addToCart('حبة دجاج مظبي / شواية', 42.00)">إضافة للسلة</button>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- قسم الإدامات والصواني -->
-        <section class="category">
-            <h3 class="category-title">قسم الإدامات</h3>
-            <div class="menu-grid">
-
-                <div class="menu-card">
-                    <img src="bamia.jpg" alt="إدام باميا صغير" class="item-img">
-                    <div class="item-content">
-                        <div class="item-header"><span class="item-name">إدام باميا صغير</span><span class="item-price">٦.٩٠ ريال</span></div>
-                        <button class="add-btn" onclick="addToCart('إدام باميا صغير', 6.90)">إضافة للسلة</button>
-                    </div>
-                </div>
-
-                <div class="menu-card">
-                    <img src="molokhia.jpg" alt="ملوخية صغير" class="item-img">
-                    <div class="item-content">
-                        <div class="item-header"><span class="item-name">ملوخية صغير</span><span class="item-price">٥.٧٥ ريال</span></div>
-                        <button class="add-btn" onclick="addToCart('ملوخية صغير', 5.75)">إضافة للسلة</button>
-                    </div>
-                </div>
-
-                <div class="menu-card">
-                    <img src="chicken-mix.jpg" alt="مسقعة فرن كبير" class="item-img">
-                    <div class="item-content">
-                        <div class="item-header"><span class="item-name">مسقعة فرن كبير</span><span class="item-price">١١.٥٠ ريال</span></div>
-                        <button class="add-btn" onclick="addToCart('مسقعة فرن كبير', 11.50)">إضافة للسلة</button>
-                    </div>
-                </div>
-
-                <div class="menu-card">
-                    <img src="mousaka.jpg" alt="مشكل فرن كبير" class="item-img">
-                    <div class="item-content">
-                        <div class="item-header"><span class="item-name">مشكل فرن كبير</span><span class="item-price">١١.٥٠ ريال</span></div>
-                        <button class="add-btn" onclick="addToCart('مشكل فرن كبير', 11.50)">إضافة للسلة</button>
-                    </div>
-                </div>
-
-                <div class="menu-card">
-                    <img src="mix-veggies.jpg" alt="مشكل فرن صغير" class="item-img">
-                    <div class="item-content">
-                        <div class="item-header"><span class="item-name">مشكل فرن صغير</span><span class="item-price">٦.٩٠ ريال</span></div>
-                        <button class="add-btn" onclick="addToCart('مشكل فرن صغير', 6.90)">إضافة للسلة</button>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- قسم الحلى -->
-        <section class="category">
-            <h3 class="category-title">قسم الحلى</h3>
-            <div class="menu-grid">
-
-                <div class="menu-card">
-                    <img src="muhalabiya.jpg" alt="مهلبية" class="item-img">
-                    <div class="item-content">
-                        <div class="item-header"><span class="item-name">مهلبية</span><span class="item-price">٣.٤٥ ريال</span></div>
-                        <button class="add-btn" onclick="addToCart('مهلبية', 3.45)">إضافة للسلة</button>
-                    </div>
-                </div>
-
-                <div class="menu-card">
-                    <img src="creme-caramel.jpg" alt="كريم كارامل" class="item-img">
-                    <div class="item-content">
-                        <div class="item-header"><span class="item-name">كريم كارامل</span><span class="item-price">٣.٤٥ ريال</span></div>
-                        <button class="add-btn" onclick="addToCart('كريم كارامل', 3.45)">إضافة للسلة</button>
-                    </div>
-                </div>
-
-                <div class="menu-card">
-                    <img src="tahina.jpg" alt="أم علي" class="item-img">
-                    <div class="item-content">
-                        <div class="item-header"><span class="item-name">أم علي</span><span class="item-price">١١.٥٠ ريال</span></div>
-                        <button class="add-btn" onclick="addToCart('أم علي', 11.50)">إضافة للسلة</button>
-                    </div>
-                </div>
-
-                <div class="menu-card">
-                    <img src="shatta.jpg" alt="كنانة بالقشطة" class="item-img">
-                    <div class="item-content">
-                        <div class="item-header"><span class="item-name">كنانة بالقشطة</span><span class="item-price">١١.٥٠ ريال</span></div>
-                        <button class="add-btn" onclick="addToCart('كنانة بالقشطة', 11.50)">إضافة للسلة</button>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- قسم السلطات والمشروبات -->
-        <section class="category">
-            <h3 class="category-title">قسم السلطات والمشروبات</h3>
-            <div class="menu-grid">
-                
-                <div class="menu-card">
-                    <img src="pepsi-can.jpg" alt="بيبسي" class="item-img">
-                    <div class="item-content">
-                        <div class="item-header"><span class="item-name">بيبسي / ميرندا</span><span class="item-price">٢.٥٠ ريال</span></div>
-                        <button class="add-btn" onclick="addToCart('بيبسي / ميرندا', 2.50)">إضافة للسلة</button>
-                    </div>
-                </div>
-
-                <div class="menu-card">
-                    <img src="laban-small.jpg" alt="لبن" class="item-img">
-                    <div class="item-content">
-                        <div class="item-header"><span class="item-name">لبن طازج</span><span class="item-price">٢.٥٠ ريال</span></div>
-                        <button class="add-btn" onclick="addToCart('لبن طازج', 2.50)">إضافة للسلة</button>
-                    </div>
-                </div>
-
-                <div class="menu-card">
-                    <img src="salad-yogurt.jpg" alt="سلطة حارة / دقوس" class="item-img">
-                    <div class="item-content">
-                        <div class="item-header"><span class="item-name">سلطة حارة / دقوس</span><span class="item-price">١.١٥ ريال</span></div>
-                        <button class="add-btn" onclick="addToCart('سلطة حارة / دقوس', 1.15)">إضافة للسلة</button>
-                    </div>
-                </div>
-
-                <div class="menu-card">
-                    <img src="daqous.jpg" alt="سلطة خضراء" class="item-img">
-                    <div class="item-content">
-                        <div class="item-header"><span class="item-name">سلطة خضراء</span><span class="item-price">٢.٣٠ ريال</span></div>
-                        <button class="add-btn" onclick="addToCart('سلطة خضراء', 2.30)">إضافة للسلة</button>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-    </main>
-
-    <!-- شريط السلة التفاعلي -->
-    <div class="cart-bar">
-        <div class="cart-info" id="cartSummary">السلة فارغة (0 أصناف) - 0 ريال</div>
-        <a href="#" class="checkout-btn" onclick="checkoutWhatsApp()">إرسال الطلب عبر واتساب</a>
+        <button class="btn" id="startBtn" onclick="startGame()">ابدأ التحدي</button>
+        
+        <div class="controls-hint">تحكم عبر الماوس أو باللمس داخل منطقة اللعب</div>
     </div>
 
-    <footer>
-        <p>جميع حقوق الطبع والنشر محفوظة © لمطاعم أمواج الخليج - المدينة المنورة</p>
-    </footer>
-
     <script>
-        let cartTotal = 0;
-        let cartCount = 0;
-        let cartItems = [];
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const highScoreElement = document.getElementById('highScore');
+        const startBtn = document.getElementById('startBtn');
 
-        function addToCart(name, price) {
-            cartCount++;
-            cartTotal += price;
-            cartItems.push(name);
-            document.getElementById('cartSummary').innerText = `المختار (${cartCount} أصناف) - ${cartTotal.toFixed(2)} ريال`;
+        let gameInterval;
+        let score = 0;
+        let highScore = localStorage.getItem('highScore') || 0;
+        highScoreElement.textContent = highScore;
+
+        let player = {
+            x: 250,
+            y: 280,
+            radius: 15,
+            color: '#38bdf8',
+            speed: 5
+        };
+
+        let obstacles = [];
+        let collectibles = [];
+        let gameRunning = false;
+        let mouseX = player.x;
+
+        // تتبع حركة الماوس أو اللمس
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            mouseX = e.clientX - rect.left;
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            if (e.touches.length > 0) {
+                mouseX = e.touches[0].clientX - rect.left;
+            }
+            e.preventDefault();
+        }, { passive: false });
+
+        function startGame() {
+            if (gameRunning) return;
+            gameRunning = true;
+            score = 0;
+            scoreElement.textContent = score;
+            obstacles = [];
+            collectibles = [];
+            startBtn.style.display = 'none';
+
+            gameInterval = setInterval(updateGame, 1000 / 60);
         }
 
-        function checkoutWhatsApp() {
-            if(cartCount === 0) {
-                alert('السلة فارغة! اختر بعض الأطباق أولاً.');
-                return;
+        function spawnEntities() {
+            // توليد العوائق الحمراء
+            if (Math.random() < 0.03) {
+                obstacles.push({
+                    x: Math.random() * (canvas.width - 30) + 15,
+                    y: -20,
+                    radius: Math.random() * 10 + 10,
+                    speed: Math.random() * 3 + 2,
+                    color: '#f43f5e'
+                });
             }
-            let message = `السلام عليكم، أرغب في طلب الأطباق التالية:%0A- ${cartItems.join('%0A- ')}%0A%0Aالإجمالي: ${cartTotal.toFixed(2)} ريال`;
-            window.open(`https://wa.me/966592244050?text=${message}`, '_blank');
+
+            // توليد النقاط الزرقاء
+            if (Math.random() < 0.02) {
+                collectibles.push({
+                    x: Math.random() * (canvas.width - 20) + 10,
+                    y: -20,
+                    radius: 10,
+                    speed: 2.5,
+                    color: '#10b981'
+                });
+            }
+        }
+
+        function updateGame() {
+            // مسح الشاشة
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // تحريك اللاعب بسلاسة نحو مؤشر الماوس
+            player.x += (mouseX - player.x) * 0.2;
+            // حصر اللاعب داخل حدود الشاشة
+            if (player.x < player.radius) player.x = player.radius;
+            if (player.x > canvas.width - player.radius) player.x = canvas.width - player.radius;
+
+            // رسم اللاعب
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+            ctx.fillStyle = player.color;
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = player.color;
+            ctx.fill();
+            ctx.closePath();
+            ctx.shadowBlur = 0; // إيقاف التوهج لبقية العناصر
+
+            // تحديث ورسم العوائق
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                let obs = obstacles[i];
+                obs.y += obs.speed;
+
+                ctx.beginPath();
+                ctx.arc(obs.x, obs.y, obs.radius, 0, Math.PI * 2);
+                ctx.fillStyle = obs.color;
+                ctx.fill();
+                ctx.closePath();
+
+                // كشف الاصطدام مع العوائق (خسارة)
+                let dist = Math.hypot(player.x - obs.x, player.y - obs.y);
+                if (dist < player.radius + obs.radius) {
+                    gameOver();
+                    return;
+                }
+
+                // إزالة العوائق التي تخرج عن الشاشة
+                if (obs.y > canvas.height + 20) {
+                    obstacles.splice(i, 1);
+                    score += 5; // نقاط إضافية لتجاوز العقبة
+                    scoreElement.textContent = score;
+                }
+            }
+
+            // تحديث ورسم المقتنيات
+            for (let i = collectibles.length - 1; i >= 0; i--) {
+                let col = collectibles[i];
+                col.y += col.speed;
+
+                ctx.beginPath();
+                ctx.arc(col.x, col.y, col.radius, 0, Math.PI * 2);
+                ctx.fillStyle = col.color;
+                ctx.fill();
+                ctx.closePath();
+
+                // كشف جمع النقاط
+                let dist = Math.hypot(player.x - col.x, player.y - col.y);
+                if (dist < player.radius + col.radius) {
+                    score += 20;
+                    scoreElement.textContent = score;
+                    collectibles.splice(i, 1);
+                    continue;
+                }
+
+                if (col.y > canvas.height + 20) {
+                    collectibles.splice(i, 1);
+                }
+            }
+
+            spawnEntities();
+        }
+
+        function gameOver() {
+            gameRunning = false;
+            clearInterval(gameInterval);
+
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('highScore', highScore);
+                highScoreElement.textContent = highScore;
+            }
+
+            // رسالة النهاية على الشاشة
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 30px Tahoma';
+            ctx.textAlign = 'center';
+            ctx.fillText('انتهت اللعبة!', canvas.width / 2, canvas.height / 2 - 20);
+
+            ctx.fillStyle = '#38bdf8';
+            ctx.font = '20px Tahoma';
+            ctx.fillText(`النتيجة النهائيه: ${score}`, canvas.width / 2, canvas.height / 2 + 20);
+
+            startBtn.textContent = 'إلعب مرة أخرى';
+            startBtn.style.display = 'inline-block';
         }
     </script>
-
 </body>
 </html>
