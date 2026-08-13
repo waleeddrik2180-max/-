@@ -2,81 +2,57 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>مغامرة الفضاء السريع</title>
+    <title>الهروب من الظلام - 3D</title>
     <style>
-        body { margin: 0; background: #050505; color: white; overflow: hidden; font-family: 'Arial', sans-serif; }
-        #gameCanvas { display: block; margin: 0 auto; background: #000; }
-        .ui { position: absolute; top: 20px; width: 100%; text-align: center; pointer-events: none; }
-        #startBtn { position: absolute; top: 70%; left: 50%; transform: translate(-50%, -50%); padding: 15px 30px; cursor: pointer; background: #ff0055; border: none; color: white; font-size: 20px; border-radius: 10px; }
+        body { margin: 0; background: #000; color: #fff; font-family: sans-serif; overflow: hidden; cursor: none; }
+        #canvas { width: 100vw; height: 100vh; display: block; }
+        #ui { position: absolute; top: 20px; width: 100%; text-align: center; pointer-events: none; }
     </style>
 </head>
 <body>
+    <div id="ui"><h1>ابحث عن المخرج في الظلام</h1><p>استخدم الماوس للتحرك والالتفات</p></div>
+    <canvas id="canvas"></canvas>
 
-    <div class="ui">
-        <h1>النقاط: <span id="score">0</span></h1>
-    </div>
-    <button id="startBtn">ابدأ المغامرة</button>
-    <canvas id="gameCanvas"></canvas>
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const scoreEl = document.getElementById('score');
-        const startBtn = document.getElementById('startBtn');
+    let player = { x: 0, y: 0, dir: 0 };
+    let frame = 0;
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+    function draw3D() {
+        ctx.fillStyle = "#050505";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        let player = { x: canvas.width/2, y: canvas.height - 100, size: 40 };
-        let obstacles = [];
-        let score = 0;
-        let gameActive = false;
-
-        window.addEventListener('mousemove', e => player.x = e.clientX - 20);
-        window.addEventListener('touchmove', e => player.x = e.touches[0].clientX - 20);
-
-        function drawPlayer() {
-            ctx.fillStyle = '#00f2ff';
-            ctx.fillRect(player.x, player.y, player.size, player.size);
-            ctx.strokeStyle = 'white';
-            ctx.strokeRect(player.x, player.y, player.size, player.size);
+        // رسم منظور الممر (وهمي 3D)
+        for(let i = 0; i < 20; i++) {
+            let depth = 1 - (i / 20) + (frame % 10) / 100;
+            let width = canvas.width * depth;
+            let height = canvas.height * depth;
+            ctx.strokeStyle = `rgba(255, 0, 0, ${depth})`;
+            ctx.strokeRect((canvas.width - width)/2, (canvas.height - height)/2, width, height);
         }
+    }
 
-        function update() {
-            if (!gameActive) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawPlayer();
-
-            if (Math.random() < 0.05) {
-                obstacles.push({ x: Math.random() * canvas.width, y: -50, size: 50, speed: 5 + (score/100) });
-            }
-
-            obstacles.forEach((obs, i) => {
-                obs.y += obs.speed;
-                // رسم وهمي للعمق
-                ctx.fillStyle = '#ff0055';
-                ctx.fillRect(obs.x, obs.y, obs.size, obs.size);
-                
-                if (obs.y > canvas.height) {
-                    obstacles.splice(i, 1);
-                    score += 10;
-                    scoreEl.innerText = score;
-                }
-
-                if (obs.y + obs.size > player.y && obs.x < player.x + player.size && obs.x + obs.size > player.x) {
-                    gameActive = false;
-                    startBtn.style.display = 'block';
-                    startBtn.innerText = 'خسرت! العب مرة أخرى';
-                }
-            });
-            requestAnimationFrame(update);
+    function animate() {
+        frame++;
+        draw3D();
+        
+        // تأثير رعب بسيط: وميض أحمر
+        if(Math.random() > 0.98) {
+            ctx.fillStyle = "rgba(255, 0, 0, 0.3)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
+        requestAnimationFrame(animate);
+    }
 
-        startBtn.onclick = () => {
-            score = 0; obstacles = []; gameActive = true;
-            startBtn.style.display = 'none';
-            update();
-        };
-    </script>
+    window.addEventListener('mousemove', (e) => {
+        player.dir = (e.clientX / canvas.width) * 10;
+    });
+
+    animate();
+</script>
 </body>
 </html>
