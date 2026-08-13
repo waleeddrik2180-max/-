@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>الهروب من الظلام - 3D</title>
+    <title>كس امك مص زبي - 3D</title>
     <style>
         body { margin: 0; background: #000; color: #fff; font-family: sans-serif; overflow: hidden; cursor: none; }
         #canvas { width: 100vw; height: 100vh; display: block; }
@@ -10,12 +10,12 @@
     </style>
 </head>
 <body>
-    <div id="ui"><h1>ابحث عن المخرج في الظلام</h1><p>استخدم الماوس للتحرك والالتفات</p></div>
+    <div id="ui"><h1>غزيل ام طيز كبيره وين؟</h1><p> غزيل ام طيز وديوس بيضاء وين بدخل زبي فطيزها!</p></div>
     <canvas id="canvas"></canvas>
 
 <script>
     const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('3d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
@@ -26,7 +26,7 @@
         ctx.fillStyle = "#050505";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // رسم منظور الممر (وهمي 3D)
+
         for(let i = 0; i < 20; i++) {
             let depth = 1 - (i / 20) + (frame % 10) / 100;
             let width = canvas.width * depth;
