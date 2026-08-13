@@ -2,299 +2,39 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة التحدي والسرعة الخارقة</title>
+    <title>THE NEON VOID</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #0f172a, #1e1b4b);
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .container {
-            text-align: center;
-            background: rgba(30, 41, 59, 0.7);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            max-width: 600px;
-            width: 90%;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            background: linear-gradient(90deg, #38bdf8, #818cf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        p {
-            color: #94a3b8;
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-        }
-
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-            background: rgba(15, 23, 42, 0.6);
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-
-        .stat-item span {
-            color: #38bdf8;
-        }
-
-        #gameCanvas {
-            background: #020617;
-            border-radius: 12px;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
-            border: 2px solid #334155;
-            display: block;
-            margin: 0 auto 20px auto;
-            cursor: pointer;
-        }
-
-        .btn {
-            background: linear-gradient(90deg, #0284c7, #4f46e5);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6);
-        }
-
-        .btn:active {
-            transform: translateY(1px);
-        }
-
-        .controls-hint {
-            margin-top: 15px;
-            font-size: 0.9rem;
-            color: #64748b;
-        }
+        body { margin: 0; background: #000; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+        canvas { display: block; }
+        #ui { position: absolute; top: 20px; left: 20px; color: #fff; pointer-events: none; font-size: 24px; text-shadow: 0 0 10px #fff; }
+        #start { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 20px 50px; background: transparent; border: 2px solid #fff; color: #fff; cursor: pointer; font-size: 20px; text-transform: uppercase; letter-spacing: 2px; }
+        #start:hover { background: #fff; color: #000; }
     </style>
 </head>
 <body>
-
-    <div class="container">
-        <h1>الـعـاصـفـة الـضـوئـيـة</h1>
-        <p>تجنب العوائق الحمراء واجمع الأجرام الزرقاء لكسب النقاط!</p>
-        
-        <div class="stats">
-            <div class="stat-item">النقاط: <span id="score">0</span></div>
-            <div class="stat-item">أعلى نتيجة: <span id="highScore">0</span></div>
-        </div>
-
-        <canvas id="gameCanvas" width="500" height="350"></canvas>
-
-        <button class="btn" id="startBtn" onclick="startGame()">ابدأ التحدي</button>
-        
-        <div class="controls-hint">تحكم عبر الماوس أو باللمس داخل منطقة اللعب</div>
-    </div>
+    <div id="ui">SCORE: 0</div>
+    <button id="start">INITIATE</button>
+    <canvas id="c"></canvas>
 
     <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const scoreElement = document.getElementById('score');
-        const highScoreElement = document.getElementById('highScore');
-        const startBtn = document.getElementById('startBtn');
-
-        let gameInterval;
-        let score = 0;
-        let highScore = localStorage.getItem('highScore') || 0;
-        highScoreElement.textContent = highScore;
-
-        let player = {
-            x: 250,
-            y: 280,
-            radius: 15,
-            color: '#38bdf8',
-            speed: 5
-        };
-
-        let obstacles = [];
-        let collectibles = [];
-        let gameRunning = false;
-        let mouseX = player.x;
-
-        // تتبع حركة الماوس أو اللمس
-        canvas.addEventListener('mousemove', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            mouseX = e.clientX - rect.left;
-        });
-
-        canvas.addEventListener('touchmove', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            if (e.touches.length > 0) {
-                mouseX = e.touches[0].clientX - rect.left;
-            }
-            e.preventDefault();
-        }, { passive: false });
-
-        function startGame() {
-            if (gameRunning) return;
-            gameRunning = true;
-            score = 0;
-            scoreElement.textContent = score;
-            obstacles = [];
-            collectibles = [];
-            startBtn.style.display = 'none';
-
-            gameInterval = setInterval(updateGame, 1000 / 60);
-        }
-
-        function spawnEntities() {
-            // توليد العوائق الحمراء
-            if (Math.random() < 0.03) {
-                obstacles.push({
-                    x: Math.random() * (canvas.width - 30) + 15,
-                    y: -20,
-                    radius: Math.random() * 10 + 10,
-                    speed: Math.random() * 3 + 2,
-                    color: '#f43f5e'
-                });
-            }
-
-            // توليد النقاط الزرقاء
-            if (Math.random() < 0.02) {
-                collectibles.push({
-                    x: Math.random() * (canvas.width - 20) + 10,
-                    y: -20,
-                    radius: 10,
-                    speed: 2.5,
-                    color: '#10b981'
-                });
-            }
-        }
-
-        function updateGame() {
-            // مسح الشاشة
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // تحريك اللاعب بسلاسة نحو مؤشر الماوس
-            player.x += (mouseX - player.x) * 0.2;
-            // حصر اللاعب داخل حدود الشاشة
-            if (player.x < player.radius) player.x = player.radius;
-            if (player.x > canvas.width - player.radius) player.x = canvas.width - player.radius;
-
-            // رسم اللاعب
-            ctx.beginPath();
-            ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
-            ctx.fillStyle = player.color;
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = player.color;
-            ctx.fill();
-            ctx.closePath();
-            ctx.shadowBlur = 0; // إيقاف التوهج لبقية العناصر
-
-            // تحديث ورسم العوائق
-            for (let i = obstacles.length - 1; i >= 0; i--) {
-                let obs = obstacles[i];
-                obs.y += obs.speed;
-
-                ctx.beginPath();
-                ctx.arc(obs.x, obs.y, obs.radius, 0, Math.PI * 2);
-                ctx.fillStyle = obs.color;
-                ctx.fill();
-                ctx.closePath();
-
-                // كشف الاصطدام مع العوائق (خسارة)
-                let dist = Math.hypot(player.x - obs.x, player.y - obs.y);
-                if (dist < player.radius + obs.radius) {
-                    gameOver();
-                    return;
-                }
-
-                // إزالة العوائق التي تخرج عن الشاشة
-                if (obs.y > canvas.height + 20) {
-                    obstacles.splice(i, 1);
-                    score += 5; // نقاط إضافية لتجاوز العقبة
-                    scoreElement.textContent = score;
-                }
-            }
-
-            // تحديث ورسم المقتنيات
-            for (let i = collectibles.length - 1; i >= 0; i--) {
-                let col = collectibles[i];
-                col.y += col.speed;
-
-                ctx.beginPath();
-                ctx.arc(col.x, col.y, col.radius, 0, Math.PI * 2);
-                ctx.fillStyle = col.color;
-                ctx.fill();
-                ctx.closePath();
-
-                // كشف جمع النقاط
-                let dist = Math.hypot(player.x - col.x, player.y - col.y);
-                if (dist < player.radius + col.radius) {
-                    score += 20;
-                    scoreElement.textContent = score;
-                    collectibles.splice(i, 1);
-                    continue;
-                }
-
-                if (col.y > canvas.height + 20) {
-                    collectibles.splice(i, 1);
-                }
-            }
-
-            spawnEntities();
-        }
-
-        function gameOver() {
-            gameRunning = false;
-            clearInterval(gameInterval);
-
-            if (score > highScore) {
-                highScore = score;
-                localStorage.setItem('highScore', highScore);
-                highScoreElement.textContent = highScore;
-            }
-
-            // رسالة النهاية على الشاشة
-            ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 30px Tahoma';
-            ctx.textAlign = 'center';
-            ctx.fillText('انتهت اللعبة!', canvas.width / 2, canvas.height / 2 - 20);
-
-            ctx.fillStyle = '#38bdf8';
-            ctx.font = '20px Tahoma';
-            ctx.fillText(`النتيجة النهائيه: ${score}`, canvas.width / 2, canvas.height / 2 + 20);
-
-            startBtn.textContent = 'إلعب مرة أخرى';
-            startBtn.style.display = 'inline-block';
+        const c = document.getElementById('c'), ctx = c.getContext('2d'), ui = document.getElementById('ui'), btn = document.getElementById('start');
+        c.width = window.innerWidth; c.height = window.innerHeight;
+        let s = 0, g = false, p = {x: c.width/2, y: c.height-100, v: 0}, o = [];
+        window.onmousemove = e => p.x = e.clientX;
+        window.ontouchmove = e => p.x = e.touches[0].clientX;
+        btn.onclick = () => { s = 0; o = []; g = true; btn.style.display = 'none'; loop(); };
+        function loop() {
+            if (!g) return;
+            ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.fillRect(0,0,c.width,c.height);
+            if (Math.random() < 0.1) o.push({x: Math.random()*c.width, y: -20, s: 2+s/500, c: `hsl(${Math.random()*360},100%,50%)`});
+            ctx.fillStyle = '#fff'; ctx.fillRect(p.x-25, p.y-25, 50, 50);
+            o.forEach((e, i) => {
+                e.y += e.s;
+                ctx.fillStyle = e.c; ctx.fillRect(e.x, e.y, 30, 30);
+                if (Math.abs(e.x - p.x) < 40 && Math.abs(e.y - p.y) < 40) { g = false; btn.innerText = 'RETRY'; btn.style.display = 'block'; }
+                if (e.y > c.height) { o.splice(i, 1); s += 10; ui.innerText = 'SCORE: ' + s; }
+            });
+            requestAnimationFrame(loop);
         }
     </script>
 </body>
