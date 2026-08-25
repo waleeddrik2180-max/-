@@ -1,58 +1,148 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <title>كس امك مص زبي - 3D</title>
-    <style>
-        body { margin: 0; background: #000; color: #fff; font-family: sans-serif; overflow: hidden; cursor: none; }
-        #canvas { width: 100vw; height: 100vh; display: block; }
-        #ui { position: absolute; top: 20px; width: 100%; text-align: center; pointer-events: none; }
-    </style>
+  <meta charset="UTF-8">
+  <title>Open World Prototype</title>
+  <style>
+    body { margin: 0; overflow: hidden; font-family: sans-serif; }
+    #ui {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: white;
+      background: rgba(0,0,0,0.6);
+      padding: 10px 15px;
+      border-radius: 8px;
+      direction: rtl;
+    }
+  </style>
 </head>
 <body>
-    <div id="ui"><h1>غزيل ام طيز كبيره وين؟</h1><p> غزيل ام طيز وديوس بيضاء وين بدخل زبي فطيزها!</p></div>
-    <canvas id="canvas"></canvas>
+
+<div id="ui">
+  🎮 **التحكم:**<br>
+  - الحركة: **W A S D**<br>
+  - ركوب / النزول من السيارة: **F**<br>
+  - حالة اللاعب: <span id="status">ترجل (مشاة)</span>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
 <script>
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('3d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+  // 1. إعداد المشهد والكميرا
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x87ceeb); // لون السماء
 
-    let player = { x: 0, y: 0, dir: 0 };
-    let frame = 0;
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
 
-    function draw3D() {
-        ctx.fillStyle = "#050505";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // إضاءة المشهد
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(20, 40, 20);
+  scene.add(light);
+  scene.add(new THREE.AmbientLight(0x404040));
 
+  // 2. إنشاء المدينة (الأرض والمباني)
+  const floor = new THREE.Mesh(
+    new THREE.PlaneGeometry(300, 300),
+    new THREE.MeshBasicMaterial({ color: 0x333333 })
+  );
+  floor.rotation.x = -Math.PI / 2;
+  scene.add(floor);
 
-        for(let i = 0; i < 20; i++) {
-            let depth = 1 - (i / 20) + (frame % 10) / 100;
-            let width = canvas.width * depth;
-            let height = canvas.height * depth;
-            ctx.strokeStyle = `rgba(255, 0, 0, ${depth})`;
-            ctx.strokeRect((canvas.width - width)/2, (canvas.height - height)/2, width, height);
-        }
+  // شوارع ومباني عشوائية
+  for (let i = 0; i < 40; i++) {
+    const h = Math.random() * 20 + 5;
+    const building = new THREE.Mesh(
+      new THREE.BoxGeometry(8, h, 8),
+      new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff })
+    );
+    building.position.set((Math.random() - 0.5) * 200, h / 2, (Math.random() - 0.5) * 200);
+    scene.add(building);
+  }
+
+  // 3. إنشاء اللاعب (شخصية خضراء)
+  const player = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.5, 0.5, 2),
+    new THREE.MeshLambertMaterial({ color: 0x00ff00 })
+  );
+  player.position.set(0, 1, 0);
+  scene.add(player);
+
+  // 4. إنشاء السيارة (صندوق أحمر مع عجلات)
+  const car = new THREE.Group();
+  const carBody = new THREE.Mesh(
+    new THREE.BoxGeometry(2.5, 1.2, 5),
+    new THREE.MeshLambertMaterial({ color: 0xff0000 })
+  );
+  carBody.position.y = 0.8;
+  car.add(carBody);
+  car.position.set(10, 0, 10);
+  scene.add(car);
+
+  // 5. نظام الحركة والتحكم
+  let inCar = false;
+  let carSpeed = 0;
+  const keys = {};
+
+  window.addEventListener('keydown', e => {
+    keys[e.key.toLowerCase()] = true;
+
+    // زر ركوب السيارة F
+    if (e.key.toLowerCase() === 'f') {
+      const dist = player.position.distanceTo(car.position);
+      if (!inCar && dist < 4) {
+        inCar = true;
+        player.visible = false;
+        document.getElementById('status').innerText = "داخل السيارة 🚗";
+      } else if (inCar) {
+        inCar = false;
+        player.visible = true;
+        player.position.set(car.position.x + 3, 1, car.position.z);
+        document.getElementById('status').innerText = "ترجل (مشاة)";
+      }
+    }
+  });
+
+  window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+
+  // 6. التحديث المستمر للعبة (Loop)
+  function animate() {
+    requestAnimationFrame(animate);
+
+    if (!inCar) {
+      // حركة المشاة
+      if (keys['w']) player.position.z -= 0.15;
+      if (keys['s']) player.position.z += 0.15;
+      if (keys['a']) player.position.x -= 0.15;
+      if (keys['d']) player.position.x += 0.15;
+
+      // كاميرا تلحق اللاعب
+      camera.position.set(player.position.x, player.position.y + 5, player.position.z + 10);
+      camera.lookAt(player.position);
+    } else {
+      // قيادة السيارة
+      if (keys['w']) carSpeed = Math.min(carSpeed + 0.01, 0.4);
+      else if (keys['s']) carSpeed = Math.max(carSpeed - 0.01, -0.15);
+      else carSpeed *= 0.95; // احتكاك
+
+      if (keys['a']) car.rotation.y += 0.03;
+      if (keys['d']) car.rotation.y -= 0.03;
+
+      car.translateZ(-carSpeed);
+
+      // كاميرا تلحق السيارة
+      const camOffset = new THREE.Vector3(0, 4, 10).applyAxisAngle(new THREE.Vector3(0, 1, 0), car.rotation.y);
+      camera.position.copy(car.position).add(camOffset);
+      camera.lookAt(car.position);
     }
 
-    function animate() {
-        frame++;
-        draw3D();
-        
-        // تأثير رعب بسيط: وميض أحمر
-        if(Math.random() > 0.98) {
-            ctx.fillStyle = "rgba(255, 0, 0, 0.3)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
-        requestAnimationFrame(animate);
-    }
+    renderer.render(scene, camera);
+  }
 
-    window.addEventListener('mousemove', (e) => {
-        player.dir = (e.clientX / canvas.width) * 10;
-    });
-
-    animate();
+  animate();
 </script>
 </body>
 </html>
