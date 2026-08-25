@@ -2,147 +2,242 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>Open World Prototype</title>
+  <title>GTA Prototype Ultra</title>
   <style>
-    body { margin: 0; overflow: hidden; font-family: sans-serif; }
-    #ui {
+    body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; }
+    #hud {
       position: absolute;
-      top: 10px;
-      left: 10px;
-      color: white;
-      background: rgba(0,0,0,0.6);
-      padding: 10px 15px;
-      border-radius: 8px;
+      top: 15px; right: 15px;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.75);
+      padding: 15px 20px;
+      border-radius: 10px;
       direction: rtl;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      border: 1px solid #444;
     }
+    #crosshair {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 10px; height: 10px;
+      background: red;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      display: none;
+    }
+    .hud-title { font-weight: bold; color: #ffbc00; margin-bottom: 5px; }
   </style>
 </head>
 <body>
 
-<div id="ui">
-  🎮 **التحكم:**<br>
-  - الحركة: **W A S D**<br>
-  - ركوب / النزول من السيارة: **F**<br>
-  - حالة اللاعب: <span id="status">ترجل (مشاة)</span>
+<div id="crosshair"></div>
+<div id="hud">
+  <div class="hud-title">🎮 نمط التحكم</div>
+  <div>مشاة: <b>WASD</b> للتحرك | <b>الماوس</b> للإطلاق</div>
+  <div>سيارة: <b>W/S</b> بنزين/ريوس | <b>A/D</b> توجيه | <b>Space</b> فرامل</div>
+  <div>ركوب/نزول: <b>F</b></div>
+  <hr style="border-color: #555; margin: 8px 0;">
+  <div>الحالة: <b id="mode-text" style="color: #00ffcc;">ترجل (مشاة)</b></div>
+  <div>السرعة: <b id="speed-text">0</b> كم/س</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
 <script>
-  // 1. إعداد المشهد والكميرا
+  // === 1. إعداد البيئة والمشهد ===
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x87ceeb); // لون السماء
+  scene.background = new THREE.Color(0x1a1a2e);
+  scene.fog = new THREE.FogExp2(0x1a1a2e, 0.015);
 
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 500);
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.shadowMap.enabled = true;
   document.body.appendChild(renderer.domElement);
 
-  // إضاءة المشهد
-  const light = new THREE.DirectionalLight(0xffffff, 1);
-  light.position.set(20, 40, 20);
-  scene.add(light);
-  scene.add(new THREE.AmbientLight(0x404040));
+  // إضاءة واقعية
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+  scene.add(ambientLight);
 
-  // 2. إنشاء المدينة (الأرض والمباني)
-  const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(300, 300),
-    new THREE.MeshBasicMaterial({ color: 0x333333 })
-  );
+  const sunLight = new THREE.DirectionalLight(0xffdfa9, 1.2);
+  sunLight.position.set(50, 100, 50);
+  sunLight.castShadow = true;
+  scene.add(sunLight);
+
+  // === 2. بناء المدينة والمضمار ===
+  const citySize = 400;
+  const floorGeo = new THREE.PlaneGeometry(citySize, citySize);
+  const floorMat = new THREE.MeshLambertMaterial({ color: 0x222222 });
+  const floor = new THREE.Mesh(floorGeo, floorMat);
   floor.rotation.x = -Math.PI / 2;
   scene.add(floor);
 
-  // شوارع ومباني عشوائية
-  for (let i = 0; i < 40; i++) {
-    const h = Math.random() * 20 + 5;
-    const building = new THREE.Mesh(
-      new THREE.BoxGeometry(8, h, 8),
-      new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff })
-    );
-    building.position.set((Math.random() - 0.5) * 200, h / 2, (Math.random() - 0.5) * 200);
-    scene.add(building);
+  // إنشاء مباني عشوائية
+  const buildings = [];
+  const buildGeo = new THREE.BoxGeometry(1, 1, 1);
+  for (let i = 0; i < 60; i++) {
+    const h = Math.random() * 30 + 10;
+    const w = Math.random() * 10 + 8;
+    const d = Math.random() * 10 + 8;
+    const mat = new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff });
+    const b = new THREE.Mesh(buildGeo, mat);
+    
+    let x = (Math.random() - 0.5) * (citySize - 40);
+    let z = (Math.random() - 0.5) * (citySize - 40);
+    if (Math.abs(x) < 15 && Math.abs(z) < 15) x += 30; // إبعاد عن منطقة البدء
+
+    b.scale.set(w, h, d);
+    b.position.set(x, h / 2, z);
+    scene.add(b);
+    buildings.push(b);
   }
 
-  // 3. إنشاء اللاعب (شخصية خضراء)
-  const player = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.5, 0.5, 2),
-    new THREE.MeshLambertMaterial({ color: 0x00ff00 })
+  // === 3. إنشاء اللاعب والسيارة ===
+  // اللاعب
+  const playerGroup = new THREE.Group();
+  const playerBody = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.5, 0.5, 1.8),
+    new THREE.MeshLambertMaterial({ color: 0x00ff88 })
   );
-  player.position.set(0, 1, 0);
-  scene.add(player);
+  playerBody.position.y = 0.9;
+  playerGroup.add(playerBody);
+  scene.add(playerGroup);
 
-  // 4. إنشاء السيارة (صندوق أحمر مع عجلات)
-  const car = new THREE.Group();
+  // السيارة
+  const carGroup = new THREE.Group();
   const carBody = new THREE.Mesh(
-    new THREE.BoxGeometry(2.5, 1.2, 5),
-    new THREE.MeshLambertMaterial({ color: 0xff0000 })
+    new THREE.BoxGeometry(2.2, 1, 4.5),
+    new THREE.MeshLambertMaterial({ color: 0xff3333 })
   );
-  carBody.position.y = 0.8;
-  car.add(carBody);
-  car.position.set(10, 0, 10);
-  scene.add(car);
+  carBody.position.y = 0.7;
+  carGroup.add(carBody);
 
-  // 5. نظام الحركة والتحكم
+  // سقف السيارة
+  const carCabin = new THREE.Mesh(
+    new THREE.BoxGeometry(1.8, 0.8, 2.2),
+    new THREE.MeshLambertMaterial({ color: 0x111111 })
+  );
+  carCabin.position.set(0, 1.4, -0.2);
+  carGroup.add(carCabin);
+
+  carGroup.position.set(8, 0, 8);
+  scene.add(carGroup);
+
+  // === 4. نظام الأسلحة والرصاص ===
+  const bullets = [];
+  function shootBullet() {
+    const b = new THREE.Mesh(
+      new THREE.SphereGeometry(0.2),
+      new THREE.MeshBasicMaterial({ color: 0xffff00 })
+    );
+    b.position.copy(playerGroup.position);
+    b.position.y += 1.2;
+
+    const dir = new THREE.Vector3(0, 0, -1).applyQuaternion(playerGroup.quaternion);
+    bullets.push({ mesh: b, dir: dir, life: 100 });
+    scene.add(b);
+  }
+
+  // === 5. التحكم والمدخلات ===
+  const keys = {};
   let inCar = false;
   let carSpeed = 0;
-  const keys = {};
+  let carSteer = 0;
 
   window.addEventListener('keydown', e => {
-    keys[e.key.toLowerCase()] = true;
+    keys[e.code] = true;
 
-    // زر ركوب السيارة F
-    if (e.key.toLowerCase() === 'f') {
-      const dist = player.position.distanceTo(car.position);
-      if (!inCar && dist < 4) {
+    if (e.code === 'KeyF') {
+      const dist = playerGroup.position.distanceTo(carGroup.position);
+      if (!inCar && dist < 5) {
         inCar = true;
-        player.visible = false;
-        document.getElementById('status').innerText = "داخل السيارة 🚗";
+        playerGroup.visible = false;
+        document.getElementById('mode-text').innerText = "داخل السيارة 🚗";
+        document.getElementById('mode-text').style.color = "#ff4444";
+        document.getElementById('crosshair').style.display = 'none';
       } else if (inCar) {
         inCar = false;
-        player.visible = true;
-        player.position.set(car.position.x + 3, 1, car.position.z);
-        document.getElementById('status').innerText = "ترجل (مشاة)";
+        playerGroup.visible = true;
+        playerGroup.position.copy(carGroup.position).add(new THREE.Vector3(2.5, 0, 0));
+        document.getElementById('mode-text').innerText = "ترجل (مشاة)";
+        document.getElementById('mode-text').style.color = "#00ffcc";
       }
     }
   });
 
-  window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+  window.addEventListener('keyup', e => keys[e.code] = false);
+  window.addEventListener('mousedown', () => {
+    if (!inCar) shootBullet();
+  });
 
-  // 6. التحديث المستمر للعبة (Loop)
-  function animate() {
-    requestAnimationFrame(animate);
+  // === 6. الحلقة التكرارية المحاكية (Game Loop) ===
+  function update() {
+    // تحديث الرصاص
+    for (let i = bullets.length - 1; i >= 0; i--) {
+      let b = bullets[i];
+      b.mesh.position.addScaledVector(b.dir, 1.2);
+      b.life--;
+      if (b.life <= 0) {
+        scene.remove(b.mesh);
+        bullets.splice(i, 1);
+      }
+    }
 
     if (!inCar) {
-      // حركة المشاة
-      if (keys['w']) player.position.z -= 0.15;
-      if (keys['s']) player.position.z += 0.15;
-      if (keys['a']) player.position.x -= 0.15;
-      if (keys['d']) player.position.x += 0.15;
+      // **حركة المشاة**
+      let moveX = 0, moveZ = 0;
+      if (keys['KeyW']) moveZ -= 0.18;
+      if (keys['KeyS']) moveZ += 0.18;
+      if (keys['KeyA']) moveX -= 0.18;
+      if (keys['KeyD']) moveX += 0.18;
 
-      // كاميرا تلحق اللاعب
-      camera.position.set(player.position.x, player.position.y + 5, player.position.z + 10);
-      camera.lookAt(player.position);
+      if (moveX !== 0 || moveZ !== 0) {
+        const angle = Math.atan2(moveX, moveZ);
+        playerGroup.rotation.y = angle;
+        playerGroup.translateZ(Math.sqrt(moveX * moveX + moveZ * moveZ));
+      }
+
+      // كاميرا المشاة
+      camera.position.set(playerGroup.position.x, playerGroup.position.y + 6, playerGroup.position.z + 10);
+      camera.lookAt(playerGroup.position.x, playerGroup.position.y + 1, playerGroup.position.z);
+      document.getElementById('speed-text').innerText = "0";
+      document.getElementById('crosshair').style.display = 'block';
+
     } else {
-      // قيادة السيارة
-      if (keys['w']) carSpeed = Math.min(carSpeed + 0.01, 0.4);
-      else if (keys['s']) carSpeed = Math.max(carSpeed - 0.01, -0.15);
-      else carSpeed *= 0.95; // احتكاك
+      // **فيزياء السيارة**
+      if (keys['KeyW']) carSpeed = Math.min(carSpeed + 0.015, 0.8);
+      else if (keys['KeyS']) carSpeed = Math.max(carSpeed - 0.01, -0.3);
+      else carSpeed *= 0.97; // تباطؤ طبيعي
 
-      if (keys['a']) car.rotation.y += 0.03;
-      if (keys['d']) car.rotation.y -= 0.03;
+      if (keys['Space']) carSpeed *= 0.85; // فرامل يدج
 
-      car.translateZ(-carSpeed);
+      // التوجيه
+      if (keys['KeyA']) carGroup.rotation.y += 0.04 * (carSpeed / 0.8);
+      if (keys['KeyD']) carGroup.rotation.y -= 0.04 * (carSpeed / 0.8);
 
-      // كاميرا تلحق السيارة
-      const camOffset = new THREE.Vector3(0, 4, 10).applyAxisAngle(new THREE.Vector3(0, 1, 0), car.rotation.y);
-      camera.position.copy(car.position).add(camOffset);
-      camera.lookAt(car.position);
+      carGroup.translateZ(-carSpeed);
+
+      // كاميرا السيارة
+      const camOffset = new THREE.Vector3(0, 5, 12).applyAxisAngle(new THREE.Vector3(0, 1, 0), carGroup.rotation.y);
+      camera.position.copy(carGroup.position).add(camOffset);
+      camera.lookAt(carGroup.position.x, carGroup.position.y + 1, carGroup.position.z);
+
+      document.getElementById('speed-text').innerText = Math.round(Math.abs(carSpeed) * 160);
     }
 
     renderer.render(scene, camera);
+    requestAnimationFrame(update);
   }
 
-  animate();
+  update();
+
+  // ضبط الحجم عند تغيير نافذة المتصفح
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
 </script>
 </body>
 </html>
