@@ -1,377 +1,507 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>GTA 3D Advanced Prototype</title>
-  <style>
-    body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, sans-serif; user-select: none; }
-    #hud {
-      position: absolute;
-      top: 15px; right: 15px;
-      color: #fff;
-      background: rgba(15, 15, 25, 0.85);
-      padding: 15px 20px;
-      border-radius: 12px;
-      direction: rtl;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-      border: 1px solid rgba(255,255,255,0.1);
-      backdrop-filter: blur(5px);
-    }
-    #crosshair {
-      position: absolute;
-      top: 50%; left: 50%;
-      width: 8px; height: 8px;
-      background: #ff3333;
-      border: 2px solid white;
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-    }
-    .title { font-weight: bold; color: #ffbc00; margin-bottom: 5px; font-size: 16px; }
-  </style>
-</head>
-<body>
-
-<div id="crosshair"></div>
-<div id="hud">
-  <div class="title">🎮 التحكم باللعبة</div>
-  <div>مشاة: <b>WASD</b> حركة | <b>الماوس</b> إطلاق نار</div>
-  <div>سيارة: <b>W/S</b> سرعة/ريوس | <b>A/D</b> توجيه | <b>Space</b> فرامل</div>
-  <div>ركوب/نزول: <b>F</b></div>
-  <hr style="border-color: rgba(255,255,255,0.2); margin: 8px 0;">
-  <div>الحالة: <b id="mode-text" style="color: #00ffcc;">مشاة 🚶</b></div>
-  <div>السرعة: <b id="speed-text">0</b> كم/س</div>
-  <div>عدد المشاة (NPCs): <b style="color: #ffbc00;">20 شخصية</b></div>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-<script>
-  // === 1. إعداد المشهد والأجواء البيئية ===
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xdfe9f3); // لون سماء دافئ
-  scene.fog = new THREE.FogExp2(0xdfe9f3, 0.008);
-
-  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  document.body.appendChild(renderer.domElement);
-
-  // إضاءة الشمس والظل
-  const ambientLight = new THREE.AmbientLight(0xffeedd, 0.6);
-  scene.add(ambientLight);
-
-  const sun = new THREE.DirectionalLight(0xffaa55, 1.2);
-  sun.position.set(80, 100, 50);
-  sun.castShadow = true;
-  sun.shadow.mapSize.width = 2048;
-  sun.shadow.mapSize.height = 2048;
-  sun.shadow.camera.near = 0.5;
-  sun.shadow.camera.far = 300;
-  const d = 100;
-  sun.shadow.camera.left = -d; sun.shadow.camera.right = d;
-  sun.shadow.camera.top = d; sun.shadow.camera.bottom = -d;
-  scene.add(sun);
-
-  // === 2. بناء المدينة والشوارع والمباني ===
-  const citySize = 300;
-  const floorGeo = new THREE.PlaneGeometry(citySize, citySize);
-  const floorMat = new THREE.MeshStandardMaterial({ color: 0x2c3e50, roughness: 0.8 });
-  const floor = new THREE.Mesh(floorGeo, floorMat);
-  floor.rotation.x = -Math.PI / 2;
-  floor.receiveShadow = true;
-  scene.add(floor);
-
-  // قائمة لحفظ وحدات الاصطدام (Bounding Boxes) للمباني
-  const buildingBoxes = [];
-
-  const buildingColors = [0x34495e, 0x7f8c8d, 0x95a5a6, 0xd2b48c, 0xb0c4de];
-  for (let i = 0; i < 35; i++) {
-    const w = Math.random() * 12 + 10;
-    const h = Math.random() * 35 + 15;
-    const d = Math.random() * 12 + 10;
-    
-    let x = (Math.random() - 0.5) * (citySize - 60);
-    let z = (Math.random() - 0.5) * (citySize - 60);
-    if (Math.abs(x) < 20 && Math.abs(z) < 20) x += 40; // تفادي منطقة البداية
-
-    const mat = new THREE.MeshStandardMaterial({
-      color: buildingColors[Math.floor(Math.random() * buildingColors.length)],
-      roughness: 0.5
-    });
-    const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
-    b.position.set(x, h / 2, z);
-    b.castShadow = true;
-    b.receiveShadow = true;
-    scene.add(b);
-
-    // حساب حدود المبنى لمنع الاختراق
-    const box = new THREE.Box3().setFromObject(b);
-    buildingBoxes.push(box);
-  }
-
-  // === 3. إنشاء شخصية اللاعب 3D ===
-  function createHumanoid(shirtColor, pantsColor) {
-    const group = new THREE.Group();
-    // الجسم
-    const torso = new THREE.Mesh(
-      new THREE.BoxGeometry(0.7, 0.9, 0.4),
-      new THREE.MeshStandardMaterial({ color: shirtColor })
-    );
-    torso.position.y = 1.05;
-    torso.castShadow = true;
-    group.add(torso);
-
-    // الرأس
-    const head = new THREE.Mesh(
-      new THREE.SphereGeometry(0.25, 16, 16),
-      new THREE.MeshStandardMaterial({ color: 0xffdbac })
-    );
-    head.position.y = 1.7;
-    head.castShadow = true;
-    group.add(head);
-
-    // الأرجل
-    const legMat = new THREE.MeshStandardMaterial({ color: pantsColor });
-    const legL = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.8, 0.3), legMat);
-    legL.position.set(-0.2, 0.4, 0);
-    legL.castShadow = true;
-    group.add(legL);
-
-    const legR = legL.clone();
-    legR.position.x = 0.2;
-    group.add(legR);
-
-    return group;
-  }
-
-  const playerGroup = createHumanoid(0x2980b9, 0x2c3e50);
-  playerGroup.position.set(0, 0, 0);
-  scene.add(playerGroup);
-
-  // === 4. تصميم سيارة واقعية 3D ===
-  function createRealisticCar() {
-    const car = new THREE.Group();
-    
-    // الهيكل الرئيسي
-    const bodyMat = new THREE.MeshStandardMaterial({ color: 0xc0392b, metalness: 0.6, roughness: 0.3 });
-    const body = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.7, 4.8), bodyMat);
-    body.position.y = 0.6;
-    body.castShadow = true;
-    car.add(body);
-
-    // السقف والزجاج
-    const glassMat = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.9, roughness: 0.1 });
-    const cabin = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.65, 2.4), glassMat);
-    cabin.position.set(0, 1.25, -0.2);
-    cabin.castShadow = true;
-    car.add(cabin);
-
-    // العجلات
-    const wheelMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.9 });
-    const wheelGeo = new THREE.CylinderGeometry(0.4, 0.4, 0.3, 16);
-    const wheelPositions = [
-      [-1.25, 0.4, 1.5], [1.25, 0.4, 1.5],
-      [-1.25, 0.4, -1.5], [1.25, 0.4, -1.5]
-    ];
-    wheelPositions.forEach(pos => {
-      const w = new THREE.Mesh(wheelGeo, wheelMat);
-      w.rotation.z = Math.PI / 2;
-      w.position.set(...pos);
-      w.castShadow = true;
-      car.add(w);
-    });
-
-    // المصابيح الأمامية
-    const lightMat = new THREE.MeshBasicMaterial({ color: 0xffffaa });
-    const lightL = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.2, 0.1), lightMat);
-    lightL.position.set(-0.8, 0.7, -2.41);
-    const lightR = lightL.clone();
-    lightR.position.x = 0.8;
-    car.add(lightL); car.add(lightR);
-
-    return car;
-  }
-
-  const carGroup = createRealisticCar();
-  carGroup.position.set(8, 0, 8);
-  scene.add(carGroup);
-
-  // === 5. إنشاء 20 شخصية NPC غير متشابهة ===
-  const npcs = [];
-  const shirtColors = [0xe74c3c, 0x8e44ad, 0x2ecc71, 0xf1c40f, 0xe67e22, 0x1abc9c, 0x34495e];
-  const pantsColors = [0x34495e, 0x2c3e50, 0x7f8c8d, 0x111111];
-
-  for (let i = 0; i < 20; i++) {
-    const sColor = shirtColors[i % shirtColors.length];
-    const pColor = pantsColors[i % pantsColors.length];
-    const npc = createHumanoid(sColor, pColor);
-    
-    // تنويع الأحجام والأطوال
-    const scale = 0.85 + Math.random() * 0.3;
-    npc.scale.set(scale, scale, scale);
-
-    const x = (Math.random() - 0.5) * (citySize - 40);
-    const z = (Math.random() - 0.5) * (citySize - 40);
-    npc.position.set(x, 0, z);
-
-    const dir = new THREE.Vector3((Math.random() - 0.5), 0, (Math.random() - 0.5)).normalize();
-    npcs.push({ group: npc, dir: dir, speed: 0.03 + Math.random() * 0.03, changeTimer: 0 });
-    scene.add(npc);
-  }
-
-  // === 6. نظام الأسلحة والطلقات ===
-  const bullets = [];
-  function shootBullet() {
-    const b = new THREE.Mesh(
-      new THREE.SphereGeometry(0.15),
-      new THREE.MeshBasicMaterial({ color: 0xffcc00 })
-    );
-    b.position.copy(playerGroup.position);
-    b.position.y += 1.4;
-
-    const dir = new THREE.Vector3(0, 0, -1).applyQuaternion(playerGroup.quaternion);
-    bullets.push({ mesh: b, dir: dir, life: 80 });
-    scene.add(b);
-  }
-
-  // === 7. التحقق من الاصطدام بالمباني ===
-  function checkCollision(newPos, radius = 0.8) {
-    const playerSphere = new THREE.Sphere(newPos, radius);
-    for (let box of buildingBoxes) {
-      if (box.intersectsSphere(playerSphere)) {
-        return true; // تصادم!
-      }
-    }
-    return false;
-  }
-
-  // === 8. التحكم والمدخلات ===
-  const keys = {};
-  let inCar = false;
-  let carSpeed = 0;
-
-  window.addEventListener('keydown', e => {
-    keys[e.code] = true;
-    if (e.code === 'KeyF') {
-      const dist = playerGroup.position.distanceTo(carGroup.position);
-      if (!inCar && dist < 5) {
-        inCar = true;
-        playerGroup.visible = false;
-        document.getElementById('mode-text').innerText = "داخل السيارة 🚗";
-        document.getElementById('mode-text').style.color = "#ff4444";
-        document.getElementById('crosshair').style.display = 'none';
-      } else if (inCar) {
-        inCar = false;
-        playerGroup.visible = true;
-        playerGroup.position.copy(carGroup.position).add(new THREE.Vector3(2.5, 0, 0));
-        document.getElementById('mode-text').innerText = "مشاة 🚶";
-        document.getElementById('mode-text').style.color = "#00ffcc";
-      }
-    }
-  });
-
-  window.addEventListener('keyup', e => keys[e.code] = false);
-  window.addEventListener('mousedown', () => { if (!inCar) shootBullet(); });
-
-  // === 9. الحلقة الرئيسية للعبة (Game Loop) ===
-  function update() {
-    // تحديث الرصاص
-    for (let i = bullets.length - 1; i >= 0; i--) {
-      let b = bullets[i];
-      b.mesh.position.addScaledVector(b.dir, 1.2);
-      b.life--;
-      if (b.life <= 0) {
-        scene.remove(b.mesh);
-        bullets.splice(i, 1);
-      }
-    }
-
-    // تحديث حركة المشاة NPCs
-    npcs.forEach(npc => {
-      npc.changeTimer++;
-      if (npc.changeTimer > 150 + Math.random() * 100) {
-        npc.dir.set((Math.random() - 0.5), 0, (Math.random() - 0.5)).normalize();
-        npc.changeTimer = 0;
-      }
-      const nextPos = npc.group.position.clone().addScaledVector(npc.dir, npc.speed);
-      if (!checkCollision(nextPos, 0.5) && Math.abs(nextPos.x) < citySize/2 - 5 && Math.abs(nextPos.z) < citySize/2 - 5) {
-        npc.group.position.copy(nextPos);
-        npc.group.rotation.y = Math.atan2(npc.dir.x, npc.dir.z);
-      } else {
-        npc.dir.negate();
-      }
-    });
-
-    if (!inCar) {
-      // حركة اللاعب المشاة
-      let moveX = 0, moveZ = 0;
-      if (keys['KeyW']) moveZ -= 0.16;
-      if (keys['KeyS']) moveZ += 0.16;
-      if (keys['KeyA']) moveX -= 0.16;
-      if (keys['KeyD']) moveX += 0.16;
-
-      if (moveX !== 0 || moveZ !== 0) {
-        const angle = Math.atan2(moveX, moveZ);
-        playerGroup.rotation.y = angle;
-
-        const moveStep = new THREE.Vector3(moveX, 0, moveZ);
-        const nextPlayerPos = playerGroup.position.clone().add(moveStep);
-
-        // منع اختراق الجدران للمشاة
-        if (!checkCollision(nextPlayerPos, 0.6)) {
-          playerGroup.position.copy(nextPlayerPos);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مطاعم ومطابخ أمواج الخليج | حي المطار - المدينة المنورة</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        oceanDark: '#111827',
+                        oceanDeep: '#0B0F19',
+                        oceanTeal: '#059669',
+                        oceanCyan: '#10B981',
+                        sandyGold: '#D97706',
+                        sandyAmber: '#B45309',
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                    }
+                }
+            }
         }
-      }
+    </script>
+    <!-- Google Fonts: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #0B0F19;
+            color: #F8FAFC;
+            overflow-x: hidden;
+        }
+        .ocean-glow {
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+        .glass-card {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+        }
+        .glass-card:hover {
+            border-color: rgba(16, 185, 129, 0.4);
+            box-shadow: 0 10px 30px -10px rgba(5, 150, 105, 0.3);
+        }
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111827;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #059669;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body class="bg-oceanDeep text-slate-100">
 
-      // كاميرا المشاة
-      camera.position.set(playerGroup.position.x, playerGroup.position.y + 5, playerGroup.position.z + 9);
-      camera.lookAt(playerGroup.position.x, playerGroup.position.y + 1, playerGroup.position.z);
-      document.getElementById('speed-text').innerText = "0";
-      document.getElementById('crosshair').style.display = 'block';
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-oceanDark/90 backdrop-blur-md border-b border-emerald-500/20 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo & Brand -->
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-emerald-600 to-amber-500 flex items-center justify-center shadow-lg shadow-emerald-600/30">
+                        <i class="fa-solid fa-fire-burner text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-black bg-gradient-to-r from-amber-400 via-emerald-300 to-emerald-500 bg-clip-text text-transparent">أمواج الخليج</span>
+                        <p class="text-xs text-emerald-400/80 tracking-widest">مطاعم ومطابخ المندي والذبايح</p>
+                    </div>
+                </div>
 
-    } else {
-      // قيادة السيارة وفيزيائيتها
-      if (keys['KeyW']) carSpeed = Math.min(carSpeed + 0.015, 0.7);
-      else if (keys['KeyS']) carSpeed = Math.max(carSpeed - 0.01, -0.25);
-      else carSpeed *= 0.96;
+                <!-- Desktop Menu Links -->
+                <div class="hidden md:flex items-center space-x-8 space-x-reverse font-semibold">
+                    <a href="#hero" class="hover:text-emerald-400 transition-colors">الرئيسية</a>
+                    <a href="#menu" class="hover:text-emerald-400 transition-colors">قائمة الطعام</a>
+                    <a href="#location" class="hover:text-emerald-400 transition-colors">الموقع</a>
+                    <a href="#contact" class="hover:text-emerald-400 transition-colors">اتصل بنا</a>
+                </div>
 
-      if (keys['Space']) carSpeed *= 0.85;
+                <!-- Action Button -->
+                <div class="hidden md:flex items-center space-x-4 space-x-reverse">
+                    <a href="https://wa.me/966508320104" target="_blank" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold px-6 py-2.5 rounded-full shadow-lg shadow-emerald-500/20 transition-all transform hover:-translate-y-0.5 flex items-center space-x-2 space-x-reverse">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>طلب سريع</span>
+                    </a>
+                </div>
 
-      if (keys['KeyA']) carGroup.rotation.y += 0.035 * (carSpeed / 0.7);
-      if (keys['KeyD']) carGroup.rotation.y -= 0.035 * (carSpeed / 0.7);
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-slate-200 hover:text-emerald-400 focus:outline-none text-2xl p-2">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
 
-      const forward = new THREE.Vector3(0, 0, -1).applyAxisAngle(new THREE.Vector3(0, 1, 0), carGroup.rotation.y);
-      const nextCarPos = carGroup.position.clone().addScaledVector(forward, carSpeed);
+        <!-- Mobile Menu Drawer -->
+        <div id="mobile-menu" class="hidden md:hidden bg-oceanDark/95 border-b border-emerald-500/20 px-6 pt-4 pb-6 space-y-4 shadow-2xl backdrop-blur-xl">
+            <a href="#hero" class="block text-lg hover:text-emerald-400 transition-colors py-2 border-b border-slate-800">الرئيسية</a>
+            <a href="#menu" class="block text-lg hover:text-emerald-400 transition-colors py-2 border-b border-slate-800">قائمة الطعام</a>
+            <a href="#location" class="block text-lg hover:text-emerald-400 transition-colors py-2 border-b border-slate-800">الموقع</a>
+            <a href="#contact" class="block text-lg hover:text-emerald-400 transition-colors py-2 border-b border-slate-800">اتصل بنا</a>
+            <div class="pt-2">
+                <a href="https://wa.me/966508320104" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2 space-x-reverse shadow-lg">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                    <span>طلب سريع عبر واتساب</span>
+                </a>
+            </div>
+        </div>
+    </nav>
 
-      // منع اختراق السيارة للجدران (الارتطام بالتوقف)
-      if (!checkCollision(nextCarPos, 1.8)) {
-        carGroup.position.copy(nextCarPos);
-      } else {
-        carSpeed = -carSpeed * 0.3; // ارتداد عند الاصطدام
-      }
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-[70vh] flex items-center justify-center pt-28 pb-16 overflow-hidden bg-gradient-to-b from-oceanDark via-oceanDeep to-oceanDark">
+        <div class="absolute inset-0 opacity-15 pointer-events-none">
+            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-emerald-600 rounded-full blur-[140px]"></div>
+            <div class="absolute bottom-10 right-10 w-96 h-96 bg-amber-500 rounded-full blur-[120px]"></div>
+        </div>
 
-      // كاميرا تتبع السيارة
-      const camOffset = new THREE.Vector3(0, 4.5, 11).applyAxisAngle(new THREE.Vector3(0, 1, 0), carGroup.rotation.y);
-      camera.position.copy(carGroup.position).add(camOffset);
-      camera.lookAt(carGroup.position.x, carGroup.position.y + 1, carGroup.position.z);
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
+            <div class="inline-flex items-center space-x-2 space-x-reverse bg-emerald-500/10 border border-emerald-500/30 px-4 py-2 rounded-full mb-6 backdrop-blur-md">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
+                <span class="text-emerald-400 text-sm font-semibold">حي المطار - المدينة المنورة</span>
+            </div>
 
-      document.getElementById('speed-text').innerText = Math.round(Math.abs(carSpeed) * 160);
-    }
+            <h1 class="text-4xl sm:text-6xl font-black tracking-tight mb-6 leading-tight">
+                مطاعم ومطابخ <span class="bg-gradient-to-r from-amber-400 via-emerald-300 to-emerald-500 bg-clip-text text-transparent ocean-glow">أمواج الخليج</span>
+            </h1>
 
-    renderer.render(scene, camera);
-    requestAnimationFrame(update);
-  }
+            <p class="max-w-2xl mx-auto text-lg text-slate-300 mb-8 font-light">
+                أصالة المندي، اللحوم الطازجة، الإدامات الشهية، والسلطات والمشروبات والحلى الطازج.
+            </p>
 
-  update();
+            <div class="flex justify-center gap-4">
+                <a href="#menu" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-extrabold px-8 py-3.5 rounded-xl shadow-xl shadow-emerald-500/20 transition-all">
+                    تصفح القائمة كاملة
+                </a>
+            </div>
+        </div>
+    </section>
 
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
-</script>
+    <!-- Menu Section -->
+    <section id="menu" class="py-20 bg-oceanDeep relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-emerald-400 font-bold tracking-wider text-sm uppercase">قائمة الطعام</span>
+                <h2 class="text-3xl sm:text-4xl font-black mt-2 mb-3">اختر ما تشتهيه من أصنافنا</h2>
+                <p class="text-slate-400 text-sm">تم تحديث الأقسام بالكامل حسب الطلب (التسعيرة توضع لاحقاً).</p>
+            </div>
+
+            <!-- Category Filter Buttons -->
+            <div class="flex flex-wrap justify-center gap-3 mb-12">
+                <button onclick="filterMenu('all')" class="menu-tab active-tab bg-emerald-600 text-white font-bold px-5 py-2 rounded-full transition-all shadow-md">الكل</button>
+                <button onclick="filterMenu('chicken')" class="menu-tab bg-oceanDark/80 hover:bg-emerald-600/20 text-slate-200 font-bold px-5 py-2 rounded-full border border-emerald-500/30 transition-all">قسم الدجاج</button>
+                <button onclick="filterMenu('meat')" class="menu-tab bg-oceanDark/80 hover:bg-emerald-600/20 text-slate-200 font-bold px-5 py-2 rounded-full border border-emerald-500/30 transition-all">قسم اللحم</button>
+                <button onclick="filterMenu('stews')" class="menu-tab bg-oceanDark/80 hover:bg-emerald-600/20 text-slate-200 font-bold px-5 py-2 rounded-full border border-emerald-500/30 transition-all">قسم الإدامات</button>
+                <button onclick="filterMenu('salads')" class="menu-tab bg-oceanDark/80 hover:bg-emerald-600/20 text-slate-200 font-bold px-5 py-2 rounded-full border border-emerald-500/30 transition-all">السلطات والمشروبات</button>
+                <button onclick="filterMenu('desserts')" class="menu-tab bg-oceanDark/80 hover:bg-emerald-600/20 text-slate-200 font-bold px-5 py-2 rounded-full border border-emerald-500/30 transition-all">قسم الحلى</button>
+            </div>
+
+            <!-- Menu Grid -->
+            <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- 1. قسم الدجاج -->
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-emerald-500" data-category="chicken">
+                    <span class="bg-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-1 rounded-full">قسم الدجاج</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">دجاج مندي</h3>
+                    <p class="text-slate-400 text-sm mb-4">دجاج طازج مطهو بفرن الحطب التقليدي مع الأرز المزفر.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20دجاج%20مندي" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-emerald-500" data-category="chicken">
+                    <span class="bg-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-1 rounded-full">قسم الدجاج</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">دجاج شواية</h3>
+                    <p class="text-slate-400 text-sm mb-4">دجاج مشوي على السيخ بتتبيلة مميزة ومقرمشة.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20دجاج%20شواية" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-emerald-500" data-category="chicken">
+                    <span class="bg-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-1 rounded-full">قسم الدجاج</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">دجاج على الفحم</h3>
+                    <p class="text-slate-400 text-sm mb-4">دجاج مشوي على الفحم بنكهة ورائحة لا تقاوم.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20دجاج%20على%20الفحم" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-emerald-500" data-category="chicken">
+                    <span class="bg-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-1 rounded-full">قسم الدجاج</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">دجاج مظبي</h3>
+                    <p class="text-slate-400 text-sm mb-4">دجاج مشوي على الحصى الحار ببهارات شعبية فاخرة.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20دجاج%20مظبي" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-emerald-500" data-category="chicken">
+                    <span class="bg-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-1 rounded-full">قسم الدجاج</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">دجاج مضغوط</h3>
+                    <p class="text-slate-400 text-sm mb-4">دجاج مضغوط بالقدر الخاص مع رز غني بالمرق والبهارات.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20دجاج%20مضغوط" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <!-- 2. قسم اللحم -->
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-amber-500" data-category="meat">
+                    <span class="bg-amber-500/20 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">قسم اللحم</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">لحم برمة</h3>
+                    <p class="text-slate-400 text-sm mb-4">لحم طازج مطهو بالقدر الفخاري بمرق الصفا والبهارات الخاصة.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20لحم%20برمة" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-amber-500" data-category="meat">
+                    <span class="bg-amber-500/20 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">قسم اللحم</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">لحم مندي</h3>
+                    <p class="text-slate-400 text-sm mb-4">لحم طازج متبل ومطبوخ بالمندي على أصوله.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20لحم%20مندي" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-amber-500" data-category="meat">
+                    <span class="bg-amber-500/20 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">قسم اللحم</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">تيس مندي</h3>
+                    <p class="text-slate-400 text-sm mb-4">تيس مندي طازج ومعدة للولائم والعزائم الخاصة.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20تيس%20مندي" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-amber-500" data-category="meat">
+                    <span class="bg-amber-500/20 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">قسم اللحم</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">لحم مضغوط</h3>
+                    <p class="text-slate-400 text-sm mb-4">مضغوط لحم طازج بنكهة غنية ومرق متشرب بالأرز.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20لحم%20مضغوط" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <!-- 3. قسم الإدامات -->
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-teal-500" data-category="stews">
+                    <span class="bg-teal-500/20 text-teal-400 text-xs font-bold px-3 py-1 rounded-full">قسم الإدامات</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">مشكل خضار</h3>
+                    <p class="text-slate-400 text-sm mb-4">خضار مشكلة طازجة ومطبوخة بمرق الخضار والبهارات.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20مشكل%20خضار" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-teal-500" data-category="stews">
+                    <span class="bg-teal-500/20 text-teal-400 text-xs font-bold px-3 py-1 rounded-full">قسم الإدامات</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">مشكل فرن</h3>
+                    <p class="text-slate-400 text-sm mb-4">خضار بالفرن محمرة ومتبلة بخلطة مطاعمنا الخاصة.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20مشكل%20فرن" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-teal-500" data-category="stews">
+                    <span class="bg-teal-500/20 text-teal-400 text-xs font-bold px-3 py-1 rounded-full">قسم الإدامات</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">مسقعة</h3>
+                    <p class="text-slate-400 text-sm mb-4">مسقعة باذنجان باللحم المفروم وصلصة الطماطم الشهية.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20مسقعة" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-teal-500" data-category="stews">
+                    <span class="bg-teal-500/20 text-teal-400 text-xs font-bold px-3 py-1 rounded-full">قسم الإدامات</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">بامية</h3>
+                    <p class="text-slate-400 text-sm mb-4">إدام بامية طازج ومطهو بعصير الطماطم والكزبرة.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20بامية" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-teal-500" data-category="stews">
+                    <span class="bg-teal-500/20 text-teal-400 text-xs font-bold px-3 py-1 rounded-full">قسم الإدامات</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">ملوخية</h3>
+                    <p class="text-slate-400 text-sm mb-4">ملوخية طازجة ومفرومة بالتقلية والكزبرة والثوم.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20ملوخية" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <!-- 4. قسم السلطات والمشروبات -->
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-cyan-500" data-category="salads">
+                    <span class="bg-cyan-500/20 text-cyan-400 text-xs font-bold px-3 py-1 rounded-full">السلطات والمشروبات</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">سلطة طحينة</h3>
+                    <p class="text-slate-400 text-sm mb-4">طحينة كريمية منعشة ومحضرة بالبهارات والليمون.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20سلطة%20طحينة" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-cyan-500" data-category="salads">
+                    <span class="bg-cyan-500/20 text-cyan-400 text-xs font-bold px-3 py-1 rounded-full">السلطات والمشروبات</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">سلطة حارة</h3>
+                    <p class="text-slate-400 text-sm mb-4">دقوس حار ومميز يفتح النفس مع المشويات.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20سلطة%20حارة" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-cyan-500" data-category="salads">
+                    <span class="bg-cyan-500/20 text-cyan-400 text-xs font-bold px-3 py-1 rounded-full">السلطات والمشروبات</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">سلطة لبن</h3>
+                    <p class="text-slate-400 text-sm mb-4">لبن بالخيار الطازج والنعناع البارد.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20سلطة%20لبن" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-cyan-500" data-category="salads">
+                    <span class="bg-cyan-500/20 text-cyan-400 text-xs font-bold px-3 py-1 rounded-full">السلطات والمشروبات</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">سلطة خضار</h3>
+                    <p class="text-slate-400 text-sm mb-4">خضار طازجة مقطعة مع الليمون وزيت الزيتون.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20سلطة%20خضار" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-cyan-500" data-category="salads">
+                    <span class="bg-cyan-500/20 text-cyan-400 text-xs font-bold px-3 py-1 rounded-full">السلطات والمشروبات</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">عشار عدني</h3>
+                    <p class="text-slate-400 text-sm mb-4">عشار عدني حار ومتبل على الطريقة الأصلية.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20عشار%20عدني" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-cyan-500" data-category="salads">
+                    <span class="bg-cyan-500/20 text-cyan-400 text-xs font-bold px-3 py-1 rounded-full">السلطات والمشروبات</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">لبن القريه (صغير / كبير)</h3>
+                    <p class="text-slate-400 text-sm mb-4">لبن القرية الطازج والبارد.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20لبن%20القرية" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-cyan-500" data-category="salads">
+                    <span class="bg-cyan-500/20 text-cyan-400 text-xs font-bold px-3 py-1 rounded-full">السلطات والمشروبات</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">ببسي (صغير / كبير)</h3>
+                    <p class="text-slate-400 text-sm mb-4">مشروب غازي بارد ومنعش.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20ببسي" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <!-- 5. قسم الحلى -->
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-purple-500" data-category="desserts">
+                    <span class="bg-purple-500/20 text-purple-400 text-xs font-bold px-3 py-1 rounded-full">قسم الحلى</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">كنافة بالقشطة</h3>
+                    <p class="text-slate-400 text-sm mb-4">كنافة ساخنة ومحشوة بالقشطة الطازجة ومسقية بالشيرة.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20كنافة%20بالقشطة" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-purple-500" data-category="desserts">
+                    <span class="bg-purple-500/20 text-purple-400 text-xs font-bold px-3 py-1 rounded-full">قسم الحلى</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">تشيز كيك</h3>
+                    <p class="text-slate-400 text-sm mb-4">تشيز كيك لذيذ بطبقة التوت أو الفراولة.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20تشيز%20كيك" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-purple-500" data-category="desserts">
+                    <span class="bg-purple-500/20 text-purple-400 text-xs font-bold px-3 py-1 rounded-full">قسم الحلى</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">كريم كراميل</h3>
+                    <p class="text-slate-400 text-sm mb-4">كريم كراميل بارد وناعم.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20كريم%20كراميل" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+                <div class="menu-item glass-card p-6 rounded-2xl shadow-xl border-l-4 border-l-purple-500" data-category="desserts">
+                    <span class="bg-purple-500/20 text-purple-400 text-xs font-bold px-3 py-1 rounded-full">قسم الحلى</span>
+                    <h3 class="text-xl font-bold text-white mt-3 mb-1">مهلبية</h3>
+                    <p class="text-slate-400 text-sm mb-4">مهلبية تقليدية مزينة بالمستكة والفستق.</p>
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+                        <span class="text-amber-400 font-bold text-sm">التسعيرة لاحقاً</span>
+                        <a href="https://wa.me/966508320104?text=أريد%20طلب%20مهلبية" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all border border-emerald-500/40">طلب واتساب</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Location & Contact Section -->
+    <section id="location" class="py-20 bg-oceanDark relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-emerald-400 font-bold tracking-wider text-sm uppercase">الموقع</span>
+                <h2 class="text-3xl font-black mt-2 mb-3">موقعنا في المدينة المنورة</h2>
+                <p class="text-slate-300 text-sm">حي المطار - شارع عبد الله بن وديعة</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-2xl text-center">
+                    <i class="fa-solid fa-location-dot text-3xl text-emerald-400 mb-3"></i>
+                    <h3 class="font-bold text-white mb-1">العنوان</h3>
+                    <p class="text-slate-300 text-sm">حي المطار، المدينة المنورة</p>
+                </div>
+                <div class="glass-card p-6 rounded-2xl text-center">
+                    <i class="fa-regular fa-clock text-3xl text-amber-400 mb-3"></i>
+                    <h3 class="font-bold text-white mb-1">أوقات العمل</h3>
+                    <p class="text-slate-300 text-sm">حتى الساعة 2:00 صباحاً</p>
+                </div>
+                <div class="glass-card p-6 rounded-2xl text-center">
+                    <i class="fa-solid fa-phone text-3xl text-emerald-400 mb-3"></i>
+                    <h3 class="font-bold text-white mb-1">رقم التواصل</h3>
+                    <p class="text-slate-300 text-sm" dir="ltr">050 832 0104</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-oceanDeep border-t border-emerald-500/20 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-slate-400 text-sm">جميع الحقوق محفوظة © 2026 مطاعم ومطابخ أمواج الخليج - حي المطار، المدينة المنورة</p>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/966508320104" target="_blank" class="fixed bottom-6 left-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl shadow-emerald-500/50 transition-all transform hover:scale-110">
+        <i class="fa-brands fa-whatsapp text-3xl"></i>
+    </a>
+
+    <!-- JavaScript -->
+    <script>
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        function filterMenu(category) {
+            const items = document.querySelectorAll('.menu-item');
+            const tabs = document.querySelectorAll('.menu-tab');
+
+            tabs.forEach(tab => {
+                tab.classList.remove('bg-emerald-600', 'text-white');
+                tab.classList.add('bg-oceanDark/80', 'text-slate-200');
+            });
+            event.target.classList.remove('bg-oceanDark/80', 'text-slate-200');
+            event.target.classList.add('bg-emerald-600', 'text-white');
+
+            items.forEach(item => {
+                if (category === 'all' || item.getAttribute('data-category') === category) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+    </script>
 </body>
 </html>
