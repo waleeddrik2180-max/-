@@ -327,7 +327,7 @@
     </div>
 
     <script>
-        // المنيو الكامل والدقيق مطابق 100% للصورة الأصلية[cite: 1]
+        // المنيو الكامل والدقيق مطابق 100% للصورة الأصلية
         const menuItems = [
             { id: 1, name: "وجبة برجر زنجر", price: 17, calories: "496 سعرة", category: "burger" },
             { id: 2, name: "وجبة برجر دجاج", price: 14, calories: "561 سعرة", category: "burger" },
@@ -342,4 +342,129 @@
             { id: 11, name: "برجر غنم طازج (دبل)", price: 31, calories: "748 سعرة", category: "burger" },
             { id: 12, name: "وجبة برجر دبل زنجر", price: 23, calories: "922 سعرة", category: "burger" },
 
-            { id: 13, name: "
+            { id: 13, name: "فاهيتا كودو زنجر", price: 17, calories: "516 سعرة", category: "fajita" },
+            { id: 14, name: "فاهيتا كودو لحم طازج", price: 22, calories: "598 سعرة", category: "fajita" },
+            { id: 15, name: "فاهيتا كودو دجاج", price: 17, calories: "573 سعرة", category: "fajita" },
+            { id: 16, name: "فاهيتا كودو جمبري", price: 16, calories: "612 سعرة", category: "fajita" },
+            { id: 17, name: "وجبة فاهيتا كودو مسحب", price: 14, calories: "596 سعرة", category: "fajita" },
+
+            { id: 18, name: "تورتيلا دجاج", price: 17, calories: "566 سعرة", category: "tortilla" },
+            { id: 19, name: "تورتيلا جمبري", price: 16, calories: "510 سعرة", category: "tortilla" },
+            { id: 20, name: "تورتيلا زنجر", price: 17, calories: "598 سعرة", category: "tortilla" },
+            { id: 21, name: "وجبة مسحب تورتيلا", price: 14, calories: "624 سعرة", category: "tortilla" },
+
+            { id: 22, name: "صحن مسحب وجبة", price: 15, calories: "912 سعرة", category: "meals" },
+            { id: 23, name: "صحن جمبري وجبة", price: 20, calories: "349 سعرة", category: "meals" }
+        ];
+
+        let cart = {};
+        let currentFilter = 'all';
+
+        const categoryNames = {
+            burger: "قائمة البرجر الفاخر",
+            fajita: "سندويشات فاهيتا وكودو",
+            tortilla: "لفائف التورتيلا المقرمشة",
+            meals: "الصحون والوجبات الخاصة"
+        };
+
+        const menuContainer = document.getElementById('menuContainer');
+        const totalPriceEl = document.getElementById('totalPrice');
+        const totalCountEl = document.getElementById('totalCount');
+
+        function renderMenu() {
+            menuContainer.innerHTML = '';
+            
+            let categoriesToDisplay = currentFilter === 'all' 
+                ? ['burger', 'fajita', 'tortilla', 'meals'] 
+                : [currentFilter];
+
+            categoriesToDisplay.forEach(catKey => {
+                const itemsInCat = menuItems.filter(i => i.category === catKey);
+                if (itemsInCat.length === 0) return;
+
+                const titleEl = document.createElement('h2');
+                titleEl.className = 'section-title';
+                titleEl.textContent = categoryNames[catKey];
+                menuContainer.appendChild(titleEl);
+
+                const gridEl = document.createElement('div');
+                gridEl.className = 'menu-grid';
+
+                itemsInCat.forEach(item => {
+                    const qty = cart[item.id] || 0;
+                    const card = document.createElement('div');
+                    card.className = 'menu-card';
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <div class="price-tag">${item.price} ر.س</div>
+                            <h3>${item.name}</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="calories"><i class="fa-solid fa-fire"></i> ${item.calories}</div>
+                            <button class="add-btn ${qty > 0 ? 'added' : ''}" onclick="updateCart(${item.id}, 1)">
+                                <i class="fa-solid ${qty > 0 ? 'fa-check' : 'fa-plus'}"></i> ${qty > 0 ? 'تم الإضافة (' + qty + ')' : 'إضافة للطلب'}
+                            </button>
+                        </div>
+                    `;
+                    gridEl.appendChild(card);
+                });
+
+                menuContainer.appendChild(gridEl);
+            });
+        }
+
+        function filterMenu(category, btnElement) {
+            currentFilter = category;
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+            renderMenu();
+        }
+
+        function updateCart(id, change) {
+            if (!cart[id]) cart[id] = 0;
+            cart[id] += change;
+            if (cart[id] <= 0) delete cart[id];
+            renderMenu();
+            updateSummary();
+        }
+
+        function updateSummary() {
+            let total = 0;
+            let count = 0;
+            for (let id in cart) {
+                const item = menuItems.find(i => i.id == id);
+                total += item.price * cart[id];
+                count += cart[id];
+            }
+            totalPriceEl.textContent = total;
+            totalCountEl.textContent = count;
+        }
+
+        function sendToWhatsApp() {
+            let count = Object.values(cart).reduce((a, b) => a + b, 0);
+            if (count === 0) {
+                alert('الرجاء اختيار وجبة واحدة على الأقل قبل الإرسال!');
+                return;
+            }
+
+            let message = "السلام عليكم، هذا طلب جديد من مزاج اليوم (فرع 2):\n\n";
+            let total = 0;
+
+            for (let id in cart) {
+                const item = menuItems.find(i => i.id == id);
+                let itemTotal = item.price * cart[id];
+                total += itemTotal;
+                message += `▪️ ${item.name} (العدد: ${cart[id]}) - ${itemTotal} ر.س\n`;
+            }
+
+            message += `\nالإجمالي الكلي: ${total} ريال سعودي`;
+
+            const phone = "966595804974";
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        renderMenu();
+    </script>
+</body>
+</html>
