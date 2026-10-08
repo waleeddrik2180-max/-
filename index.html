@@ -647,5 +647,30 @@
         }
 
         function sendToWhatsApp() {
-            let count = Object.values(cart).reduce((a, b)
-                
+            let count = Object.values(cart).reduce((a, b) => a + b, 0);
+            if (count === 0) {
+                alert('الرجاء اختيار وجبة واحدة على الأقل قبل الإرسال!');
+                return;
+            }
+
+            let message = "السلام عليكم، هذا طلب جديد من مزاج اليوم (فرع 2):\n\n";
+            let total = 0;
+
+            for (let id in cart) {
+                const item = menuItems.find(i => i.id == id);
+                let itemTotal = item.price * cart[id];
+                total += itemTotal;
+                message += `▪️ ${item.name} (العدد: ${cart[id]}) - ${itemTotal} ر.س\n`;
+            }
+
+            message += `\nالإجمالي الكلي: ${total} ريال سعودي`;
+
+            const phone = "966595804974";
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        renderMenu();
+    </script>
+</body>
+</html>
