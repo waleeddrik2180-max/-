@@ -4,11 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مزاج اليوم - فرع 2</title>
-    <!-- استيراد خط تجوال العصري -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <!-- أيقونات FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #f59e0b;
+            --primary-glow: rgba(245, 158, 11, 0.4);
+            --bg-dark: #090a0f;
+            --bg-card: #131822;
+            --bg-card-hover: #1a2233;
+            --border-color: #222b3d;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -17,95 +26,176 @@
         }
 
         body {
-            background-color: #0b0f19;
-            color: #f3f4f6;
-            padding-bottom: 130px;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            padding-bottom: 140px;
+            overflow-x: hidden;
         }
 
+        /* الهيدر الخورافي */
         header {
-            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
-            padding: 30px 20px;
+            background: linear-gradient(135deg, #11151f 0%, #0d1017 100%);
+            padding: 35px 20px;
             text-align: center;
-            border-bottom: 4px solid #eab308;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            border-bottom: 3px solid var(--primary);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 3px;
+            background: #fff;
+            box-shadow: 0 0 15px var(--primary);
         }
 
         header h1 {
-            font-size: 2.2rem;
-            color: #ffffff;
+            font-size: 2.5rem;
+            color: #fff;
             margin-bottom: 8px;
             font-weight: 900;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            text-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
         }
 
         header p {
-            color: #9ca3af;
-            font-size: 1rem;
+            color: var(--text-muted);
+            font-size: 1.05rem;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 25px auto;
-            padding: 0 15px;
+            max-width: 1250px;
+            margin: 30px auto;
+            padding: 0 20px;
         }
 
+        /* شريط التوصيل */
+        .delivery-banner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: linear-gradient(90deg, #182232, #1f2c42);
+            border: 1px solid var(--border-color);
+            padding: 15px 25px;
+            border-radius: 16px;
+            margin-bottom: 35px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            font-size: 1.1rem;
+        }
+
+        .delivery-banner i {
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+
+        .delivery-banner strong {
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+
+        /* أزرار الأقسام الفخمة */
+        .categories-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .cat-btn {
+            background: var(--bg-card);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 12px 22px;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .cat-btn:hover, .cat-btn.active {
+            background: var(--primary);
+            color: #000;
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px var(--primary-glow);
+        }
+
+        /* عنوان القسم */
+        .section-title {
+            font-size: 1.6rem;
+            margin: 40px 0 20px;
+            padding-right: 15px;
+            border-right: 5px solid var(--primary);
+            color: #fff;
+            font-weight: 800;
+        }
+
+        /* شبكة المنتجات */
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
         }
 
         .menu-card {
-            background: #161e2e;
-            border-radius: 18px;
+            background: var(--bg-card);
+            border-radius: 20px;
             overflow: hidden;
-            border: 1px solid #1f2937;
-            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            position: relative;
         }
 
         .menu-card:hover {
-            transform: translateY(-6px);
-            border-color: #eab308;
-            box-shadow: 0 12px 30px rgba(234, 179, 8, 0.2);
+            transform: translateY(-8px);
+            background: var(--bg-card-hover);
+            border-color: var(--primary);
+            box-shadow: 0 15px 35px rgba(245, 158, 11, 0.15);
         }
 
         .card-header {
             position: relative;
-            background: #1f2937;
-            padding: 18px 15px;
+            background: #1a2233;
+            padding: 22px 18px;
             text-align: center;
-            border-bottom: 1px solid #374151;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .price-tag {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #eab308;
-            color: #0b0f19;
+            top: 12px;
+            right: 12px;
+            background: var(--primary);
+            color: #000;
             font-weight: 900;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.95rem;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            padding: 6px 14px;
+            border-radius: 25px;
+            font-size: 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .card-header h3 {
-            font-size: 1.2rem;
-            color: #ffffff;
-            margin-top: 12px;
+            font-size: 1.25rem;
+            color: #fff;
+            margin-top: 15px;
             font-weight: 700;
         }
 
         .card-body {
-            padding: 18px 15px;
+            padding: 20px 18px;
             text-align: center;
             flex-grow: 1;
             display: flex;
@@ -114,15 +204,20 @@
         }
 
         .calories {
-            color: #9ca3af;
-            font-size: 0.88rem;
-            margin-bottom: 15px;
-            background: #1f2937;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 18px;
+            background: #192231;
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 8px;
+            padding: 6px 14px;
+            border-radius: 10px;
             align-self: center;
-            border: 1px solid #374151;
+            border: 1px solid var(--border-color);
+        }
+
+        .calories i {
+            color: #ef4444;
+            margin-left: 5px;
         }
 
         .add-btn {
@@ -130,174 +225,222 @@
             color: white;
             border: none;
             width: 100%;
-            padding: 12px;
-            border-radius: 12px;
+            padding: 13px;
+            border-radius: 14px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            font-size: 1rem;
+            gap: 10px;
+            font-size: 1.05rem;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
         }
 
         .add-btn:hover {
             background: #1d4ed8;
+            transform: scale(1.02);
         }
 
         .add-btn.added {
             background: #16a34a;
+            box-shadow: 0 4px 15px rgba(22, 163, 74, 0.3);
         }
 
-        /* شريط سلة الطلبات العائمة */
+        /* سلة الطلبات العائمة الخورافية */
         .cart-bar {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            background: #161e2e;
-            border-top: 3px solid #eab308;
-            padding: 18px 25px;
+            background: rgba(19, 24, 34, 0.95);
+            backdrop-filter: blur(15px);
+            border-top: 3px solid var(--primary);
+            padding: 20px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 -8px 30px rgba(0,0,0,0.7);
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
             z-index: 1000;
         }
 
         .cart-info {
-            font-size: 1.15rem;
-            font-weight: 700;
+            font-size: 1.25rem;
+            font-weight: 800;
         }
 
         .cart-info span {
-            color: #eab308;
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary-glow);
         }
 
         .whatsapp-btn {
             background: #22c55e;
             color: #fff;
             border: none;
-            padding: 14px 28px;
-            border-radius: 14px;
+            padding: 15px 32px;
+            border-radius: 16px;
             font-weight: 900;
-            font-size: 1.05rem;
+            font-size: 1.15rem;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 10px;
-            transition: transform 0.2s, background 0.2s;
+            gap: 12px;
+            transition: all 0.3s;
             text-decoration: none;
-            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
         }
 
         .whatsapp-btn:hover {
             background: #16a34a;
-            transform: scale(1.03);
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.6);
         }
 
-        .delivery-info {
-            text-align: center;
-            margin: 15px 0 25px;
-            color: #9ca3af;
-            font-size: 1rem;
-            background: #161e2e;
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px solid #1f2937;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .delivery-info i {
-            color: #eab308;
-            margin-left: 8px;
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            .cart-bar { padding: 15px 20px; flex-direction: column; gap: 15px; text-align: center; }
+            .whatsapp-btn { width: 100%; justify-content: center; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>مزاج اليوم (فرع 2)</h1>
-        <p>قائمة الوجبات السريعة - اطلب بسهولة عبر الواتساب</p>
+        <h1>مزاج اليوم</h1>
+        <p>فرع (2) - قائمة الوجبات السريعة الفاخرة</p>
     </header>
 
     <div class="container">
-        <div class="delivery-info">
-            <i class="fa-solid fa-phone-volume"></i> خدمة التوصيل: <strong>0595804974</strong>
+        <div class="delivery-banner">
+            <i class="fa-solid fa-phone-volume"></i>
+            <span>خدمة التوصيل السريع:</span>
+            <strong>0595804974</strong>
         </div>
 
-        <div class="menu-grid" id="menuGrid">
-            <!-- سيتم توليد الوجبات برمجياً هنا -->
+        <!-- أزرار تصفية الأقسام -->
+        <div class="categories-nav">
+            <button class="cat-btn active" onclick="filterMenu('all', this)">الكل</button>
+            <button class="cat-btn" onclick="filterMenu('burger', this)">البرجر</button>
+            <button class="cat-btn" onclick="filterMenu('fajita', this)">فاهيتا وكودو</button>
+            <button class="cat-btn" onclick="filterMenu('tortilla', this)">التورتيلا</button>
+            <button class="cat-btn" onclick="filterMenu('meals', this)">الصحون والوجبات الأخرى</button>
+        </div>
+
+        <div id="menuContainer">
+            <!-- سيتم تعبئة الأقسام والوجبات هنا برمجياً بدقة -->
         </div>
     </div>
 
-    <!-- شريط سلة الطلبات -->
+    <!-- شريط سلة الطلبات العائم -->
     <div class="cart-bar">
         <div class="cart-info">
-            الإجمالي: <span id="totalPrice">0</span> ر.س | الأصناف: <span id="totalCount">0</span>
+            الإجمالي: <span id="totalPrice">0</span> ر.س | الأصناف المتاحة: <span id="totalCount">0</span>
         </div>
         <button class="whatsapp-btn" onclick="sendToWhatsApp()">
-            <i class="fa-brands fa-whatsapp fa-lg"></i> إرسال الطلب للواتساب
+            <i class="fa-brands fa-whatsapp fa-xl"></i> إرسال الطلب عبر الواتساب
         </button>
     </div>
 
     <script>
-        // المنيو الدقيق والمطابق تماماً للصورة بدون أي تغيير
+        // المنيو الكامل والدقيق مطابق للصورة الأصلية مع تحديد الفئات لكل وجبة بدقة
         const menuItems = [
-            { id: 1, name: "وجبة برجر زنجر", price: 17, calories: "496 سعرة" },
-            { id: 2, name: "وجبة برجر دجاج", price: 14, calories: "561 سعرة" },
-            { id: 3, name: "وجبة برجر لحم", price: 14, calories: "584 سعرة" },
-            { id: 4, name: "وجبة برجر مشوي طازج", price: 22, calories: "820 سعرة" },
-            { id: 5, name: "برجر فلفل حار أمريكانا", price: 19, calories: "691 سعرة" },
-            { id: 6, name: "برجر دجاج دبل أمريكانا", price: 18, calories: "714 سعرة" },
-            { id: 7, name: "وجبة برجر دجاج طازج", price: 17, calories: "459 سعرة" },
-            { id: 8, name: "وجبة برجر لحم طازج", price: 22, calories: "426 سعرة" },
-            { id: 9, name: "وجبة برجر مشوي سبايسي", price: 22, calories: "462 سعرة" },
-            { id: 10, name: "صحن مسحب وجبة", price: 15, calories: "912 سعرة" },
-            { id: 11, name: "برجر دجاج طازج (دبل)", price: 25, calories: "659 سعرة" },
-            { id: 12, name: "برجر غنم طازج (دبل)", price: 31, calories: "748 سعرة" },
-            { id: 13, name: "وجبة برجر دبل زنجر", price: 23, calories: "922 سعرة" },
-            { id: 14, name: "فاهيتا كودو زنجر", price: 17, calories: "516 سعرة" },
-            { id: 15, name: "فاهيتا كودو لحم طازج", price: 22, calories: "598 سعرة" },
-            { id: 16, name: "فاهيتا كودو دجاج", price: 17, calories: "573 سعرة" },
-            { id: 17, name: "صحن جمبري وجبة", price: 20, calories: "349 سعرة" },
-            { id: 18, name: "فاهيتا كودو جمبري", price: 16, calories: "612 سعرة" },
-            { id: 19, name: "وجبة فاهيتا كودو مسحب", price: 14, calories: "596 سعرة" },
-            { id: 20, name: "تورتيلا دجاج", price: 17, calories: "566 سعرة" },
-            { id: 21, name: "تورتيلا جمبري", price: 16, calories: "510 سعرة" },
-            { id: 22, name: "تورتيلا زنجر", price: 17, calories: "598 سعرة" },
-            { id: 23, name: "وجبة مسحب تورتيلا", price: 14, calories: "624 سعرة" }
+            // قسم البرجر
+            { id: 1, name: "وجبة برجر زنجر", price: 17, calories: "496 سعرة", category: "burger" },
+            { id: 2, name: "وجبة برجر دجاج", price: 14, calories: "561 سعرة", category: "burger" },
+            { id: 3, name: "وجبة برجر لحم", price: 14, calories: "584 سعرة", category: "burger" },
+            { id: 4, name: "وجبة برجر مشوي طازج", price: 22, calories: "820 سعرة", category: "burger" },
+            { id: 5, name: "برجر فلفل حار أمريكانا", price: 19, calories: "691 سعرة", category: "burger" },
+            { id: 6, name: "برجر دجاج دبل أمريكانا", price: 18, calories: "714 سعرة", category: "burger" },
+            { id: 7, name: "وجبة برجر دجاج طازج", price: 17, calories: "459 سعرة", category: "burger" },
+            { id: 8, name: "وجبة برجر لحم طازج", price: 22, calories: "426 سعرة", category: "burger" },
+            { id: 9, name: "وجبة برجر مشوي سبايسي", price: 22, calories: "462 سعرة", category: "burger" },
+            { id: 10, name: "برجر دجاج طازج (دبل)", price: 25, calories: "659 سعرة", category: "burger" },
+            { id: 11, name: "برجر غنم طازج (دبل)", price: 31, calories: "748 سعرة", category: "burger" },
+            { id: 12, name: "وجبة برجر دبل زنجر", price: 23, calories: "922 سعرة", category: "burger" },
+
+            // قسم فاهيتا وكودو
+            { id: 13, name: "فاهيتا كودو زنجر", price: 17, calories: "516 سعرة", category: "fajita" },
+            { id: 14, name: "فاهيتا كودو لحم طازج", price: 22, calories: "598 سعرة", category: "fajita" },
+            { id: 15, name: "فاهيتا كودو دجاج", price: 17, calories: "573 سعرة", category: "fajita" },
+            { id: 16, name: "فاهيتا كودو جمبري", price: 16, calories: "612 سعرة", category: "fajita" },
+            { id: 17, name: "وجبة فاهيتا كودو مسحب", price: 14, calories: "596 سعرة", category: "fajita" },
+
+            // قسم التورتيلا
+            { id: 18, name: "تورتيلا دجاج", price: 17, calories: "566 سعرة", category: "tortilla" },
+            { id: 19, name: "تورتيلا جمبري", price: 16, calories: "510 سعرة", category: "tortilla" },
+            { id: 20, name: "تورتيلا زنجر", price: 17, calories: "598 سعرة", category: "tortilla" },
+            { id: 21, name: "وجبة مسحب تورتيلا", price: 14, calories: "624 سعرة", category: "tortilla" },
+
+            // قسم الصحون والوجبات الأخرى
+            { id: 22, name: "صحن مسحب وجبة", price: 15, calories: "912 سعرة", category: "meals" },
+            { id: 23, name: "صحن جمبري وجبة", price: 20, calories: "349 سعرة", category: "meals" }
         ];
 
         let cart = {};
+        let currentFilter = 'all';
 
-        const menuGrid = document.getElementById('menuGrid');
+        const categoryNames = {
+            burger: "قائمة البرجر الفاخر",
+            fajita: "سندويشات فاهيتا وكودو",
+            tortilla: "لفائف التورتيلا المقرمشة",
+            meals: "الصحون والوجبات الخاصة"
+        };
+
+        const menuContainer = document.getElementById('menuContainer');
         const totalPriceEl = document.getElementById('totalPrice');
         const totalCountEl = document.getElementById('totalCount');
 
         function renderMenu() {
-            menuGrid.innerHTML = '';
-            menuItems.forEach(item => {
-                const qty = cart[item.id] || 0;
-                const card = document.createElement('div');
-                card.className = 'menu-card';
-                card.innerHTML = `
-                    <div class="card-header">
-                        <div class="price-tag">${item.price} ر.س</div>
-                        <h3>${item.name}</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="calories"><i class="fa-solid fa-fire"></i> ${item.calories}</div>
-                        <button class="add-btn ${qty > 0 ? 'added' : ''}" onclick="updateCart(${item.id}, 1)">
-                            <i class="fa-solid ${qty > 0 ? 'fa-check' : 'fa-plus'}"></i> ${qty > 0 ? 'تم الإضافة (' + qty + ')' : 'إضافة للطلب'}
-                        </button>
-                    </div>
-                `;
-                menuGrid.appendChild(card);
+            menuContainer.innerHTML = '';
+            
+            let categoriesToDisplay = currentFilter === 'all' 
+                ? ['burger', 'fajita', 'tortilla', 'meals'] 
+                : [currentFilter];
+
+            categoriesToDisplay.forEach(catKey => {
+                const itemsInCat = menuItems.filter(i => i.category === catKey);
+                if (itemsInCat.length === 0) return;
+
+                // إنشاء عنوان القسم
+                const titleEl = document.createElement('h2');
+                titleEl.className = 'section-title';
+                titleEl.textContent = categoryNames[catKey];
+                menuContainer.appendChild(titleEl);
+
+                // إنشاء شبكة البطاقات لهذا القسم
+                const gridEl = document.createElement('div');
+                gridEl.className = 'menu-grid';
+
+                itemsInCat.forEach(item => {
+                    const qty = cart[item.id] || 0;
+                    const card = document.createElement('div');
+                    card.className = 'menu-card';
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <div class="price-tag">${item.price} ر.س</div>
+                            <h3>${item.name}</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="calories"><i class="fa-solid fa-fire"></i> ${item.calories}</div>
+                            <button class="add-btn ${qty > 0 ? 'added' : ''}" onclick="updateCart(${item.id}, 1)">
+                                <i class="fa-solid ${qty > 0 ? 'fa-check' : 'fa-plus'}"></i> ${qty > 0 ? 'تم الإضافة (' + qty + ')' : 'إضافة للطلب'}
+                            </button>
+                        </div>
+                    `;
+                    gridEl.appendChild(card);
+                });
+
+                menuContainer.appendChild(gridEl);
             });
+        }
+
+        function filterMenu(category, btnElement) {
+            currentFilter = category;
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+            renderMenu();
         }
 
         function updateCart(id, change) {
@@ -323,27 +466,28 @@
         function sendToWhatsApp() {
             let count = Object.values(cart).reduce((a, b) => a + b, 0);
             if (count === 0) {
-                alert('الرجاء اختيار وجبة واحدة على الأقل قبل الإرسال!');
+                alert('الرجاء اختيار وجبة واحدة على الأقل قبل إرسال الطلب!');
                 return;
             }
 
-            let message = "السلام عليكم، هذا طلب جديد من مزاج اليوم (فرع 2):\n\n";
+            let message = "السلام عليكم، أود طلب الأطباق التالية من مزاج اليوم (فرع 2):\n\n";
             let total = 0;
 
             for (let id in cart) {
                 const item = menuItems.find(i => i.id == id);
                 let itemTotal = item.price * cart[id];
                 total += itemTotal;
-                message += `- ${item.name} (العدد: ${cart[id]}) - ${itemTotal} ر.س\n`;
+                message += `▪️ ${item.name} (العدد: ${cart[id]}) - ${itemTotal} ر.س\n`;
             }
 
-            message += `\nالإجمالي الكلي: ${total} ريال`;
+            message += `\nالإجمالي الكلي: ${total} ريال سعودي`;
 
-            const phone = "966595804974"; // رقم التوصيل
+            const phone = "966595804974"; // رقم التوصيل المعتمد من المنيو
             const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
         }
 
+        // التشغيل الأولي
         renderMenu();
     </script>
 </body>
