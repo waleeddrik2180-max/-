@@ -174,22 +174,12 @@
             box-shadow: 0 20px 45px rgba(252, 211, 77, 0.2);
         }
 
-        .card-image-container {
-            width: 100%;
-            height: 190px;
-            overflow: hidden;
+        .card-header {
             position: relative;
-        }
-
-        .card-image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .menu-card:hover .card-image-container img {
-            transform: scale(1.08);
+            background: rgba(15, 23, 42, 0.7);
+            padding: 26px 18px;
+            text-align: center;
+            border-bottom: 1px solid var(--glass-border);
         }
 
         .price-tag {
@@ -203,33 +193,32 @@
             border-radius: 30px;
             font-size: 1.1rem;
             box-shadow: 0 4px 15px rgba(252, 211, 77, 0.35);
-            z-index: 2;
+        }
+
+        .card-header h3 {
+            font-size: 1.35rem;
+            color: #fff;
+            margin-top: 10px;
+            font-weight: 800;
         }
 
         .card-body {
-            padding: 20px 18px;
+            padding: 24px 18px;
             text-align: center;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .card-body h3 {
-            font-size: 1.35rem;
-            color: #fff;
-            margin-bottom: 12px;
-            font-weight: 800;
+            justify-content: center;
         }
 
         .calories {
             color: var(--text-muted);
             font-size: 0.95rem;
-            margin-bottom: 18px;
+            margin-bottom: 22px;
             background: rgba(3, 7, 18, 0.6);
             display: inline-block;
-            padding: 6px 16px;
-            border-radius: 12px;
+            padding: 8px 18px;
+            border-radius: 14px;
             align-self: center;
             border: 1px solid var(--glass-border);
         }
@@ -244,7 +233,7 @@
             color: white;
             border: none;
             width: 100%;
-            padding: 14px;
+            padding: 15px;
             border-radius: 16px;
             font-weight: 800;
             cursor: pointer;
@@ -253,7 +242,7 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
         }
 
@@ -456,7 +445,6 @@
         <div id="menuContainer"></div>
     </div>
 
-    <!-- شريط السلة العائم -->
     <div class="cart-bar" id="cartBar">
         <div class="cart-info">
             <span>الإجمالي: <span id="totalPrice">0</span> ر.س</span>
@@ -469,14 +457,14 @@
         </button>
     </div>
 
-    <!-- نافذة السلة المنبتقة -->
     <div class="modal-overlay" id="cartModal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>تفاصيل السلة الخاصة بك</h3>
                 <button class="close-modal" onclick="toggleCartModal(false)">&times;</button>
             </div>
-            <div class="modal-body" id="modalCartItems"></div>
+            <div class="modal-body" id="modalCartItems">
+                </div>
             <button class="whatsapp-btn" style="width: 100%; justify-content: center;" onclick="sendToWhatsApp()">
                 <i class="fa-brands fa-whatsapp fa-xl"></i> إرسال الطلب للواتساب
             </button>
@@ -485,32 +473,32 @@
 
     <script>
         const menuItems = [
-            { id: 1, name: "وجبة برجر زنجر", price: 17, calories: "496 سعرة", category: "burger", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" },
-            { id: 2, name: "وجبة برجر دجاج", price: 14, calories: "561 سعرة", category: "burger", img: "https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=600&q=80" },
-            { id: 3, name: "وجبة برجر لحم", price: 14, calories: "584 سعرة", category: "burger", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80" },
-            { id: 4, name: "وجبة برجر مشوي طازج", price: 22, calories: "820 سعرة", category: "burger", img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80" },
-            { id: 5, name: "برجر فلفل حار أمريكانا", price: 19, calories: "691 سعرة", category: "burger", img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=600&q=80" },
-            { id: 6, name: "برجر دجاج دبل أمريكانا", price: 18, calories: "714 سعرة", category: "burger", img: "https://images.unsplash.com/photo-1610440042657-612c34d95e4f?auto=format&fit=crop&w=600&q=80" },
-            { id: 7, name: "وجبة برجر دجاج طازج", price: 17, calories: "459 سعرة", category: "burger", img: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=600&q=80" },
-            { id: 8, name: "وجبة برجر لحم طازج", price: 22, calories: "426 سعرة", category: "burger", img: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80" },
-            { id: 9, name: "وجبة برجر مشوي سبايسي", price: 22, calories: "462 سعرة", category: "burger", img: "https://images.unsplash.com/photo-1551782450-17144efb9c50?auto=format&fit=crop&w=600&q=80" },
-            { id: 10, name: "برجر دجاج طازج (دبل)", price: 25, calories: "659 سعرة", category: "burger", img: "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?auto=format&fit=crop&w=600&q=80" },
-            { id: 11, name: "برجر غنم طازج (دبل)", price: 31, calories: "748 سعرة", category: "burger", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
-            { id: 12, name: "وجبة برجر دبل زنجر", price: 23, calories: "922 سعرة", category: "burger", img: "https://images.unsplash.com/photo-1525164475550-51107297926d?auto=format&fit=crop&w=600&q=80" },
+            { id: 1, name: "وجبة برجر زنجر", price: 17, calories: "496 سعرة", category: "burger" },
+            { id: 2, name: "وجبة برجر دجاج", price: 14, calories: "561 سعرة", category: "burger" },
+            { id: 3, name: "وجبة برجر لحم", price: 14, calories: "584 سعرة", category: "burger" },
+            { id: 4, name: "وجبة برجر مشوي طازج", price: 22, calories: "820 سعرة", category: "burger" },
+            { id: 5, name: "برجر فلفل حار أمريكانا", price: 19, calories: "691 سعرة", category: "burger" },
+            { id: 6, name: "برجر دجاج دبل أمريكانا", price: 18, calories: "714 سعرة", category: "burger" },
+            { id: 7, name: "وجبة برجر دجاج طازج", price: 17, calories: "459 سعرة", category: "burger" },
+            { id: 8, name: "وجبة برجر لحم طازج", price: 22, calories: "426 سعرة", category: "burger" },
+            { id: 9, name: "وجبة برجر مشوي سبايسي", price: 22, calories: "462 سعرة", category: "burger" },
+            { id: 10, name: "برجر دجاج طازج (دبل)", price: 25, calories: "659 سعرة", category: "burger" },
+            { id: 11, name: "برجر غنم طازج (دبل)", price: 31, calories: "748 سعرة", category: "burger" },
+            { id: 12, name: "وجبة برجر دبل زنجر", price: 23, calories: "922 سعرة", category: "burger" },
 
-            { id: 13, name: "فاهيتا كودو زنجر", price: 17, calories: "516 سعرة", category: "fajita", img: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=600&q=80" },
-            { id: 14, name: "فاهيتا كودو لحم طازج", price: 22, calories: "598 سعرة", category: "fajita", img: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80" },
-            { id: 15, name: "فاهيتا كودو دجاج", price: 17, calories: "573 سعرة", category: "fajita", img: "https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=600&q=80" },
-            { id: 16, name: "فاهيتا كودو جمبري", price: 16, calories: "612 سعرة", category: "fajita", img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80" },
-            { id: 17, name: "وجبة فاهيتا كودو مسحب", price: 14, calories: "596 سعرة", category: "fajita", img: "https://images.unsplash.com/photo-1529042410759-befb1204b468?auto=format&fit=crop&w=600&q=80" },
+            { id: 13, name: "فاهيتا كودو زنجر", price: 17, calories: "516 سعرة", category: "fajita" },
+            { id: 14, name: "فاهيتا كودو لحم طازج", price: 22, calories: "598 سعرة", category: "fajita" },
+            { id: 15, name: "فاهيتا كودو دجاج", price: 17, calories: "573 سعرة", category: "fajita" },
+            { id: 16, name: "فاهيتا كودو جمبري", price: 16, calories: "612 سعرة", category: "fajita" },
+            { id: 17, name: "وجبة فاهيتا كودو مسحب", price: 14, calories: "596 سعرة", category: "fajita" },
 
-            { id: 18, name: "تورتيلا دجاج", price: 17, calories: "566 سعرة", category: "tortilla", img: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80" },
-            { id: 19, name: "تورتيلا جمبري", price: 16, calories: "510 سعرة", category: "tortilla", img: "https://images.unsplash.com/photo-1552332386-f8dd00dc2f85?auto=format&fit=crop&w=600&q=80" },
-            { id: 20, name: "تورتيلا زنجر", price: 17, calories: "598 سعرة", category: "tortilla", img: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=600&q=80" },
-            { id: 21, name: "وجبة مسحب تورتيلا", price: 14, calories: "624 سعرة", category: "tortilla", img: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80" },
+            { id: 18, name: "تورتيلا دجاج", price: 17, calories: "566 سعرة", category: "tortilla" },
+            { id: 19, name: "تورتيلا جمبري", price: 16, calories: "510 سعرة", category: "tortilla" },
+            { id: 20, name: "تورتيلا زنجر", price: 17, calories: "598 سعرة", category: "tortilla" },
+            { id: 21, name: "وجبة مسحب تورتيلا", price: 14, calories: "624 سعرة", category: "tortilla" },
 
-            { id: 22, name: "صحن مسحب وجبة", price: 15, calories: "912 سعرة", category: "meals", img: "https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=600&q=80" },
-            { id: 23, name: "صحن جمبري وجبة", price: 20, calories: "349 سعرة", category: "meals", img: "https://images.unsplash.com/photo-1532336414038-cf19250c5757?auto=format&fit=crop&w=600&q=80" }
+            { id: 22, name: "صحن مسحب وجبة", price: 15, calories: "912 سعرة", category: "meals" },
+            { id: 23, name: "صحن جمبري وجبة", price: 20, calories: "349 سعرة", category: "meals" }
         ];
 
         let cart = {};
@@ -528,6 +516,7 @@
         const totalCountEl = document.getElementById('totalCount');
         const cartBar = document.getElementById('cartBar');
 
+        // دالة إصدار الصوت التفاعلي
         function playClickSound() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -574,15 +563,12 @@
                     const card = document.createElement('div');
                     card.className = 'menu-card';
                     card.innerHTML = `
-                        <div class="card-image-container">
+                        <div class="card-header">
                             <div class="price-tag">${item.price} ر.س</div>
-                            <img src="${item.img}" alt="${item.name}" loading="lazy">
+                            <h3>${item.name}</h3>
                         </div>
                         <div class="card-body">
-                            <div>
-                                <h3>${item.name}</h3>
-                                <div class="calories"><i class="fa-solid fa-fire-flame-curved"></i> ${item.calories}</div>
-                            </div>
+                            <div class="calories"><i class="fa-solid fa-fire-flame-curved"></i> ${item.calories}</div>
                             <button class="add-btn ${qty > 0 ? 'added' : ''}" onclick="updateCart(${item.id}, 1)">
                                 <i class="fa-solid ${qty > 0 ? 'fa-check' : 'fa-plus'}"></i> ${qty > 0 ? 'تم الإضافة (' + qty + ')' : 'إضافة للطلب'}
                             </button>
