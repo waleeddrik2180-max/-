@@ -174,12 +174,22 @@
             box-shadow: 0 20px 45px rgba(252, 211, 77, 0.2);
         }
 
-        .card-header {
+        .card-image-container {
+            width: 100%;
+            height: 190px;
+            overflow: hidden;
             position: relative;
-            background: rgba(15, 23, 42, 0.7);
-            padding: 26px 18px;
-            text-align: center;
-            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .card-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .menu-card:hover .card-image-container img {
+            transform: scale(1.08);
         }
 
         .price-tag {
@@ -193,32 +203,33 @@
             border-radius: 30px;
             font-size: 1.1rem;
             box-shadow: 0 4px 15px rgba(252, 211, 77, 0.35);
-        }
-
-        .card-header h3 {
-            font-size: 1.35rem;
-            color: #fff;
-            margin-top: 10px;
-            font-weight: 800;
+            z-index: 2;
         }
 
         .card-body {
-            padding: 24px 18px;
+            padding: 20px 18px;
             text-align: center;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
+        }
+
+        .card-body h3 {
+            font-size: 1.35rem;
+            color: #fff;
+            margin-bottom: 12px;
+            font-weight: 800;
         }
 
         .calories {
             color: var(--text-muted);
             font-size: 0.95rem;
-            margin-bottom: 22px;
+            margin-bottom: 18px;
             background: rgba(3, 7, 18, 0.6);
             display: inline-block;
-            padding: 8px 18px;
-            border-radius: 14px;
+            padding: 6px 16px;
+            border-radius: 12px;
             align-self: center;
             border: 1px solid var(--glass-border);
         }
@@ -233,7 +244,7 @@
             color: white;
             border: none;
             width: 100%;
-            padding: 15px;
+            padding: 14px;
             border-radius: 16px;
             font-weight: 800;
             cursor: pointer;
@@ -242,7 +253,7 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
         }
 
@@ -445,232 +456,4 @@
         <div id="menuContainer"></div>
     </div>
 
-    <div class="cart-bar" id="cartBar">
-        <div class="cart-info">
-            <span>الإجمالي: <span id="totalPrice">0</span> ر.س</span>
-            <button class="view-cart-btn" onclick="toggleCartModal(true)">
-                <i class="fa-solid fa-cart-shopping"></i> عرض السلة (<span id="totalCount">0</span>)
-            </button>
-        </div>
-        <button class="whatsapp-btn" onclick="sendToWhatsApp()">
-            <i class="fa-brands fa-whatsapp fa-xl"></i> إرسال الطلب عبر الواتساب
-        </button>
-    </div>
-
-    <div class="modal-overlay" id="cartModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>تفاصيل السلة الخاصة بك</h3>
-                <button class="close-modal" onclick="toggleCartModal(false)">&times;</button>
-            </div>
-            <div class="modal-body" id="modalCartItems">
-                </div>
-            <button class="whatsapp-btn" style="width: 100%; justify-content: center;" onclick="sendToWhatsApp()">
-                <i class="fa-brands fa-whatsapp fa-xl"></i> إرسال الطلب للواتساب
-            </button>
-        </div>
-    </div>
-
-    <script>
-        const menuItems = [
-            { id: 1, name: "وجبة برجر زنجر", price: 17, calories: "496 سعرة", category: "burger" },
-            { id: 2, name: "وجبة برجر دجاج", price: 14, calories: "561 سعرة", category: "burger" },
-            { id: 3, name: "وجبة برجر لحم", price: 14, calories: "584 سعرة", category: "burger" },
-            { id: 4, name: "وجبة برجر مشوي طازج", price: 22, calories: "820 سعرة", category: "burger" },
-            { id: 5, name: "برجر فلفل حار أمريكانا", price: 19, calories: "691 سعرة", category: "burger" },
-            { id: 6, name: "برجر دجاج دبل أمريكانا", price: 18, calories: "714 سعرة", category: "burger" },
-            { id: 7, name: "وجبة برجر دجاج طازج", price: 17, calories: "459 سعرة", category: "burger" },
-            { id: 8, name: "وجبة برجر لحم طازج", price: 22, calories: "426 سعرة", category: "burger" },
-            { id: 9, name: "وجبة برجر مشوي سبايسي", price: 22, calories: "462 سعرة", category: "burger" },
-            { id: 10, name: "برجر دجاج طازج (دبل)", price: 25, calories: "659 سعرة", category: "burger" },
-            { id: 11, name: "برجر غنم طازج (دبل)", price: 31, calories: "748 سعرة", category: "burger" },
-            { id: 12, name: "وجبة برجر دبل زنجر", price: 23, calories: "922 سعرة", category: "burger" },
-
-            { id: 13, name: "فاهيتا كودو زنجر", price: 17, calories: "516 سعرة", category: "fajita" },
-            { id: 14, name: "فاهيتا كودو لحم طازج", price: 22, calories: "598 سعرة", category: "fajita" },
-            { id: 15, name: "فاهيتا كودو دجاج", price: 17, calories: "573 سعرة", category: "fajita" },
-            { id: 16, name: "فاهيتا كودو جمبري", price: 16, calories: "612 سعرة", category: "fajita" },
-            { id: 17, name: "وجبة فاهيتا كودو مسحب", price: 14, calories: "596 سعرة", category: "fajita" },
-
-            { id: 18, name: "تورتيلا دجاج", price: 17, calories: "566 سعرة", category: "tortilla" },
-            { id: 19, name: "تورتيلا جمبري", price: 16, calories: "510 سعرة", category: "tortilla" },
-            { id: 20, name: "تورتيلا زنجر", price: 17, calories: "598 سعرة", category: "tortilla" },
-            { id: 21, name: "وجبة مسحب تورتيلا", price: 14, calories: "624 سعرة", category: "tortilla" },
-
-            { id: 22, name: "صحن مسحب وجبة", price: 15, calories: "912 سعرة", category: "meals" },
-            { id: 23, name: "صحن جمبري وجبة", price: 20, calories: "349 سعرة", category: "meals" }
-        ];
-
-        let cart = {};
-        let currentFilter = 'all';
-
-        const categoryNames = {
-            burger: "قائمة البرجر الفاخر",
-            fajita: "سندويشات فاهيتا وكودو",
-            tortilla: "لفائف التورتيلا المقرمشة",
-            meals: "الصحون والوجبات الخاصة"
-        };
-
-        const menuContainer = document.getElementById('menuContainer');
-        const totalPriceEl = document.getElementById('totalPrice');
-        const totalCountEl = document.getElementById('totalCount');
-        const cartBar = document.getElementById('cartBar');
-
-        // دالة إصدار الصوت التفاعلي
-        function playClickSound() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.08);
-                gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
-                osc.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.08);
-            } catch (e) {}
-        }
-
-        function triggerCartPulse() {
-            cartBar.classList.add('pulse');
-            setTimeout(() => cartBar.classList.remove('pulse'), 200);
-        }
-
-        function renderMenu() {
-            menuContainer.innerHTML = '';
-            
-            let categoriesToDisplay = currentFilter === 'all' 
-                ? ['burger', 'fajita', 'tortilla', 'meals'] 
-                : [currentFilter];
-
-            categoriesToDisplay.forEach(catKey => {
-                let itemsInCat = menuItems.filter(i => i.category === catKey);
-                if (itemsInCat.length === 0) return;
-
-                const titleEl = document.createElement('h2');
-                titleEl.className = 'section-title';
-                titleEl.textContent = categoryNames[catKey];
-                menuContainer.appendChild(titleEl);
-
-                const gridEl = document.createElement('div');
-                gridEl.className = 'menu-grid';
-
-                itemsInCat.forEach(item => {
-                    const qty = cart[item.id] || 0;
-                    const card = document.createElement('div');
-                    card.className = 'menu-card';
-                    card.innerHTML = `
-                        <div class="card-header">
-                            <div class="price-tag">${item.price} ر.س</div>
-                            <h3>${item.name}</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="calories"><i class="fa-solid fa-fire-flame-curved"></i> ${item.calories}</div>
-                            <button class="add-btn ${qty > 0 ? 'added' : ''}" onclick="updateCart(${item.id}, 1)">
-                                <i class="fa-solid ${qty > 0 ? 'fa-check' : 'fa-plus'}"></i> ${qty > 0 ? 'تم الإضافة (' + qty + ')' : 'إضافة للطلب'}
-                            </button>
-                        </div>
-                    `;
-                    gridEl.appendChild(card);
-                });
-
-                menuContainer.appendChild(gridEl);
-            });
-        }
-
-        function filterMenu(category, btnElement) {
-            currentFilter = category;
-            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-            btnElement.classList.add('active');
-            renderMenu();
-        }
-
-        function updateCart(id, change) {
-            playClickSound();
-            triggerCartPulse();
-            if (!cart[id]) cart[id] = 0;
-            cart[id] += change;
-            if (cart[id] <= 0) delete cart[id];
-            renderMenu();
-            updateSummary();
-            updateModalCartItems();
-        }
-
-        function updateSummary() {
-            let total = 0;
-            let count = 0;
-            for (let id in cart) {
-                const item = menuItems.find(i => i.id == id);
-                total += item.price * cart[id];
-                count += cart[id];
-            }
-            totalPriceEl.textContent = total;
-            totalCountEl.textContent = count;
-        }
-
-        function toggleCartModal(open) {
-            const modal = document.getElementById('cartModal');
-            modal.style.display = open ? 'flex' : 'none';
-            if (open) updateModalCartItems();
-        }
-
-        function updateModalCartItems() {
-            const modalContainer = document.getElementById('modalCartItems');
-            modalContainer.innerHTML = '';
-            
-            let hasItems = false;
-            for (let id in cart) {
-                hasItems = true;
-                const item = menuItems.find(i => i.id == id);
-                const row = document.createElement('div');
-                row.className = 'cart-item-row';
-                row.innerHTML = `
-                    <div>
-                        <h4 style="color:#fff; font-size:1rem; margin-bottom:4px;">${item.name}</h4>
-                        <span style="color:var(--primary); font-size:0.9rem;">${item.price * cart[id]} ر.س</span>
-                    </div>
-                    <div class="cart-item-controls">
-                        <button onclick="updateCart(${id}, -1)">-</button>
-                        <span style="color:#fff; font-weight:bold; min-width:20px; text-align:center;">${cart[id]}</span>
-                        <button onclick="updateCart(${id}, 1)">+</button>
-                    </div>
-                `;
-                modalContainer.appendChild(row);
-            }
-
-            if (!hasItems) {
-                modalContainer.innerHTML = `<p style="color:var(--text-muted); text-align:center; padding:20px;">السلة فارغة حالياً..</p>`;
-            }
-        }
-
-        function sendToWhatsApp() {
-            let count = Object.values(cart).reduce((a, b) => a + b, 0);
-            if (count === 0) {
-                alert('الرجاء اختيار وجبة واحدة على الأقل قبل الإرسال!');
-                return;
-            }
-
-            let message = "السلام عليكم، هذا طلب جديد من مزاج اليوم (فرع 2):\n\n";
-            let total = 0;
-
-            for (let id in cart) {
-                const item = menuItems.find(i => i.id == id);
-                let itemTotal = item.price * cart[id];
-                total += itemTotal;
-                message += `▪️ ${item.name} (العدد: ${cart[id]}) - ${itemTotal} ر.س\n`;
-            }
-
-            message += `\nالإجمالي الكلي: ${total} ريال سعودي`;
-
-            const phone = "966595804974";
-            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-            window.open(url, '_blank');
-        }
-
-        renderMenu();
-    </script>
-</body>
-</html>
+    <!-- ش
