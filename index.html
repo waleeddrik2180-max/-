@@ -3,226 +3,376 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة 3D خارقة - Mat7as Game</title>
+    <title>هاتريك - Hattrick</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body {
+        :root {
+            --bg-color: #0b0e14;
+            --card-bg: #161b22;
+            --accent-color: #00e676;
+            --text-color: #f0f6fc;
+            --text-secondary: #8b949e;
+            --border-color: #30363d;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
-            overflow: hidden;
-            background-color: #0b0b16;
-            font-family: 'Tahoma', sans-serif;
-            user-select: none;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
-        #ui {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #fff;
-            background: rgba(15, 15, 30, 0.85);
-            padding: 12px 25px;
-            border-radius: 12px;
-            font-size: 18px;
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding-bottom: 70px;
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(180deg, #161b22 0%, #0b0e14 100%);
+            padding: 16px;
             text-align: center;
-            border: 2px solid #00ff88;
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
-            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        #gameover {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #ff3366;
-            background: rgba(0, 0, 0, 0.9);
-            padding: 30px 50px;
-            border-radius: 15px;
-            font-size: 30px;
-            text-align: center;
-            border: 3px solid #ff3366;
-            display: none;
-            box-shadow: 0 0 30px rgba(255, 51, 102, 0.6);
-            z-index: 10;
+
+        header h1 {
+            color: var(--accent-color);
+            font-size: 24px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
-        #gameover button {
-            margin-top: 20px;
-            padding: 10px 25px;
-            background: #00ff88;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #000;
+
+        .leagues-scroll {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 12px 16px;
+            background: #12161c;
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        .league-chip {
+            background: #21262d;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
             cursor: pointer;
             transition: 0.2s;
         }
-        #gameover button:hover {
-            background: #00cc6a;
-            transform: scale(1.05);
+
+        .league-chip.active {
+            background: var(--accent-color);
+            color: #000;
+            font-weight: bold;
+            border-color: var(--accent-color);
+        }
+
+        .section {
+            display: none;
+            padding: 16px;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .match-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 8px;
+        }
+
+        .badge-live {
+            background: #ff1744;
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        .teams-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 12px 0;
+        }
+
+        .team {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            width: 35%;
+        }
+
+        .team-icon {
+            width: 44px;
+            height: 44px;
+            background: #21262d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .team-name {
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .score-box {
+            background: #21262d;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--accent-color);
+            border: 1px solid var(--border-color);
+            letter-spacing: 2px;
+        }
+
+        .goal-alert {
+            background: rgba(0, 230, 118, 0.15);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            text-align: center;
+            padding: 6px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .predict-section {
+            margin-top: 12px;
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .predict-inputs {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .predict-inputs input {
+            width: 45px;
+            height: 36px;
+            background: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: #fff;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .btn-predict {
+            background: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .profile-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .avatar {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--accent-color), #00b0ff);
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: #000;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: #161b22;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 11px;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .nav-item.active {
+            color: var(--accent-color);
         }
     </style>
 </head>
 <body>
 
-    <div id="ui">النقاط: <span id="score">0</span> | اتهرب من العوائق الحمراء باستخدام الأسهم أو WASD!</div>
-    
-    <div id="gameover">
-        <div>❌ صقعت في العائق وانتهت اللعبة!</div>
-        <div style="font-size: 20px; margin-top: 10px; color: #fff;">نقاطك: <span id="final-score">0</span></div>
-        <button onclick="restartGame()">اضغط لإعادة اللعب</button>
+    <header>
+        <h1><i class="fa-solid fa-futbol"></i> HATTRICK</h1>
+    </header>
+
+    <div class="leagues-scroll">
+        <div class="league-chip active" onclick="filterLeague('all', this)">الكل 🔥</div>
+        <div class="league-chip" onclick="filterLeague('saudi', this)">دوري روشن السعودي 🇸🇦</div>
+        <div class="league-chip" onclick="filterLeague('ucl', this)">أبطال أوروبا 🇪🇺</div>
+        <div class="league-chip" onclick="filterLeague('eng', this)">الدوري الإنجليزي 🏴󠁧󠁢󠁥󠁮󠁧󠁿</div>
     </div>
 
-    <!-- استدعاء مكتبة Three.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <div id="matches-sec" class="section active">
+        <div class="match-card" data-league="saudi">
+            <div class="match-header">
+                <span>دوري روشن السعودي</span>
+                <span class="badge-live">مباشر 82'</span>
+            </div>
+            <div id="alert-1" class="goal-alert">⚽ قوووول! سجل الهلال الهدف الثاني!</div>
+            <div class="teams-container">
+                <div class="team">
+                    <div class="team-icon">🔵</div>
+                    <div class="team-name">الهلال</div>
+                </div>
+                <div class="score-box" id="score-1">1 - 1</div>
+                <div class="team">
+                    <div class="team-icon">🟡</div>
+                    <div class="team-name">النصر</div>
+                </div>
+            </div>
+            <button onclick="simulateGoal(1, 'الهلال')" style="width:100%; background:#21262d; border:1px solid #30363d; color:#00e676; padding:6px; border-radius:6px; margin-bottom:10px; cursor:pointer; font-size:12px;">⚡ (تجربة مبرمج): محاكاة هدف جديد</button>
+            <div class="predict-section">
+                <div class="predict-inputs">
+                    <input type="number" placeholder="0">
+                    <span>:</span>
+                    <input type="number" placeholder="0">
+                    <button class="btn-predict" onclick="alert('تم حفظ توقعك!')">توقع</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="profile-sec" class="section">
+        <div class="profile-card">
+            <div class="avatar"><i class="fa-solid fa-user-ninja"></i></div>
+            <h2>وليد (Mt7as)</h2>
+            <div style="color:var(--accent-color); font-size:13px; margin-top:5px; font-weight:bold;">مؤسس ومبرمج تطبيق هاتريك 🚀</div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('matches-sec', this)">
+            <i class="fa-solid fa-gamepad"></i>
+            <span>المباريات</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('profile-sec', this)">
+            <i class="fa-solid fa-user"></i>
+            <span>حسابي</span>
+        </div>
+    </div>
 
     <script>
-        // إعداد المشهد والكاميرا
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0b0b16);
-        scene.fog = new THREE.FogExp2(0x0b0b16, 0.035);
-
-        const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 7, 12);
-        camera.lookAt(0, 0, -2);
-
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true;
-        document.body.appendChild(renderer.domElement);
-
-        // الإضاءة الديناميكية القوية
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-        scene.add(ambientLight);
-
-        const dirLight = new THREE.DirectionalLight(0x00ff88, 1.5);
-        dirLight.position.set(10, 20, 10);
-        dirLight.castShadow = true;
-        scene.add(dirLight);
-
-        const pointLight = new THREE.PointLight(0xff00ff, 2, 50);
-        pointLight.position.set(0, 5, -5);
-        scene.add(pointLight);
-
-        // أرضية اللعبة (شبكة مستقبلية)
-        const planeGeometry = new THREE.PlaneGeometry(60, 200, 30, 30);
-        const planeMaterial = new THREE.MeshStandardMaterial({ 
-            color: 0x151525, 
-            roughness: 0.4,
-            wireframe: false
-        });
-        const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-        plane.rotation.x = -Math.PI / 2;
-        plane.receiveShadow = true;
-        scene.add(plane);
-
-        // إضافة خطوط مضيئة للأرضية
-        const gridHelper = new THREE.GridHelper(60, 40, 0x00ff88, 0x333355);
-        gridHelper.position.y = 0.01;
-        scene.add(gridHelper);
-
-        // بناء شخصية اللاعب (مركبة أو روبوت مجسم 3D متطور)
-        const playerGroup = new THREE.Group();
-
-        // جسم اللاعب الأساسي
-        const bodyGeo = new THREE.BoxGeometry(1.2, 0.6, 2);
-        const bodyMat = new THREE.MeshStandardMaterial({ color: 0x00ff88, metalness: 0.8, roughness: 0.2 });
-        const body = new THREE.Mesh(bodyGeo, bodyMat);
-        body.position.y = 0.5;
-        body.castShadow = true;
-        playerGroup.add(body);
-
-        // قمرة القيادة (زجاج أمامي)
-        const cockpitGeo = new THREE.BoxGeometry(0.8, 0.5, 1);
-        const cockpitMat = new THREE.MeshStandardMaterial({ color: 0x00ffff, transparent: true, opacity: 0.7, roughness: 0.1 });
-        const cockpit = new THREE.Mesh(cockpitGeo, cockpitMat);
-        cockpit.position.set(0, 0.8, -0.2);
-        playerGroup.add(cockpit);
-
-        // محركات خلفية متوهجة
-        const engineGeo = new THREE.CylinderGeometry(0.3, 0.3, 0.8, 16);
-        const engineMat = new THREE.MeshBasicMaterial({ color: 0xff00ff });
-        const engine1 = new THREE.Mesh(engineGeo, engineMat);
-        engine1.rotation.x = Math.PI / 2;
-        engine1.position.set(0.4, 0.4, 1.1);
-        playerGroup.add(engine1);
-
-        const engine2 = engine1.clone();
-        engine2.position.x = -0.4;
-        playerGroup.add(engine2);
-
-        playerGroup.position.set(0, 0, 5);
-        scene.add(playerGroup);
-
-        // متغيرات الحركة والتحكم
-        const keys = {};
-        window.addEventListener('keydown', (e) => { keys[e.key.toLowerCase()] = true; });
-        window.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
-
-        let playerSpeed = 0.25;
-        let obstacles = [];
-        let score = 0;
-        let isGameOver = false;
-
-        // دالة إنشاء العوائق (تجي ضد اللاعب بشكل عشوائي)
-        function spawnObstacle() {
-            if (isGameOver) return;
-
-            const width = Math.random() * 2 + 1;
-            const height = Math.random() * 2 + 1;
-            const obsGeo = new THREE.BoxGeometry(width, height, 1.5);
-            const obsMat = new THREE.MeshStandardMaterial({ color: 0xff3366, roughness: 0.3, metalness: 0.5 });
-            const obstacle = new THREE.Mesh(obsGeo, obsMat);
-
-            // أماكن عشوائية على عرض الشارع (من -12 إلى 12)
-            const randomX = (Math.random() - 0.5) * 24;
-            obstacle.position.set(randomX, height / 2, -60);
-            obstacle.castShadow = true;
-
-            scene.add(obstacle);
-            obstacles.push(obstacle);
+        function switchTab(secId, el) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(secId).classList.add('active');
+            el.classList.add('active');
         }
 
-        // إطلاق عوائق كل فترة
-        let obstacleTimer = setInterval(spawnObstacle, 900);
+        function filterLeague(leagueKey, el) {
+            document.querySelectorAll('.league-chip').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
 
-        // تحديث اللعبة والحركة
-        function updateGame() {
-            if (isGameOver) return;
-
-            // حركة اللاعب يمين ويسار وفوق تحت بحدود الشارع
-            if ((keys['a'] || keys['arrowleft']) && playerGroup.position.x > -14) {
-                playerGroup.position.x -= playerSpeed;
-                playerGroup.rotation.z = THREE.MathUtils.lerp(playerGroup.rotation.z, 0.3, 0.1);
-            } else if ((keys['d'] || keys['arrowright']) && playerGroup.position.x < 14) {
-                playerGroup.position.x += playerSpeed;
-                playerGroup.rotation.z = THREE.MathUtils.lerp(playerGroup.rotation.z, -0.3, 0.1);
-            } else {
-                playerGroup.rotation.z = THREE.MathUtils.lerp(playerGroup.rotation.z, 0, 0.1);
-            }
-
-            // حركة للأمام والخلف
-            if ((keys['w'] || keys['arrowup']) && playerGroup.position.z > -20) {
-                playerGroup.position.z -= playerSpeed * 0.8;
-            }
-            if ((keys['s'] || keys['arrowdown']) && playerGroup.position.z < 8) {
-                playerGroup.position.z += playerSpeed * 0.8;
-            }
-
-            // تحريك الأرضية عشان تعطي شعور السرعة والحركة المستمرة
-            plane.position.z += 0.4;
-            if (plane.position.z > 50) plane.position.z = 0;
-
-            // تحريك العوائق نحونا
-            for (let i = obstacles.length - 1; i >= 0; i--) {
-                let obs = obstacles[i];
-                obs.position.z += 0.5; // سرعة العائق
-
-                // نظام الاصطدام (Collision Detection)
-                let distance = playerGroup.position.distanceTo(obs.position);
-                if (distance < 1.5) {
-                    gameOver();
+            document.querySelectorAll('.match-card').forEach(card => {
+                if(leagueKey === 'all' || card.dataset.league === leagueKey) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
                 }
+            });
+        }
 
-                // إزالة العوائق اللي تعدت اللاعب وزيادة النقاط
-                if (obs.position.z > 10) {
-                    scene.remove(obs);
-                    obstacles.splice(i,
+        function simulateGoal(matchId, scoringTeam) {
+            const scoreBox = document.getElementById(`score-${matchId}`);
+            const alertBox = document.getElementById(`alert-${matchId}`);
+            
+            scoreBox.textContent = "2 - 1";
+            alertBox.textContent = `⚽ قوووول لـ ${scoringTeam}! اشتعلت المباراة 🔥`;
+            alertBox.style.display = 'block';
+
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
