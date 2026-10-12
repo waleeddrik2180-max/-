@@ -52,7 +52,6 @@
             gap: 10px;
         }
 
-        /* Leagues Selector Tabs */
         .leagues-scroll {
             display: flex;
             gap: 8px;
@@ -176,7 +175,6 @@
             letter-spacing: 2px;
         }
 
-        /* Goal Alert Banner inside match card */
         .goal-alert {
             background: rgba(0, 230, 118, 0.15);
             border: 1px solid var(--accent-color);
@@ -188,10 +186,8 @@
             font-weight: bold;
             margin-bottom: 10px;
             display: none;
-            animation: bounce 0.5s;
         }
 
-        /* Predict Section */
         .predict-section {
             margin-top: 12px;
             background: rgba(0,0,0,0.2);
@@ -231,7 +227,6 @@
             cursor: pointer;
         }
 
-        /* Profile & Standings */
         .profile-card {
             background: var(--card-bg);
             border-radius: 16px;
@@ -289,7 +284,6 @@
         <h1><i class="fa-solid fa-futbol"></i> HATTRICK</h1>
     </header>
 
-    <!-- قائمة الدوريات الأفقيّة -->
     <div class="leagues-scroll">
         <div class="league-chip active" onclick="filterLeague('all', this)">الكل 🔥</div>
         <div class="league-chip" onclick="filterLeague('saudi', this)">دوري روشن السعودي 🇸🇦</div>
@@ -297,10 +291,7 @@
         <div class="league-chip" onclick="filterLeague('eng', this)">الدوري الإنجليزي 🏴󠁧󠁢󠁥󠁮󠁧󠁿</div>
     </div>
 
-    <!-- شاشة المباريات -->
     <div id="matches-sec" class="section active">
-        
-        <!-- مباراة سعودي -->
         <div class="match-card" data-league="saudi">
             <div class="match-header">
                 <span>دوري روشن السعودي</span>
@@ -318,9 +309,7 @@
                     <div class="team-name">النصر</div>
                 </div>
             </div>
-            <!-- زر تجريبي للمطور (وليد) عشان يشوف كيف الهدف يتسجل بالتطبيق لحظياً -->
             <button onclick="simulateGoal(1, 'الهلال')" style="width:100%; background:#21262d; border:1px solid #30363d; color:#00e676; padding:6px; border-radius:6px; margin-bottom:10px; cursor:pointer; font-size:12px;">⚡ (تجربة مبرمج): محاكاة هدف جديد</button>
-            
             <div class="predict-section">
                 <div class="predict-inputs">
                     <input type="number" placeholder="0">
@@ -330,39 +319,8 @@
                 </div>
             </div>
         </div>
-
-        <!-- مباراة أبطال أوروبا -->
-        <div class="match-card" data-league="ucl">
-            <div class="match-header">
-                <span>دوري أبطال أوروبا</span>
-                <span class="badge-live">مباشر 45'</span>
-            </div>
-            <div id="alert-2" class="goal-alert">⚽ قوووول! ريال مدريد يتقدم!</div>
-            <div class="teams-container">
-                <div class="team">
-                    <div class="team-icon">⚪</div>
-                    <div class="team-name">ريال مدريد</div>
-                </div>
-                <div class="score-box" id="score-2">0 - 0</div>
-                <div class="team">
-                    <div class="team-icon">🔴</div>
-                    <div class="team-name">بايرن ميونخ</div>
-                </div>
-            </div>
-            <button onclick="simulateGoal(2, 'ريال مدريد')" style="width:100%; background:#21262d; border:1px solid #30363d; color:#00e676; padding:6px; border-radius:6px; margin-bottom:10px; cursor:pointer; font-size:12px;">⚡ (تجربة مبرمج): محاكاة هدف جديد</button>
-            <div class="predict-section">
-                <div class="predict-inputs">
-                    <input type="number" placeholder="0">
-                    <span>:</span>
-                    <input type="number" placeholder="0">
-                    <button class="btn-predict" onclick="alert('تم حفظ توقعك!')">توقع</button>
-                </div>
-            </div>
-        </div>
-
     </div>
 
-    <!-- شاشة الملف الشخصي -->
     <div id="profile-sec" class="section">
         <div class="profile-card">
             <div class="avatar"><i class="fa-solid fa-user-ninja"></i></div>
@@ -371,7 +329,6 @@
         </div>
     </div>
 
-    <!-- الشريط السفلي -->
     <div class="bottom-nav">
         <div class="nav-item active" onclick="switchTab('matches-sec', this)">
             <i class="fa-solid fa-gamepad"></i>
@@ -404,23 +361,14 @@
             });
         }
 
-        // دالة محاكاة الهدف الحظي (كيف يظهر الهدف بالتطبيق)
         function simulateGoal(matchId, scoringTeam) {
             const scoreBox = document.getElementById(`score-${matchId}`);
             const alertBox = document.getElementById(`alert-${matchId}`);
             
-            // تغيير النتيجة (كمثال تكتيكي)
-            scoreBox.style.color = '#ff17445'; // وميض أحمر خفيف للهدف
-            setTimeout(() => scoreBox.style.color = 'var(--accent-color)', 300);
-            
-            if(matchId === 1) scoreBox.textContent = "2 - 1";
-            if(matchId === 2) scoreBox.textContent = "1 - 0";
-
-            // إظهار تنبيه الهدف الحماسي
+            scoreBox.textContent = "2 - 1";
             alertBox.textContent = `⚽ قوووول لـ ${scoringTeam}! اشتعلت المباراة 🔥`;
             alertBox.style.display = 'block';
 
-            // إخفاء التنبيه بعد 4 ثواني
             setTimeout(() => {
                 alertBox.style.display = 'none';
             }, 4000);
