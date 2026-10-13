@@ -1,139 +1,216 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>طريق الدوام</title>
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>طريق الدوام</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Lalezar&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Lalezar&family=Lilita+One&display=swap">
 <style>
-/* Concept: a commute at dawn. UI is built from Saudi road signs: green boards with a white inner line for info and shop items, a yellow plate for the clock and prices. The scene is a hilly road with palms and lamp posts, the office at the end. Single look by choice (a game scene), every colour is a token. */
-:root {
-  --asphalt: #1c2024;
-  --asphalt-2: #272c31;
-  --sign: #0b6e4f;
-  --sign-deep: #08543c;
-  --sign-ink: #ffffff;
-  --plate: #ffc72c;
-  --plate-ink: #1a1a14;
-  --paper: #eef2ef;
-  --muted: #a9b6b0;
-  --danger: #e5484d;
-  --office: #2d5b8a;
-  --display: 'Lalezar', 'IBM Plex Sans Arabic', system-ui, sans-serif;
-  --body: 'IBM Plex Sans Arabic', system-ui, sans-serif;
-  color-scheme: dark;
-}
-* { box-sizing: border-box; }
-html, body { height: 100%; }
-body { margin: 0; background: var(--asphalt); color: var(--sign-ink); font: 500 15px/1.5 var(--body); overflow: hidden; -webkit-tap-highlight-color: transparent; }
-button { font: inherit; color: inherit; cursor: pointer; }
-:focus-visible { outline: 3px solid var(--plate); outline-offset: 2px; }
-#app { height: 100%; max-width: 1000px; margin-inline: auto; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; background: var(--asphalt); }
-
-/* HUD */
-.hud { padding: 10px 16px 8px; display: grid; gap: 8px; }
-.row1 { display: flex; align-items: center; gap: 10px; }
-.sign { background: var(--sign); border: 2px solid var(--sign-ink); border-radius: 8px; box-shadow: 0 0 0 2px var(--sign); padding: 2px 12px; display: flex; align-items: baseline; gap: 6px; }
-.bal { min-width: 0; }
-.bal .lbl { font-size: 12px; opacity: .85; }
-.bal b { font: 400 28px/1.1 var(--display); font-variant-numeric: tabular-nums; }
-.bal .unit { font: 400 18px var(--display); }
-.plate { margin-inline-start: auto; background: var(--plate); color: var(--plate-ink); border-radius: 6px; padding: 2px 12px; font: 700 20px/1.3 var(--body); font-variant-numeric: tabular-nums; letter-spacing: .02em; border: 2px solid #1a1a14; }
-.plate.late { background: var(--danger); color: #fff; }
-.day { font-size: 13px; color: var(--muted); white-space: nowrap; }
-.day b { color: var(--sign-ink); font-size: 16px; }
-.iconbtn { width: 38px; height: 38px; border-radius: 8px; border: 2px solid #3a4148; background: var(--asphalt-2); display: grid; place-items: center; padding: 0; }
-.iconbtn svg { width: 18px; height: 18px; fill: var(--sign-ink); }
-.row2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; align-items: center; }
-.track { display: flex; align-items: center; gap: 8px; min-width: 0; }
-.track svg { width: 22px; height: 22px; flex: none; }
-.rail { position: relative; flex: 1; height: 8px; background: #3a4148; border-radius: 4px; }
-.rail i { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--plate); border-radius: 4px; }
-.rail u { position: absolute; top: 50%; left: 0; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: #fff; border: 3px solid var(--sign); text-decoration: none; }
-.left { font-size: 12px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
-.stam { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 12px; color: var(--muted); }
-.bar { flex: 1; height: 10px; background: #3a4148; border-radius: 5px; overflow: hidden; min-width: 40px; }
-.bar i { display: block; height: 100%; width: 100%; background: #5ed38a; transition: background .2s; }
-.stam.tired .bar i { background: var(--danger); }
-.stam em { font-style: normal; color: var(--sign-ink); white-space: nowrap; }
-
-/* stage */
-#stage { position: relative; min-height: 0; background: #7eb6d6; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; }
-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.sheet { position: absolute; inset: 0; overflow-y: auto; padding: 16px; background: var(--asphalt); display: flex; flex-direction: column; gap: 16px; }
-.sheet[hidden] { display: none; }
-.sheet h2 { margin: 0; font: 400 26px/1.2 var(--display); text-wrap: balance; }
-.mission { display: grid; gap: 4px; color: var(--muted); font-size: 14px; }
-.mission b { color: var(--sign-ink); font-variant-numeric: tabular-nums; }
-.how { background: var(--asphalt-2); border: 2px dashed var(--plate); border-radius: 10px; padding: 12px 14px; display: grid; gap: 4px; font-size: 14px; }
-.how b { color: var(--plate); }
-.merchant { display: flex; gap: 12px; align-items: center; }
-.merchant svg { width: 64px; height: 64px; flex: none; }
-.say { background: var(--paper); color: #17201b; border-radius: 12px 12px 12px 2px; padding: 10px 14px; font-size: 14px; position: relative; }
-.shopgrid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
-.shopgrid h3 { grid-column: 1 / -1; margin: 6px 0 0; font: 400 20px var(--display); color: var(--plate); }
-.item { background: var(--sign); border: 3px solid var(--sign-ink); border-radius: 10px; outline: 2px solid var(--sign); padding: 10px 12px; display: grid; gap: 6px; min-width: 0; }
-.item .top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-.item b { font: 400 20px/1.2 var(--display); }
-.item p { margin: 0; font-size: 13px; opacity: .92; }
-.pips { display: flex; gap: 4px; }
-.pips i { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--sign-ink); }
-.pips i.on { background: var(--plate); border-color: var(--plate); }
-.buy { align-self: end; justify-self: start; background: var(--plate); color: var(--plate-ink); border: 2px solid #1a1a14; border-radius: 6px; padding: 4px 14px; font: 700 15px var(--body); font-variant-numeric: tabular-nums; }
-.buy:disabled { background: #6f7a74; color: #20262a; border-color: #20262a; cursor: not-allowed; }
-.buy.use { background: var(--paper); }
-.buy.on { background: transparent; color: var(--sign-ink); border-color: var(--sign-ink); cursor: default; }
-.reset { align-self: flex-start; background: none; border: 0; color: var(--muted); text-decoration: underline; padding: 0; font-size: 13px; }
-.endcard { margin: auto; width: min(420px, 100%); background: var(--sign); border: 3px solid var(--sign-ink); outline: 2px solid var(--sign); border-radius: 12px; padding: 18px; display: grid; gap: 10px; }
-.endcard.bad { background: #8d2a2e; outline-color: #8d2a2e; }
-.endcard h2 { font-size: 30px; }
-.endcard .ln { display: flex; justify-content: space-between; gap: 12px; font-variant-numeric: tabular-nums; }
-.endcard .tot { border-top: 2px solid rgba(255,255,255,.5); padding-top: 8px; font: 400 24px var(--display); }
-#pause { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(20,24,28,.62); font: 400 34px var(--display); }
-#pause[hidden] { display: none; }
-
-/* controls */
-.ctl { padding: 10px 16px calc(12px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 6px; justify-items: center; background: var(--asphalt); }
-#go { width: min(100%, 460px); height: 64px; border-radius: 14px; border: 3px solid #1a1a14; background: var(--plate); color: var(--plate-ink); font: 400 28px var(--display); touch-action: none; user-select: none; -webkit-user-select: none; box-shadow: 0 5px 0 #b88d00; transition: transform .05s, box-shadow .05s; }
-#go.down { transform: translateY(4px); box-shadow: 0 1px 0 #b88d00; }
-#go.run { background: #ff8a3d; box-shadow: 0 5px 0 #b95a14; }
-#go.run.down { box-shadow: 0 1px 0 #b95a14; }
-.keys { font-size: 12px; color: var(--muted); }
-@media (hover: none) { .keys { display: none; } }
-@media (max-width: 460px) { .row2 { grid-template-columns: 1fr; gap: 6px; } .bal b { font-size: 24px; } }
-@media (prefers-reduced-motion: reduce) { #go { transition: none; } }
-</style>
-
+:root{--asphalt:#1c2024;--asphalt-2:#272c31;--sign:#0b6e4f;--sign-deep:#08543c;--sign-ink:#fff;--plate:#ffc72c;--plate-ink:#1a1a14;--paper:#eef2ef;--muted:#a9b6b0;--danger:#e5484d;--danger-deep:#9c2a2e;--display:'Lalezar','IBM Plex Sans Arabic',system-ui,sans-serif;--body:'IBM Plex Sans Arabic',system-ui,sans-serif;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html[lang=en]{--display:'Lilita One','Lalezar','IBM Plex Sans Arabic',system-ui,sans-serif}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--asphalt);color:var(--sign-ink);font:500 15px/1.5 var(--body);overflow:hidden;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--plate);outline-offset:2px}
+#app{height:100%;max-width:1000px;margin-inline:auto;display:grid;grid-template-rows:auto minmax(0,1fr) auto;grid-template-columns:minmax(0,1fr);background:var(--asphalt)}
+.hud{padding:10px 16px 8px;display:grid;gap:8px}
+.row1{display:flex;align-items:center;gap:8px}
+.sign{background:var(--sign);border:2px solid var(--sign-ink);border-radius:8px;box-shadow:0 0 0 2px var(--sign);padding:2px 12px;display:flex;align-items:baseline;gap:6px}
+.bal{min-width:0}.bal .lbl{font-size:12px;opacity:.85}
+.bal b{font:400 28px/1.1 var(--display);font-variant-numeric:tabular-nums}
+.bal .unit{font:400 18px var(--display)}
+.plate{margin-inline-start:auto;background:var(--plate);color:var(--plate-ink);border-radius:6px;padding:2px 12px;font:700 20px/1.3 var(--body);font-variant-numeric:tabular-nums;border:2px solid #1a1a14;white-space:nowrap}
+.plate.late{background:var(--danger);color:#fff}
+.day{font-size:13px;color:var(--muted);white-space:nowrap}.day b{color:var(--sign-ink);font-size:16px}
+.iconbtn{width:38px;height:38px;border-radius:8px;border:2px solid #3a4148;background:var(--asphalt-2);display:grid;place-items:center;padding:0;flex:none}
+.iconbtn svg{width:18px;height:18px;fill:var(--sign-ink)}
+.iconbtn.lang{width:auto;min-width:38px;padding:0 10px;font:700 14px var(--body)}
+.row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:center}
+.track{display:flex;align-items:center;gap:8px;min-width:0}.track svg{width:22px;height:22px;flex:none}
+.rail{position:relative;flex:1;height:8px;background:#3a4148;border-radius:4px}
+.rail i{position:absolute;inset:0 auto 0 0;width:0;background:var(--plate);border-radius:4px}
+.rail u{position:absolute;top:50%;left:0;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#fff;border:3px solid var(--sign);text-decoration:none}
+.left{font-size:12px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.stam{display:flex;align-items:center;gap:8px;min-width:0;font-size:12px;color:var(--muted)}
+.bar{flex:1;height:10px;background:#3a4148;border-radius:5px;overflow:hidden;min-width:40px}
+.bar i{display:block;height:100%;width:100%;background:#5ed38a;transition:background .2s}
+.stam.tired .bar i{background:var(--danger)}
+.stam em{font-style:normal;color:var(--sign-ink);white-space:nowrap}
+.hearts{color:var(--danger);font-size:15px;letter-spacing:1px;white-space:nowrap}
+.hearts[hidden]{display:none}
+#stage{position:relative;min-height:0;background:#7eb6d6;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.sheet{position:absolute;inset:0;overflow-y:auto;padding:16px;background:var(--asphalt);display:flex;flex-direction:column;gap:16px}
+.sheet[hidden]{display:none}
+.sheet h2{margin:0;font:400 26px/1.2 var(--display);text-wrap:balance}
+.mission{display:grid;gap:4px;color:var(--muted);font-size:14px}.mission b{color:var(--sign-ink);font-variant-numeric:tabular-nums}
+.how{background:var(--asphalt-2);border:2px dashed var(--plate);border-radius:10px;padding:12px 14px;display:grid;gap:4px;font-size:14px}.how b{color:var(--plate)}
+.special,.daily{background:linear-gradient(135deg,#7a3a14,#a35a14);border:3px solid var(--plate);border-radius:12px;padding:12px 14px;display:grid;gap:6px;font-size:14px}
+.special b,.daily b{font:400 21px/1.2 var(--display);color:var(--plate)}
+.special.boss{background:linear-gradient(135deg,#3a2a6b,#5a3a9c)}
+.daily{background:linear-gradient(135deg,#0b6e4f,#128a63)}
+.merchant{display:flex;gap:12px;align-items:center}.merchant svg{width:64px;height:64px;flex:none}
+.say{background:var(--paper);color:#17201b;border-radius:12px 12px 12px 2px;padding:10px 14px;font-size:14px}
+.shopgrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.shopgrid h3{grid-column:1/-1;margin:6px 0 0;font:400 20px var(--display);color:var(--plate)}
+.item{background:var(--sign);border:3px solid var(--sign-ink);border-radius:10px;outline:2px solid var(--sign);padding:10px 12px;display:grid;gap:6px;min-width:0}
+.item .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.item b{font:400 20px/1.2 var(--display)}
+.item p{margin:0;font-size:13px;opacity:.92}
+.item.car.cur{outline-color:var(--plate)}
+.item .sw{height:8px;border-radius:4px;border:1px solid rgba(255,255,255,.5)}
+.perk{font-size:11px;font-weight:700;background:var(--plate);color:var(--plate-ink);border-radius:99px;padding:1px 10px;white-space:nowrap}
+.pips{display:flex;gap:4px}
+.pips i{width:12px;height:12px;border-radius:50%;border:2px solid var(--sign-ink)}
+.pips i.on{background:var(--plate);border-color:var(--plate)}
+.buy{align-self:end;justify-self:start;background:var(--plate);color:var(--plate-ink);border:2px solid #1a1a14;border-radius:6px;padding:4px 14px;font:700 15px var(--body);font-variant-numeric:tabular-nums}
+.buy:disabled{background:#6f7a74;color:#20262a;border-color:#20262a;cursor:not-allowed}
+.buy.use{background:var(--paper)}
+.buy.on{background:transparent;color:var(--sign-ink);border-color:var(--sign-ink);cursor:default}
+.reset{align-self:flex-start;background:none;border:0;color:var(--muted);text-decoration:underline;padding:0;font-size:13px}
+.routes{display:grid;gap:10px}.routes h3{margin:0;font:400 20px var(--display);color:var(--plate)}
+.routegrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.route{text-align:start;display:grid;gap:6px;min-width:0;background:var(--asphalt-2);border:3px solid #3a4148;border-radius:12px;padding:12px 14px;color:var(--sign-ink)}
+.route:disabled{opacity:.55;cursor:not-allowed}
+.route .rt{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.route .rt b{font:400 22px/1.2 var(--display)}
+.route .tag{font-size:12px;font-weight:700;padding:1px 10px;border-radius:99px;border:2px solid currentColor}
+.route.safe .tag{color:#5ed38a}.route.risk .tag{color:#ff8a3d}.route.sand .tag{color:#e6c76b}.route.toll .tag{color:#6ab7ff}.route.night .tag{color:#b79cff}
+.route p{margin:0;font-size:13px;color:var(--muted)}
+.route ul{margin:0;padding:0;list-style:none;display:grid;gap:2px;font-size:13px}
+.route li b{font-variant-numeric:tabular-nums}
+.route[aria-pressed="true"]{background:var(--sign);border-color:var(--plate);box-shadow:0 0 0 2px var(--sign)}
+.route[aria-pressed="true"] p{color:#e3efe9}
+.route.risk[aria-pressed="true"]{background:#7a3a14;box-shadow:0 0 0 2px #7a3a14}
+.route.risk[aria-pressed="true"] p{color:#ffe8d6}
+.route.sand[aria-pressed="true"]{background:#6b5524;box-shadow:0 0 0 2px #6b5524}
+.route.toll[aria-pressed="true"]{background:#1d4668;box-shadow:0 0 0 2px #1d4668}
+.route.night[aria-pressed="true"]{background:#2c2a5a;box-shadow:0 0 0 2px #2c2a5a}
+.route.sand[aria-pressed="true"] p,.route.toll[aria-pressed="true"] p,.route.night[aria-pressed="true"] p{color:#eef2f7}
+.sect{display:grid;gap:10px}.sect h3{margin:0;font:400 20px var(--display);color:var(--plate)}
+.statgrid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.stat{background:var(--asphalt-2);border:2px solid #3a4148;border-radius:10px;padding:8px 12px;display:grid;gap:2px}
+.stat span{font-size:12px;color:var(--muted)}
+.stat b{font:400 22px var(--display);font-variant-numeric:tabular-nums}
+.toplist{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+.toplist li{background:var(--asphalt-2);border:2px solid #3a4148;border-radius:8px;padding:6px 12px;font-size:14px;font-variant-numeric:tabular-nums}
+.toplist li:first-child{border-color:var(--plate)}
+.muted{margin:0;color:var(--muted);font-size:13px}
+.achgrid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.ach{background:var(--asphalt-2);border:2px solid #3a4148;border-radius:10px;padding:8px 12px;display:grid;gap:2px;opacity:.6}
+.ach.on{opacity:1;background:var(--sign);border-color:var(--plate)}
+.ach .n{font:400 17px var(--display)}
+.ach p{margin:0;font-size:12px;color:#d9e4de}
+.endcard{margin:auto;width:min(420px,100%);background:var(--sign);border:3px solid var(--sign-ink);outline:2px solid var(--sign);border-radius:12px;padding:18px;display:grid;gap:10px}
+.endcard.bad{background:#8d2a2e;outline-color:#8d2a2e}
+.endcard h2{font-size:30px}
+.endcard .ln{display:flex;justify-content:space-between;gap:12px;font-variant-numeric:tabular-nums}
+.endcard .note{font-size:13px;opacity:.8}
+.endcard .tot{border-top:2px solid rgba(255,255,255,.5);padding-top:8px;font:400 24px var(--display)}
+#pause{position:absolute;inset:0;display:grid;place-items:center;background:rgba(20,24,28,.62);font:400 34px var(--display);text-align:center;padding:16px}
+#pause[hidden]{display:none}
+#toast{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:5;max-width:92%;background:var(--plate);color:var(--plate-ink);border:2px solid #1a1a14;border-radius:10px;padding:6px 16px;font:700 15px var(--body);text-align:center;box-shadow:0 4px 0 rgba(0,0,0,.35);pointer-events:none}
+#toast[hidden]{display:none}
+.ctl{padding:10px 16px calc(12px + env(safe-area-inset-bottom,0px));display:grid;gap:6px;justify-items:center;background:var(--asphalt)}
+#go{width:min(100%,460px);height:64px;border-radius:14px;border:3px solid #1a1a14;background:var(--plate);color:var(--plate-ink);font:400 28px var(--display);touch-action:manipulation;user-select:none;-webkit-user-select:none;box-shadow:0 5px 0 #b88d00;transition:transform .05s,box-shadow .05s,background .15s}
+#go:active{transform:translateY(4px);box-shadow:0 1px 0 #b88d00}
+#go.idle{background:var(--sign);color:#fff;border-color:#fff;box-shadow:0 5px 0 var(--sign-deep)}
+#go.idle:active{box-shadow:0 1px 0 var(--sign-deep)}
+#go.run{background:var(--danger);color:#fff;border-color:#fff;box-shadow:0 5px 0 var(--danger-deep)}
+#go.run:active{box-shadow:0 1px 0 var(--danger-deep)}
+.keys{font-size:12px;color:var(--muted);text-align:center}
+@media (hover:none){.keys{display:none}}
+@media (max-width:460px){.row2{grid-template-columns:1fr;gap:6px}.bal b{font-size:24px}.row1{gap:6px}.plate{padding:2px 8px;font-size:17px}}
+.hud{grid-template-columns:minmax(0,1fr)}.row1>*{min-width:0}.plate{overflow:hidden;max-width:100%}
+@media (prefers-reduced-motion:reduce){#go{transition:none}}
+.iconbtn[hidden]{display:none}
+.day[hidden]{display:none}
+.daily.wheelc{background:linear-gradient(135deg,#4a2a7c,#7a3fb0)}
+.quests{display:grid;gap:8px}
+.qrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;align-items:center;background:var(--asphalt-2);border:2px solid #3a4148;border-radius:10px;padding:8px 12px}
+.qrow.done{border-color:var(--plate)}
+.qrow .qn{font-size:14px}
+.qrow small{color:var(--muted);font-variant-numeric:tabular-nums}
+.qrow b{color:var(--plate);font-size:20px}
+.qbar{grid-column:1/-1;height:8px;background:#3a4148;border-radius:4px;overflow:hidden}
+.qbar i{display:block;height:100%;background:var(--plate)}
+#wheel{position:absolute;inset:0;z-index:4;display:grid;place-items:center;background:rgba(14,17,20,.9);padding:16px;overflow:auto}
+#wheel[hidden]{display:none}
+.wbox{width:min(360px,100%);display:grid;gap:12px;justify-items:center;text-align:center}
+.wbox h2{margin:0;font:400 28px var(--display);color:var(--plate)}
+.wheelwrap{position:relative;width:min(300px,76vw);aspect-ratio:1;margin-top:14px}
+#wheelrot{width:100%;height:100%;transition:transform 4s cubic-bezier(.12,.7,.1,1)}
+#wheelrot svg{width:100%;height:100%;display:block}
+.ptr{position:absolute;top:-14px;left:50%;margin-left:-12px;width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-top:26px solid var(--plate);filter:drop-shadow(0 2px 0 #1a1a14)}
+#wres{min-height:1.6em;font:400 22px var(--display)}
+.wbtns{display:flex;gap:10px}
+.wbtns .buy{align-self:auto;justify-self:auto;font-size:17px;padding:8px 22px}
+@media (prefers-reduced-motion:reduce){#wheelrot{transition:none}}
+.gorow{display:flex;gap:10px;width:min(100%,460px)}
+.gorow #go{flex:1;width:auto;min-width:0}
+#defbtn{flex:none;width:96px;height:64px;border-radius:14px;border:3px solid #fff;background:#2f6fe0;color:#fff;display:grid;place-items:center;align-content:center;font:400 17px/1.05 var(--display);touch-action:manipulation;user-select:none;-webkit-user-select:none;box-shadow:0 5px 0 #1d4aa8;padding:0 4px}
+#defbtn svg{width:24px;height:24px;fill:#fff}
+#defbtn:active{transform:translateY(4px);box-shadow:0 1px 0 #1d4aa8}
+#defbtn[hidden]{display:none}
+#defbtn.alert{animation:defp .45s infinite alternate}
+@keyframes defp{to{background:#e5484d;box-shadow:0 5px 0 #8d2a2e}}
+@media (prefers-reduced-motion:reduce){#defbtn.alert{animation:none;background:#e5484d}}
+#ending{position:absolute;inset:0;z-index:4;display:grid;place-items:center;background:rgba(14,17,20,.95);padding:16px;overflow:auto}
+#ending[hidden]{display:none}
+.escene{width:min(440px,100%);display:grid;gap:14px;justify-items:center;text-align:center}
+.escene h2{margin:0;font:400 28px var(--display);color:var(--plate)}
+.chars{display:flex;gap:28px;align-items:flex-end;justify-content:center}
+.ch{display:grid;gap:4px;justify-items:center;opacity:.45;transform:scale(.9);transition:opacity .2s,transform .2s;font-size:13px}
+.ch.on{opacity:1;transform:scale(1.08)}
+.ch svg{width:92px;height:92px;border-radius:14px;display:block}
+.bubble{background:var(--paper);color:#17201b;border-radius:14px;padding:12px 16px;font-size:16px;line-height:1.6;min-height:5.4em;width:100%;display:grid;align-items:center}
+.ebtns .buy{align-self:auto;justify-self:auto;font-size:17px;padding:8px 26px}
+.eprog{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.admrow{display:flex;gap:8px;flex-wrap:wrap}
+.escene.wide{width:min(560px,100%);grid-template-columns:minmax(0,1fr)}
+#ecv{width:100%;max-width:100%;min-width:0;height:auto;display:block;border-radius:12px;border:3px solid #3a4148;background:#7ec8ee}
+.escene .statgrid{width:100%}
+.escene p{margin:0;color:#d9e4de}
+.confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.confetti i{position:absolute;top:-16px;width:8px;height:14px;opacity:.9;animation:cf 3.4s linear infinite}
+@keyframes cf{to{transform:translateY(105vh) rotate(540deg)}}
+@media (prefers-reduced-motion:reduce){.ch{transition:none}.confetti{display:none}}
+</style></head><body>
 <div id="app">
   <header class="hud">
     <div class="row1">
-      <div class="sign bal"><span class="lbl">رصيدك</span><b id="bal">0</b><span class="unit">م</span></div>
-      <div class="day">يوم <b id="day">1</b></div>
-      <div class="plate" id="clock">6:00 ص</div>
-      <button class="iconbtn" id="pausebtn" aria-label="إيقاف مؤقت"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="3" width="4" height="14" rx="1"/><rect x="12" y="3" width="4" height="14" rx="1"/></svg></button>
+      <div class="sign bal"><span class="lbl" id="t-bal"></span><b id="bal">0</b><span class="unit" id="t-unit"></span></div>
+      <div class="day"><span id="t-day"></span> <b id="day">1</b></div>
+      <div class="plate" id="clock">6:00</div>
+      <button class="iconbtn" id="sndbtn" type="button"></button>
+      <button class="iconbtn lang" id="langbtn" type="button"></button>
+      <button class="iconbtn" id="homebtn" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12 12 4l9 8v8h-6v-5H9v5H3z"/></svg></button>
+      <button class="iconbtn" id="pausebtn"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="3" width="4" height="14" rx="1"/><rect x="12" y="3" width="4" height="14" rx="1"/></svg></button>
     </div>
     <div class="row2">
       <div class="track" dir="ltr">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12 12 4l9 8v8h-6v-5H9v5H3z" fill="#ffffff"/></svg>
         <div class="rail"><i id="prog"></i><u id="dot"></u></div>
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="1" fill="#7fb2e5"/><g fill="#14304d"><rect x="8" y="6" width="3" height="3"/><rect x="13" y="6" width="3" height="3"/><rect x="8" y="11" width="3" height="3"/><rect x="13" y="11" width="3" height="3"/><rect x="10.5" y="16" width="3" height="5"/></g></svg>
-        <span class="left" id="left">500 م</span>
+        <span class="left" id="left">500</span>
       </div>
-      <div class="stam" id="stamwrap"><span>البنزين</span><div class="bar"><i id="stam"></i></div><em id="vehname">سيارتك القديمة</em></div>
+      <div class="stam" id="stamwrap"><span id="t-fuel"></span><div class="bar"><i id="stam"></i></div><em id="vehname"></em><span class="hearts" id="hearts" hidden></span></div>
     </div>
   </header>
-
   <main id="stage">
     <canvas id="cv"></canvas>
     <section class="sheet" id="home"></section>
     <section class="sheet" id="end" hidden></section>
-    <div id="pause" hidden>موقّف. اضغط للمتابعة</div>
+    <div id="toast" hidden></div>
+    <div id="pause" hidden></div>
+    <div id="wheel" hidden></div>
+    <div id="ending" hidden></div>
   </main>
-
   <footer class="ctl">
-    <button id="go" type="button">اطلع للشغل</button>
-    <div class="keys" id="keys">من الكيبورد: مسطرة (Space) أو السهم الأيمن للبنزين، وP للإيقاف</div>
+    <div class="gorow"><button id="go" type="button"></button><button id="defbtn" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h4l8-5v16l-8-5H3z"/><path d="M18 8q3 4 0 8" stroke="#fff" fill="none" stroke-width="2" stroke-linecap="round"/></svg><span id="deft"></span></button></div>
+    <div class="keys" id="keys"></div>
   </footer>
 </div>
-
 <script>
 (function () {
   'use strict';
@@ -145,389 +222,446 @@ canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block
   function hs(n) { n = Math.imul(n ^ 61, 0x45d9f3b); n ^= n >>> 16; n = Math.imul(n, 0x45d9f3b); n ^= n >>> 16; return (n >>> 0) / 4294967296; }
   function mix(c1, c2, t) { return 'rgb(' + [0, 1, 2].map(function (i) { return Math.round(lerp(c1[i], c2[i], t)); }).join(',') + ')'; }
 
-  /* ---------- game data ---------- */
+  /* ===================== Translations ===================== */
+  var TX = {
+    ar: {
+      title: 'طريق الدوام', bal: 'رصيدك', unit: 'م', day: 'يوم', pauseAria: 'إيقاف مؤقت', fuel: 'البنزين', charge: 'الشحن',
+      pauseTxt: 'موقّف. اضغط للمتابعة',
+      homeAria: 'الرئيسية', homeToast: 'رجعت للبيت. الرحلة انلغت.',
+      questsT: 'المهام اليومية', qClaim: 'استلم',
+      qToast: function (r) { return 'مهمة منجزة! +' + r + ' م'; },
+      qt: { arrive: function (n) { return 'وصّل الشغل ' + (n > 1 ? n + ' مرات' : 'مرة'); }, meters: function (n) { return 'اقطع ' + fmt(n) + ' م في الطريق'; }, cans: function (n) { return 'اجمع ' + n + ' جوالين بنزين'; }, early: function (n) { return 'وصّل وباقي 30% من الوقت ' + (n > 1 ? n + ' مرات' : 'مرة'); } },
+      wheelT: 'عجلة الحظ', wheelD: 'لفّة مجانية كل يوم، وجوائز عشوائية.', wheelUsed: 'لفّيتها اليوم. تعال بكرة!', wheelBtn: 'لف',
+      wheelSpin: 'لف العجلة', wheelClose: 'إغلاق', wheelHint: 'جرّب حظك!',
+      wheelWin: function (v) { return 'ربحت ' + v + ' م!'; },
+      endT: 'النهاية', endNext: 'التالي', endDone: 'تم', endMgr: 'المدير', endEmp: 'أنت', endSkip: 'تخطي', endBye: 'مع السلامة!', endSceneAria: 'مشهد النهاية',
+      endReward: 'راتبك صار دبل!',
+      winT: 'مبروك! ختمت اللعبة', winD: 'وصلت للنهاية، وراتبك صار دبل من اليوم.', winBtn: 'كمّل اللعب',
+      winStats: ['أيام الدوام', 'مرات الوصول', 'مجموع الأرباح', 'أطول متتالية'],
+      admT: 'وضع الأدمن', admEnd: 'عرض مشهد النهاية',
+      endLines: [
+        ['m', 'انت الموظف الشريف صبرت هاذي الايام عشان الوظيفه لهذا السبب انت راح تكون ماتجيني بس راتبك راح يكون دبل حق الوظيفه'],
+        ['e', 'والله شكراً يا المدير حرفياً انا ماني مصدق بس مع السلامة']
+      ],
+      defBtn: 'بوري', bnAmbFar: 'قطاع طرق قدامك! جهّز البوري', bnAmbNow: 'قطاع طرق! اضغط البوري الحين!',
+      ambOk: 'هربوا! مكافأة', ambCaught: 'مسكوك! خسرت فلوس', ambNone: 'ما عندك بوري!',
+      ambToastWin: function (n) { return 'صدّيت قطاع الطرق! +' + n + ' م'; }, ambToastLose: function (n) { return 'قطاع الطرق أخذوا ' + n + ' م!'; },
+      eAmbB: 'مكافأة صدّ قطاع الطرق', eAmbL: 'اللي أخذه قطاع الطرق',
+      keys: 'من الكيبورد: مسطرة (Space) للمشي والوقوف، السهم الأيمن مشي، السهم الأيسر وقوف، وP للإيقاف، وB لبوري الردع (الطريق المختصر)',
+      langBtn: 'EN', langAria: 'Switch to English', ampm: 'ص', secs: 'ثانية',
+      sndOn: 'الصوت شغّال، اضغط للكتم', sndOff: 'الصوت مكتوم، اضغط للتشغيل',
+      outFuel: 'البنزين خلص!', plusFuel: '+25 بنزين', outCharge: 'الشحن خلص!', plusCharge: '+25 شحن',
+      beast: 'الوحش تحمّل الضربة!', crash: 'اصطدام!', careful: 'عدّيت بحذر',
+      fine: 'غرامة رادار!', radarOk: 'عدّيت الرادار بأمان', jamF: 'زحمة!', rainF: 'مطر! الأرض زلقة',
+      climb: 'طلعة صعبة', down: 'نزلة', danger: 'خطر قدامك! اضغط قف', obst: 'عائق قدامك، خلّك بطيء',
+      bnRadar: function (l) { return 'رادار قدامك! الحد ' + l; },
+      bnJam: 'زحمة قدامك', bnInJam: 'زحمة! سرعتك تنزل', bnRain: 'مطر! الطريق زلق', bnSand: 'رمل! بطّئ', bnSandAhead: 'رمل قدامك',
+      office: 'الشركة', tollGate: 'رسوم',
+      eTitleOk: 'وصلت الشغل بدري!', eTitleWreck: 'تعطّلت سيارتك!', eTitleLate: 'تأخرت على الدوام!',
+      eMsgLux: 'الفخامة سوّت سواها، مكافآت الوصول دبل! هذا حسابك:',
+      eMsgOk: 'المدير ابتسم لك اليوم، وهذا حسابك:',
+      eMsgWreck: 'كثرت عليك الاصطدامات وتعطّلت السيارة. حصلت نص اللي مشيته بس:',
+      eMsgLate: 'المدير يتصل عليك. ما وصلت، لكن اللي مشيته يحسب لك:',
+      eDist: 'أمتار الطريق', eArr: 'مكافأة الوصول', eTime: 'مكافأة الوقت الباقي', eCon: 'تعويض الطريق الآمن', eTot: 'المجموع',
+      eFineL: 'غرامات الرادار (مخصومة من الأمتار)', eTollL: 'رسوم الطريق (مدفوعة قبل الرحلة)',
+      bDrive: 'امشي ▶', bStop: 'قف ■', bStopDry: 'قف ■ · البنزين خلص', bStopDryEv: 'قف ■ · الشحن خلص', bHome: 'رجّع للبيت', bGo: 'اطلع للشغل',
+      hTitle: function (d) { return 'يوم ' + d + '، لازم توصل الشغل'; },
+      mDist: function (d) { return 'المسافة من بيتك للشغل: <b>' + d + ' م</b>'; },
+      mTime: function (s) { return 'الدوام الساعة 8:00 ص، وعندك <b>' + s + ' ثانية</b> من أول الطريق'; },
+      spHolidayT: 'يوم عطلة!', spHolidayD: 'أمتار الطريق ×2 ومكافآت الوصول ×2 اليوم. استغلّه!',
+      spBossT: 'المدير الجديد وصل!', spBossD: 'الوقت أقل بـ15%، بس مكافأة الوصول والوقت الباقي ×1.6.',
+      dailyT: 'مكافأتك اليومية', dailyBtn: 'استلم',
+      dailyD: function (a, s) { return 'تستلم <b>' + a + ' م</b> · أيام متتالية: ' + s; },
+      howTitle: 'كيف تلعب؟',
+      how1: 'اضغط الزر الكبير <b>امشي ▶</b> عشان السيارة تمشي، واضغطه مرة ثانية <b>قف ■</b> عشان تبطّئ وتوقف. السيارة ما تمشي من نفسها.',
+      how2: 'الطلعة تبطّئك وتصرف بنزين أكثر، والنزلة تسرّعك. جوالين البنزين الحمراء على الطريق تعبّي لك الخزان.',
+      how3: 'كل متر تقطعه = فلوس. اشتر تطويرات وسيارات من المعرض وتصير أسرع. انتبه من الرادارات والزحمة والمطر.',
+      chooseRoute: 'اختر طريقك',
+      rDist: function (d) { return 'المسافة: <b>' + d + ' م</b>'; },
+      rTime: function (s) { return 'الوقت المتاح: <b>' + s + ' ثانية</b>'; },
+      rRate: function (r, a) { return 'ربح الأمتار: <b>×' + r + '</b> · مكافأة الوصول: <b>×' + a + '</b>'; },
+      rToll: function (n) { return 'الرسوم قبل الطلعة: <b>' + n + ' م</b>'; },
+      rTollNo: 'رصيدك ما يكفي للرسوم',
+      shopUp: 'تطويرات', shopCar: 'المعرض', shopPaint: 'الدهانات', shopSticker: 'الملصقات',
+      buy: function (p) { return 'اشتر · ' + p + ' م'; },
+      maxLv: 'أقصى مستوى', drivingNow: 'راكبها الحين', ride: 'اركب', equipped: 'مركّب', pick: 'اختر',
+      spd: function (v, d) { return 'السرعة: <b>' + v + '</b> م/ث · الصرف: <b>×' + d + '</b>'; },
+      reset: 'ابدأ اللعبة من الصفر', sure: 'متأكد؟ اضغط مرة ثانية وكل تقدمك يروح',
+      pipsAria: function (n, m) { return 'المستوى ' + n + ' من ' + m; },
+      heartsAria: function (n, m) { return 'السلامة ' + n + ' من ' + m; },
+      recT: 'سجلك',
+      recLabels: ['أفضل يوم وصلته', 'أعلى ربح برحلة', 'أطول متتالية وصول', 'مرات الوصول', 'مجموع الأرباح', 'عدد الرحلات'],
+      topT: 'أفضل 5 رحلات', topEmpty: 'ما فيه رحلات مسجلة بعد.',
+      topRow: function (i, d, r, a, ok) { return '#' + i + ' · يوم ' + d + ' · ' + r + ' · <b>' + a + ' م</b>' + (ok ? '' : ' · متأخر'); },
+      achT: function (n, m) { return 'الإنجازات (' + n + '/' + m + ')'; },
+      toastAch: function (n, r) { return 'إنجاز جديد: ' + n + ' (+' + r + ' م)'; },
+      ach: {
+        first: ['أول وصول', 'وصّل للشغل لأول مرة.'],
+        streak3: ['ثلاثة ورا بعض', 'وصّل 3 أيام متتالية.'],
+        streak10: ['عشرة ورا بعض', 'وصّل 10 أيام متتالية.'],
+        rich: ['صاحب ثروة', 'اجمع 10,000 م في رصيدك.'],
+        maxup: ['مطوّر محترف', 'وصّل تطوير واحد لأقصى مستوى.'],
+        collector: ['هاوي سيارات', 'اقتنِ 3 سيارات.'],
+        desert: ['ابن الصحراء', 'وصّل الشغل من الطريق الصحراوي.'],
+        toll: ['سالك المدفوع', 'وصّل من الطريق السريع المدفوع.'],
+        night: ['سائق الليل', 'وصّل من الطريق الليلي.'],
+        allroads: ['جوّال الطرق', 'وصّل من الطرق الخمسة كلها.'],
+        clean: ['مختصر نظيف', 'وصّل من طريق خطر بدون ولا اصطدام.'],
+        radarfree: ['ملتزم بالسرعة', 'مرّ على رادار بدون غرامة ووصّل.'],
+        rain: ['تحت المطر', 'وصّل الشغل بعد ما مرّيت بمطر.'],
+        special: ['دوام مميز', 'وصّل في يوم عطلة أو يوم المدير الجديد.'],
+        fast: ['برق', 'وصّل وباقي نص الوقت أو أكثر.'],
+        painter: ['ذوق رفيع', 'اشتر دهان أو ملصق لسيارتك.'],
+        daily7: ['ملتزم يومياً', 'استلم المكافأة اليومية 7 أيام متتالية.']
+      },
+      paints: { def: 'لون المصنع', red: 'أحمر ناري', blue: 'أزرق ملكي', white: 'أبيض لؤلؤي', black: 'أسود مطفي', gold: 'ذهبي', pink: 'وردي' },
+      stickers: { none: 'بدون ملصق', stripe: 'خط سباق', flame: 'لهب', star: 'نجمة', palm: 'نخلة' },
+      upg: {
+        shoes: ['محرك أقوى', 'السيارة أسرع بنسبة 12% لكل مستوى'],
+        thermos: ['خزان أكبر', '+20 بنزين (أو شحن)، تمشي مسافة أطول قبل ما يخلص'],
+        alarm: ['منبّه ثاني', '+8 ثواني قبل ما يفوتك الدوام'],
+        bag: ['بونص الراتب', 'كل متر تقطعه يحسب لك 15% زيادة'],
+        gym: ['كفرات جبلية', 'الطلعات تبطّئك أقل، وتصرف بنزين أقل فيها']
+      },
+      veh: [
+        ['الدفنوس', 'للبداية', 'سيارتك العادية للبداية. ماشية الحال، بس تدور.'],
+        ['الوحش', 'تتحمل الضربات', 'مرتفعة وقوية: 6 قلوب، وضربات قطاع الطريق ما توقفها، والطلعات ما تهمها.'],
+        ['السريع', 'ملك المختصر', 'رياضية تطير. على الطريق القصير تزيد سرعتها 40%.'],
+        ['الفخامة', 'دبل أرباح الوصول', 'فخامة وهيبة: مكافأة الوصول ومكافأة الوقت الباقي يتضاعفون.'],
+        ['البيك أب', 'ملك الصحراء', 'تقطع الرمل كأنه أسفلت، والطلعات ما تهمها، وتتحمل ضربة زيادة.'],
+        ['الكهربائية', 'بدون بنزين', 'تشحن نفسها في النزلات وتصرف قليل. شحنها محدود بس سرعتها حلوة.']
+      ],
+      route: {
+        long: ['الطريق الطويل', 'آمن', 'طريق مفتوح وهادي، طلعاته خفيفة وما فيه مخاطر. فلوسك مضمونة حتى لو تأخرت. أحياناً زحمة أو مطر.'],
+        short: ['الطريق المختصر', 'خطر', 'قصير وسريع وأرباحه عالية، بس فيه طلعات حادة وقطاع طريق. تصادم بسرعة عالية يكلفك قلب، و3 قلوب يعني تتعطل. وأحياناً رادار ومطر.'],
+        desert: ['الطريق الصحراوي', 'رمل', 'طريق مفتوح وسط الصحراء، فيه بقع رمل تبطّئك وتصرف بنزين أكثر. أرباحه أعلى من الطويل.'],
+        highway: ['الطريق السريع', 'مدفوع', 'مستوي وسريع، بس تدفع رسوم قبل ما تطلع. فيه رادارات تغرّمك لو زودت السرعة، وأحياناً زحمة.'],
+        night: ['الطريق الليلي', 'ليل', 'طريق مظلم وقصير وأرباحه عالية. ما تشوف العوائق إلا قريبة، وفيه مطر والرادارات أحياناً.']
+      },
+      says: [
+        'يا هلا بالموظف! الطريق طويل، وكل متر تقطعه له سعر عندي.',
+        'ما فيه شي ببلاش يا غالي، بس عندي بضاعة تستاهل.',
+        'اللي يوصل بدري يقبض أكثر. شوف وش يناسبك.',
+        'الوحش يمرّ على قطاع الطريق وكأنهم مو موجودين.',
+        'المدير ما يسامح على التأخير، خلّك جاهز.',
+        'السريع على المختصر شي ثاني، بس لا تنسى تقف قبل العوائق.',
+        'الفخامة تضاعف مكافأة الوصول، يعني الدوام عليها غير!',
+        'الرمل ما يوقّف البيك أب، جرّبه في الصحراء.',
+        'الكهربائية تعبّي من النزلات، لا تستهين فيها!'
+      ]
+    },
+    en: {
+      title: 'The Commute', bal: 'Balance', unit: 'm', day: 'Day', pauseAria: 'Pause', fuel: 'Fuel', charge: 'Charge',
+      pauseTxt: 'Paused. Tap to continue',
+      homeAria: 'Home', homeToast: 'Back home. The trip was cancelled.',
+      questsT: 'Daily Quests', qClaim: 'Claim',
+      qToast: function (r) { return 'Quest complete! +' + r + ' m'; },
+      qt: { arrive: function (n) { return 'Arrive at work ' + (n > 1 ? n + ' times' : 'once'); }, meters: function (n) { return 'Drive ' + fmt(n) + ' m on the road'; }, cans: function (n) { return 'Collect ' + n + ' fuel cans'; }, early: function (n) { return 'Arrive with 30% of the time left ' + (n > 1 ? n + ' times' : 'once'); } },
+      wheelT: 'Lucky Wheel', wheelD: 'One free spin a day, with random prizes.', wheelUsed: 'You spun it today. Come back tomorrow!', wheelBtn: 'Spin',
+      wheelSpin: 'Spin the wheel', wheelClose: 'Close', wheelHint: 'Try your luck!',
+      wheelWin: function (v) { return 'You won ' + v + ' m!'; },
+      endT: 'The Ending', endNext: 'Next', endDone: 'Done', endMgr: 'Manager', endEmp: 'You', endSkip: 'Skip', endBye: 'Goodbye!', endSceneAria: 'Ending scene',
+      endReward: 'Your salary is now double!',
+      winT: 'Congratulations! You beat the game', winD: 'You reached the end, and your salary is now double.', winBtn: 'Keep playing',
+      winStats: ['Work days', 'Arrivals', 'Total earned', 'Best streak'],
+      admT: 'Admin mode', admEnd: 'Show ending scene',
+      endLines: [
+        ['m', 'You, the honest employee, stayed patient all these days for the job. For that reason, you will not need to come to me anymore, but your salary will be double the job pay.'],
+        ['e', 'Thank you so much, boss. Honestly, I cannot believe it. Anyway, goodbye.']
+      ],
+      defBtn: 'Siren', bnAmbFar: 'Bandits ahead! Get the siren ready', bnAmbNow: 'Bandits! Hit the siren now!',
+      ambOk: 'They fled! Bonus', ambCaught: 'Robbed! You lost money', ambNone: 'No siren left!',
+      ambToastWin: function (n) { return 'Bandits driven off! +' + n + ' m'; }, ambToastLose: function (n) { return 'The bandits took ' + n + ' m!'; },
+      eAmbB: 'Bandit-repel bonus', eAmbL: 'Taken by bandits',
+      keys: 'Keyboard: Space to drive/stop, Right arrow to drive, Left arrow to stop, P to pause, B for the siren (shortcut route)',
+      langBtn: 'عربي', langAria: 'التبديل إلى العربية', ampm: 'AM', secs: 'seconds',
+      sndOn: 'Sound on, tap to mute', sndOff: 'Sound muted, tap to turn on',
+      outFuel: 'Out of fuel!', plusFuel: '+25 fuel', outCharge: 'Out of charge!', plusCharge: '+25 charge',
+      beast: 'The Beast shrugged it off!', crash: 'Crash!', careful: 'Passed carefully',
+      fine: 'Speed camera fine!', radarOk: 'Passed the camera safely', jamF: 'Traffic!', rainF: 'Rain! Slippery road',
+      climb: 'Steep climb', down: 'Downhill', danger: 'Danger ahead! Press Stop', obst: 'Obstacle ahead, stay slow',
+      bnRadar: function (l) { return 'Speed camera ahead! Limit ' + l; },
+      bnJam: 'Traffic ahead', bnInJam: 'Traffic jam! You slow down', bnRain: 'Rain! Slippery road', bnSand: 'Sand! Slow down', bnSandAhead: 'Sand ahead',
+      office: 'Company', tollGate: 'TOLL',
+      eTitleOk: 'You made it to work early!', eTitleWreck: 'Your car broke down!', eTitleLate: 'You are late for work!',
+      eMsgLux: 'The Luxury paid off, arrival bonuses are doubled! Here is your tally:',
+      eMsgOk: 'The boss smiled at you today. Here is your tally:',
+      eMsgWreck: 'Too many crashes and the car broke down. You only get half of what you drove:',
+      eMsgLate: 'The boss is calling. You did not make it, but what you drove still counts:',
+      eDist: 'Road meters', eArr: 'Arrival bonus', eTime: 'Time-left bonus', eCon: 'Safe-route compensation', eTot: 'Total',
+      eFineL: 'Camera fines (already deducted)', eTollL: 'Road toll (paid before the trip)',
+      bDrive: 'Drive ▶', bStop: 'Stop ■', bStopDry: 'Stop ■ · Out of fuel', bStopDryEv: 'Stop ■ · Out of charge', bHome: 'Back home', bGo: 'Head to work',
+      hTitle: function (d) { return 'Day ' + d + ', you must get to work'; },
+      mDist: function (d) { return 'Distance from home to work: <b>' + d + ' m</b>'; },
+      mTime: function (s) { return 'Work starts at 8:00 AM, and you have <b>' + s + ' seconds</b> from the start of the road'; },
+      spHolidayT: 'Holiday!', spHolidayD: 'Meter earnings ×2 and arrival bonuses ×2 today. Make the most of it!',
+      spBossT: 'The new boss is here!', spBossD: '15% less time, but arrival and time-left bonuses are ×1.6.',
+      dailyT: 'Your daily bonus', dailyBtn: 'Claim',
+      dailyD: function (a, s) { return 'You get <b>' + a + ' m</b> · day streak: ' + s; },
+      howTitle: 'How to play?',
+      how1: 'Press the big <b>Drive ▶</b> button to make the car go, and press it again (<b>Stop ■</b>) to slow down and stop. The car does not move on its own.',
+      how2: 'Hills slow you down and burn more fuel, and downhills speed you up. The red fuel cans on the road refill your tank.',
+      how3: 'Every meter you drive = money. Buy upgrades and cars from the showroom to get faster. Watch out for speed cameras, traffic and rain.',
+      chooseRoute: 'Choose your route',
+      rDist: function (d) { return 'Distance: <b>' + d + ' m</b>'; },
+      rTime: function (s) { return 'Time allowed: <b>' + s + ' seconds</b>'; },
+      rRate: function (r, a) { return 'Meter earnings: <b>×' + r + '</b> · Arrival bonus: <b>×' + a + '</b>'; },
+      rToll: function (n) { return 'Toll before you set off: <b>' + n + ' m</b>'; },
+      rTollNo: 'Not enough balance for the toll',
+      shopUp: 'Upgrades', shopCar: 'Showroom', shopPaint: 'Paint', shopSticker: 'Stickers',
+      buy: function (p) { return 'Buy · ' + p + ' m'; },
+      maxLv: 'Max level', drivingNow: 'Driving it now', ride: 'Drive', equipped: 'Equipped', pick: 'Select',
+      spd: function (v, d) { return 'Speed: <b>' + v + '</b> m/s · Use: <b>×' + d + '</b>'; },
+      reset: 'Restart the game from scratch', sure: 'Sure? Press again and all your progress is lost',
+      pipsAria: function (n, m) { return 'Level ' + n + ' of ' + m; },
+      heartsAria: function (n, m) { return 'Safety ' + n + ' of ' + m; },
+      recT: 'Your Records',
+      recLabels: ['Best day reached', 'Best single trip', 'Longest arrival streak', 'Arrivals', 'Total earned', 'Trips'],
+      topT: 'Top 5 trips', topEmpty: 'No trips recorded yet.',
+      topRow: function (i, d, r, a, ok) { return '#' + i + ' · Day ' + d + ' · ' + r + ' · <b>' + a + ' m</b>' + (ok ? '' : ' · late'); },
+      achT: function (n, m) { return 'Achievements (' + n + '/' + m + ')'; },
+      toastAch: function (n, r) { return 'Achievement unlocked: ' + n + ' (+' + r + ' m)'; },
+      ach: {
+        first: ['First Arrival', 'Make it to work for the first time.'],
+        streak3: ['Three in a Row', 'Arrive 3 days in a row.'],
+        streak10: ['Ten in a Row', 'Arrive 10 days in a row.'],
+        rich: ['Wealthy', 'Hold 10,000 m in your balance.'],
+        maxup: ['Pro Tuner', 'Max out one upgrade.'],
+        collector: ['Car Fan', 'Own 3 cars.'],
+        desert: ['Desert Son', 'Reach work via the desert road.'],
+        toll: ['Toll Taker', 'Reach work via the toll highway.'],
+        night: ['Night Driver', 'Reach work via the night road.'],
+        allroads: ['Road Tripper', 'Arrive via all five routes.'],
+        clean: ['Clean Run', 'Arrive on a dangerous route without a crash.'],
+        radarfree: ['Law Abiding', 'Pass a speed camera without a fine and arrive.'],
+        rain: ['Singing in the Rain', 'Arrive after driving through rain.'],
+        special: ['Special Shift', 'Arrive on a holiday or new-boss day.'],
+        fast: ['Lightning', 'Arrive with half the time still left.'],
+        painter: ['Fine Taste', 'Buy a paint or sticker for your car.'],
+        daily7: ['Daily Regular', 'Claim the daily bonus 7 days in a row.']
+      },
+      paints: { def: 'Factory', red: 'Fire Red', blue: 'Royal Blue', white: 'Pearl White', black: 'Matte Black', gold: 'Gold', pink: 'Pink' },
+      stickers: { none: 'No sticker', stripe: 'Racing stripe', flame: 'Flames', star: 'Star', palm: 'Palm' },
+      upg: {
+        shoes: ['Stronger Engine', 'Car is 12% faster per level'],
+        thermos: ['Bigger Tank', '+20 fuel (or charge), drive farther before running dry'],
+        alarm: ['Second Alarm', '+8 seconds before you miss work'],
+        bag: ['Salary Bonus', 'Every meter you drive earns 15% more'],
+        gym: ['Off-road Tires', 'Hills slow you less and burn less fuel']
+      },
+      veh: [
+        ['The Clunker', 'Starter', 'Your everyday car to begin with. It gets by, but it runs.'],
+        ['The Beast', 'Takes hits', 'Tall and tough: 6 hearts, bandit hits barely stop it, and hills do not bother it.'],
+        ['The Speedster', 'Shortcut king', 'A sports car that flies. On the short route its speed is up 40%.'],
+        ['The Luxury', 'Double arrival pay', 'Pure class: arrival and time-left bonuses are doubled.'],
+        ['The Pickup', 'Desert king', 'Crosses sand like asphalt, shrugs off hills, and takes an extra hit.'],
+        ['The Electric', 'No gas', 'Recharges itself on downhills and sips power. Limited charge, but quick.']
+      ],
+      route: {
+        long: ['The Long Route', 'Safe', 'An open, calm road with gentle hills and no hazards. Your pay is safe even if you are late. Sometimes traffic or rain.'],
+        short: ['The Shortcut', 'Risky', 'Short, fast and high-paying, but with steep hills and bandits. A high-speed crash costs a heart, and losing all your hearts means a breakdown. Sometimes cameras and rain.'],
+        desert: ['The Desert Road', 'Sand', 'An open road through the desert with sand patches that slow you down and burn more fuel. Pays better than the long route.'],
+        highway: ['The Toll Highway', 'Toll', 'Flat and fast, but you pay a toll before you set off. Speed cameras fine you if you go too fast, and sometimes traffic.'],
+        night: ['The Night Road', 'Night', 'A short dark road that pays well. You only see obstacles up close, with rain and speed cameras at times.']
+      },
+      says: [
+        'Welcome, employee! The road is long, and every meter you drive has a price with me.',
+        'Nothing comes free, my friend, but my goods are worth it.',
+        'Whoever arrives early gets paid more. See what suits you.',
+        'The Beast rolls past bandits like they are not even there.',
+        'The boss does not forgive lateness, so be ready.',
+        'The Speedster is something else on the shortcut, just do not forget to stop before obstacles.',
+        'The Luxury doubles your arrival bonus, so commuting in it is different!',
+        'Sand does not stop the Pickup, try it in the desert.',
+        'The Electric refills on downhills, do not underestimate it!'
+      ]
+    }
+  };
+  var LANG_KEY = 'dawam.lang';
+  var LANG = (function () { try { var l = localStorage.getItem(LANG_KEY); return TX[l] ? l : 'ar'; } catch (e) { return 'ar'; } })();
+  function tx(k) { return TX[LANG][k]; }
+
+  /* ===================== Game data ===================== */
   var UPG = [
-    { id: 'shoes', name: 'محرك أقوى', desc: 'السيارة أسرع بنسبة 12% لكل مستوى', base: 200, grow: 1.8 },
-    { id: 'thermos', name: 'خزان أكبر', desc: '+20 بنزين، تمشي مسافة أطول قبل ما يخلص', base: 150, grow: 1.7 },
-    { id: 'alarm', name: 'منبّه ثاني', desc: '+8 ثواني قبل ما يفوتك الدوام', base: 250, grow: 1.8 },
-    { id: 'bag', name: 'بونص الراتب', desc: 'كل متر تقطعه يحسب لك 15% زيادة', base: 300, grow: 1.9 },
-    { id: 'gym', name: 'كفرات جبلية', desc: 'الطلعات تبطّئك أقل، وتصرف بنزين أقل فيها', base: 220, grow: 1.8 }
+    { id: 'shoes', base: 200, grow: 1.8 },
+    { id: 'thermos', base: 150, grow: 1.7 },
+    { id: 'alarm', base: 250, grow: 1.8 },
+    { id: 'bag', base: 300, grow: 1.9 },
+    { id: 'gym', base: 220, grow: 1.8 }
   ];
   var MAXLV = 5;
   var VEH = [
-    { name: 'سيارتك القديمة', run: 17, cost: 0, drain: 1, desc: 'ماشية الحال، بس تدور.' },
-    { name: 'سيدان', run: 22, cost: 3000, drain: .85, desc: 'مريحة وأسرع، وتصرف بنزين أقل.' },
-    { name: 'دفع رباعي', run: 25, cost: 9000, drain: .65, desc: 'عالية وقوية، والطلعات ما تهمها.' },
-    { name: 'سيارة سبورت', run: 36, cost: 30000, drain: .5, desc: 'أخيراً! تطير على النزلات.' }
+    { look: 'old', col: ['#c98a52', '#9a6234'], run: 17, cost: 0, drain: 1, hp: 0, tough: 0, bump: .12, dmg: 1, climb: 1, shortMul: 1, arr: 1 },
+    { look: 'suv', col: ['#2f7a55', '#1f5a3e'], run: 22, cost: 6000, drain: .75, hp: 3, tough: 8, bump: .6, dmg: .4, climb: .6, shortMul: 1, arr: 1 },
+    { look: 'sport', col: ['#e0362d', '#a8231c'], run: 30, cost: 16000, drain: .6, hp: 0, tough: 0, bump: .12, dmg: 1, climb: 1, shortMul: 1.4, arr: 1 },
+    { look: 'lux', col: ['#1c1f26', '#3a3f4a'], run: 24, cost: 35000, drain: .7, hp: 0, tough: 0, bump: .12, dmg: 1, climb: 1, shortMul: 1, arr: 2 },
+    { look: 'pickup', col: ['#d9822b', '#a35a14'], run: 20, cost: 10000, drain: .8, hp: 1, tough: 3, bump: .4, dmg: .7, climb: .55, shortMul: 1, arr: 1, sandProof: true },
+    { look: 'ev', col: ['#2ec4b6', '#1b8f84'], run: 27, cost: 22000, drain: .55, hp: 0, tough: 0, bump: .12, dmg: 1, climb: .8, shortMul: 1.15, arr: 1, ev: true }
   ];
-  var SAYS = [
-    'يا هلا بالموظف! الطريق طويل، وكل متر تقطعه له سعر عندي.',
-    'ما فيه شي ببلاش يا غالي، بس عندي بضاعة تستاهل.',
-    'اللي يوصل بدري يقبض أكثر. شوف وش يناسبك.',
-    'المحرك هذا جرّبته أنا بنفسي، والله ما شفت أقوى منه.',
-    'المدير ما يسامح على التأخير، خلّك جاهز.',
-    'الطلعات هالأيام وايد، لا تنسى الكفرات.'
+  var VORDER = [0, 1, 4, 2, 5, 3];
+  var ROUTES = {
+    long: { key: 'long', cls: 'safe', dist: 1.5, amp: .6, rate: 1, arr: 1, tb: 1, haz: false, div: 9, add: 20, consol: .5, ev: ['jam', 'rain'], ground: '#4a4038' },
+    short: { key: 'short', cls: 'risk', dist: .6, amp: 1.4, rate: 3.5, arr: 4, tb: 2, haz: true, div: 11, add: 10, consol: 0, ev: ['radar', 'rain'], ground: '#4a4038' },
+    desert: { key: 'desert', cls: 'sand', dist: 1.1, amp: .9, rate: 1.8, arr: 2, tb: 1.5, haz: false, div: 10, add: 15, consol: .3, sand: true, ev: ['rain'], ground: '#b8935a' },
+    highway: { key: 'highway', cls: 'toll', dist: 1.3, amp: .3, rate: 1.5, arr: 1.8, tb: 1.3, haz: false, div: 13, add: 10, consol: .2, toll: true, spd: 1.2, ev: ['radar', 'jam'], ground: '#3b4636' },
+    night: { key: 'night', cls: 'night', dist: .9, amp: 1.1, rate: 2.5, arr: 3, tb: 2, haz: true, div: 10.5, add: 12, consol: 0, night: true, ev: ['rain', 'radar'], ground: '#2a2824' }
+  };
+  var RORDER = ['long', 'short', 'desert', 'highway', 'night'];
+  var PAINTS = [
+    { id: 'def', cost: 0 },
+    { id: 'red', cost: 500, col: ['#e0362d', '#a8231c'] },
+    { id: 'blue', cost: 500, col: ['#2f6fe0', '#1d4aa8'] },
+    { id: 'white', cost: 600, col: ['#f2f4f7', '#c3c9d2'] },
+    { id: 'black', cost: 700, col: ['#2a2d33', '#14161a'] },
+    { id: 'gold', cost: 2500, col: ['#e6c04a', '#a98512'] },
+    { id: 'pink', cost: 500, col: ['#f27fb2', '#c24f84'] }
   ];
-  var SAVE_KEY = 'dawam.v2';
+  var STICK = [
+    { id: 'none', cost: 0 }, { id: 'stripe', cost: 400 }, { id: 'flame', cost: 800 }, { id: 'star', cost: 600 }, { id: 'palm', cost: 600 }
+  ];
+  var ACH_IDS = ['first', 'streak3', 'streak10', 'rich', 'maxup', 'collector', 'desert', 'toll', 'night', 'allroads', 'clean', 'radarfree', 'rain', 'special', 'fast', 'painter', 'daily7'];
+  var ACH_REWARD = 250;
+  var QT = { arrive: { n: [1, 2], r: 200 }, meters: { n: [2500, 4000], r: 250 }, cans: { n: [5, 8], r: 150 }, early: { n: [1, 2], r: 300 } };
+  var QIDS = ['arrive', 'meters', 'cans', 'early'];
+  var WHEEL = [{ v: 50, w: 20 }, { v: 100, w: 22 }, { v: 150, w: 16 }, { v: 250, w: 14 }, { v: 400, w: 10 }, { v: 600, w: 7 }, { v: 1000, w: 4 }, { v: 2000, w: 1 }];
+  var RADAR_LIM = 22;
+  var HAZ_SPEED = 12;
+  var SAVE_KEY = 'dawam.v4';
   var S = load() || fresh();
-  function fresh() { return { money: 0, day: 1, up: { shoes: 0, thermos: 0, alarm: 0, bag: 0, gym: 0 }, veh: 0, owned: [0], best: 0 }; }
+  function fresh() {
+    return { money: 0, day: 1, up: { shoes: 0, thermos: 0, alarm: 0, bag: 0, gym: 0 }, veh: 0, owned: [0], best: 0, route: 'long',
+      stats: { runs: 0, arrivals: 0, total: 0, streak: 0, bestStreak: 0, bestTrip: 0, routes: {} }, top: [], ach: {},
+      daily: { last: '', streak: 0 }, quests: { date: '', list: [] }, wheel: { last: '' }, adm: 0, ends: {}, dbl: 0, ownPaint: ['def'], ownSticker: ['none'], paint: 'def', sticker: 'none' };
+  }
   function load() {
     try {
-      var j = JSON.parse(localStorage.getItem(SAVE_KEY));
+      var mig = false, raw = localStorage.getItem(SAVE_KEY);
+      if (!raw) { raw = localStorage.getItem('dawam.v3'); mig = true; }
+      var j = JSON.parse(raw);
       if (j && typeof j.money === 'number' && typeof j.day === 'number' && j.up && Array.isArray(j.owned)) {
         var f = fresh(); Object.keys(f.up).forEach(function (k) { f.up[k] = clamp(+j.up[k] || 0, 0, MAXLV); });
-        f.money = Math.max(0, j.money); f.day = Math.max(1, j.day); f.owned = j.owned.filter(function (i) { return VEH[i]; }); if (f.owned.indexOf(0) < 0) f.owned.push(0);
-        f.veh = f.owned.indexOf(j.veh) >= 0 ? j.veh : 0; f.best = +j.best || 0; return f;
+        f.money = Math.max(0, j.money); f.day = Math.max(1, j.day);
+        f.owned = mig ? [0] : j.owned.filter(function (i) { return VEH[i]; }); if (f.owned.indexOf(0) < 0) f.owned.push(0);
+        f.veh = f.owned.indexOf(j.veh) >= 0 ? j.veh : 0; f.best = +j.best || 0; f.route = ROUTES[j.route] ? j.route : 'long';
+        if (j.stats && typeof j.stats === 'object') {
+          ['runs', 'arrivals', 'total', 'streak', 'bestStreak', 'bestTrip'].forEach(function (k) { f.stats[k] = Math.max(0, +j.stats[k] || 0); });
+          if (j.stats.routes && typeof j.stats.routes === 'object') RORDER.forEach(function (k) { if (j.stats.routes[k]) f.stats.routes[k] = 1; });
+        }
+        if (Array.isArray(j.top)) f.top = j.top.filter(function (t) { return t && ROUTES[t.route]; }).slice(0, 5);
+        if (j.ach && typeof j.ach === 'object') ACH_IDS.forEach(function (id) { if (j.ach[id]) f.ach[id] = 1; });
+        if (j.daily && typeof j.daily.last === 'string') f.daily = { last: j.daily.last, streak: Math.max(0, +j.daily.streak || 0) };
+        if (j.quests && typeof j.quests.date === 'string' && Array.isArray(j.quests.list)) f.quests = { date: j.quests.date, list: j.quests.list.filter(function (q) { return q && QT[q.t] && +q.n > 0; }).slice(0, 3).map(function (q) { return { t: q.t, n: +q.n, p: Math.max(0, +q.p || 0), r: Math.max(0, +q.r || 0), c: q.c ? 1 : 0 }; }) };
+        if (j.wheel && typeof j.wheel.last === 'string') f.wheel = { last: j.wheel.last };
+        f.adm = j.adm ? 1 : 0;
+        if (j.ends && j.ends.won) f.ends.won = 1;
+        f.dbl = j.dbl ? 1 : 0;
+        if (Array.isArray(j.ownPaint)) f.ownPaint = j.ownPaint.filter(function (id) { return PAINTS.some(function (p) { return p.id === id; }); });
+        if (f.ownPaint.indexOf('def') < 0) f.ownPaint.push('def');
+        if (Array.isArray(j.ownSticker)) f.ownSticker = j.ownSticker.filter(function (id) { return STICK.some(function (p) { return p.id === id; }); });
+        if (f.ownSticker.indexOf('none') < 0) f.ownSticker.push('none');
+        f.paint = f.ownPaint.indexOf(j.paint) >= 0 ? j.paint : 'def';
+        f.sticker = f.ownSticker.indexOf(j.sticker) >= 0 ? j.sticker : 'none';
+        return f;
       }
     } catch (e) {}
     return null;
   }
   function save() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch (e) {} }
 
+  function special(day) { return day % 10 === 0 ? 'boss' : day % 5 === 0 ? 'holiday' : null; }
   function price(u, lv) { return Math.round(u.base * Math.pow(u.grow, lv) / 10) * 10; }
-  function distOf(day) { return 500 + 150 * (day - 1); }
-  function maxSt() { return 100 + 20 * S.up.thermos; }
-  function limitOf(day) { return distOf(day) / 9.5 + 12 + 8 * S.up.alarm; }
-  function mult() { return 1 + .15 * S.up.bag; }
-
-  /* ---------- run state ---------- */
-  var mode = 'home', R = null, last = 0;
-  function makeRun() {
-    var dist = distOf(S.day), r = rng(S.day * 7919 + 13), c = rng(S.day * 31 + 5);
-    var run = {
-      x: 0, v: 0, st: maxSt(), tired: false, t: 0, earn: 0, hold: false, paused: false, dist: dist, limit: limitOf(S.day),
-      terr: { A: 26 + .6 * Math.min(S.day, 12), p1: r() * 6.28, p2: r() * 6.28, p3: r() * 6.28, f1: 6.283 / (300 + r() * 110), f2: 6.283 / (140 + r() * 50), f3: 6.283 / (80 + r() * 20) },
-      cups: [], phase: 0, floats: [], camH: 0, view: 0
-    };
-    var x = 80; while (x < dist - 60) { run.cups.push({ x: x, got: false }); x += 80 + c() * 120; }
-    return run;
-  }
-  function hAt(x) {
-    var T = R.terr, w = Math.min(1, Math.max(0, x) / 90) * Math.min(1, Math.max(0, R.dist - x) / 90);
-    if (x < 0 || x > R.dist) return 0;
-    w = w * w * (3 - 2 * w);
-    return w * T.A * (Math.sin(T.f1 * x + T.p1) + .4 * Math.sin(T.f2 * x + T.p2) + .15 * Math.sin(T.f3 * x + T.p3));
-  }
-  function slopeAt(x) { return (hAt(x + .6) - hAt(x - .6)) / 1.2; }
-
-  function step(dt) {
-    var veh = VEH[S.veh], slope = slopeAt(R.x), sp = 1 + .12 * S.up.shoes, gym = 1 - .12 * S.up.gym;
-    var gas = R.hold && R.st > 0, top = veh.run * sp;
-    var acc = gas ? (top - R.v) * 1.8 : -R.v * .9;
-    acc -= slope > 0 ? slope * 9 * gym : slope * 9;
-    R.v = Math.max(0, R.v + acc * dt);
-    var dx = R.v * dt; R.x += dx; R.earn += dx * mult(); R.t += dt;
-    if (gas) {
-      R.st -= 2 * veh.drain * (1 + Math.max(0, slope) * 1.5 * gym) * dt;
-      if (R.st <= 0) { R.st = 0; if (!R.dry) { R.dry = true; addFloat('البنزين خلص!'); } }
-    }
-    R.tired = R.st <= 0;
-    R.cups.forEach(function (c) { if (!c.got && Math.abs(c.x - R.x) < 3) { c.got = true; R.st = Math.min(maxSt(), R.st + 25); R.dry = false; addFloat('+25 بنزين'); } });
-    R.floats.forEach(function (f2) { f2.life -= dt; }); R.floats = R.floats.filter(function (f2) { return f2.life > 0; });
-    if (R.x >= R.dist - 1) finish(true); else if (R.t >= R.limit) finish(false);
-  }
-  function addFloat(text) { R.floats.push({ text: text, life: 1.2, max: 1.2 }); }
-
-  function finish(ok) {
-    mode = 'end'; R.hold = false;
-    var earn = Math.floor(R.earn), arr = 0, tb = 0;
-    if (ok) { arr = Math.round(R.dist * .25 * mult()); tb = Math.round(Math.max(0, R.limit - R.t) * 4); S.day++; S.best = Math.max(S.best, S.day - 1); }
-    var tot = earn + arr + tb; S.money += tot; save();
-    var el = $('end');
-    el.innerHTML = '<div class="endcard' + (ok ? '' : ' bad') + '"><h2>' + (ok ? 'وصلت الشغل بدري!' : 'تأخرت على الدوام!') + '</h2>' +
-      '<div>' + (ok ? 'المدير ابتسم لك اليوم، وهذا حسابك:' : 'المدير يتصل عليك. ما وصلت، لكن اللي مشيته يحسب لك:') + '</div>' +
-      '<div class="ln"><span>أمتار الطريق</span><b>' + fmt(earn) + ' م</b></div>' +
-      (ok ? '<div class="ln"><span>مكافأة الوصول</span><b>' + fmt(arr) + ' م</b></div><div class="ln"><span>مكافأة الوقت الباقي</span><b>' + fmt(tb) + ' م</b></div>' : '') +
-      '<div class="ln tot"><span>المجموع</span><span>+' + fmt(tot) + ' م</span></div></div>';
-    el.hidden = false; $('home').hidden = true; refresh();
+  function distOf(day, key) { return Math.round((500 + 150 * (day - 1)) * ROUTES[key || S.route].dist / 10) * 10; }
+  function tollOf(day) { return Math.round((100 + 30 * (day - 1)) / 10) * 10; }
+  function maxSt() { return (100 + 20 * S.up.thermos) * (VEH[S.veh].ev ? .65 : 1); }
+  function limitOf(day, key) { var rt = ROUTES[key || S.route]; return (distOf(day, rt.key) / rt.div + rt.add + 8 * S.up.alarm) * (special(day) === 'boss' ? .85 : 1); }
+  function mult() { return (1 + .15 * S.up.bag) * (S.dbl ? 2 : 1); }
+  function fixRoute() { if (S.route === 'highway' && S.money < tollOf(S.day)) S.route = 'long'; }
+  function dstr(d) { return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+  function dailyInfo() {
+    var now = new Date(), today = dstr(now), yest = dstr(new Date(now.getTime() - 864e5));
+    if (S.daily.last === today) return { can: false };
+    var st = S.daily.last === yest ? S.daily.streak + 1 : 1;
+    return { can: true, streak: st, amount: 100 + 60 * Math.min(st - 1, 6), today: today };
   }
 
-  /* ---------- screens ---------- */
-  var merchantSVG = '<svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="12" fill="#08543c"/><path d="M10 64c0-16 10-22 22-22s22 6 22 22z" fill="#ffffff"/><path d="M32 42v22" stroke="#d9dfdb" stroke-width="2"/><circle cx="32" cy="29" r="11" fill="#c98f63"/><path d="M18 30c0-12 6-18 14-18s14 6 14 18c-3-5-6-7-14-7s-11 2-14 7z" fill="#ffffff"/><path d="M18 30c0-12 6-18 14-18s14 6 14 18" fill="none" stroke="#c9302c" stroke-width="2" stroke-dasharray="3 2"/><path d="M26 33q6 5 12 0" fill="none" stroke="#3a2a1c" stroke-width="2"/><circle cx="27.5" cy="28" r="1.4" fill="#2a1c12"/><circle cx="36.5" cy="28" r="1.4" fill="#2a1c12"/></svg>';
-  function pips(n) { var h = ''; for (var i = 0; i < MAXLV; i++) h += '<i class="' + (i < n ? 'on' : '') + '"></i>'; return '<span class="pips" aria-label="المستوى ' + n + ' من ' + MAXLV + '">' + h + '</span>'; }
-  function renderHome() {
-    var d = distOf(S.day), lim = limitOf(S.day), h = '';
-    h += '<h2>يوم ' + S.day + '، لازم توصل الشغل</h2>';
-    h += '<div class="mission"><span>المسافة من بيتك للشغل: <b>' + fmt(d) + ' م</b></span><span>الدوام الساعة 8:00 ص، وعندك <b>' + Math.round(lim) + ' ثانية</b> من أول الطريق</span></div>';
-    if (S.day === 1 && S.best === 0) h += '<div class="how"><b>كيف تلعب؟</b><span>اضغط على الزر الكبير <b>وأنت ماسكه</b> عشان السيارة تمشي، وإذا فكيته توقف وتبطّئ لين تقف. السيارة ما تمشي من نفسها.</span><span>الطلعة تبطّئك وتصرف بنزين أكثر، والنزلة تسرّعك. جوالين البنزين الحمراء على الطريق تعبّي لك الخزان.</span><span>كل متر تقطعه = فلوس. اشتر تطويرات من التاجر وتصير أسرع.</span></div>';
-    h += '<div class="merchant">' + merchantSVG + '<div class="say">' + SAYS[(S.day + S.best) % SAYS.length] + '</div></div>';
-    h += '<div class="shopgrid"><h3>تطويرات</h3>';
-    UPG.forEach(function (u) {
-      var lv = S.up[u.id], max = lv >= MAXLV, p = price(u, lv);
-      h += '<div class="item"><div class="top"><b>' + u.name + '</b>' + pips(lv) + '</div><p>' + u.desc + '</p>' +
-        (max ? '<button class="buy on" disabled>أقصى مستوى</button>' : '<button class="buy" data-up="' + u.id + '"' + (S.money < p ? ' disabled' : '') + '>اشتر · ' + fmt(p) + ' م</button>') + '</div>';
-    });
-    h += '<h3>مركبات</h3>';
-    VEH.forEach(function (v, i) {
-      if (i === 0) return;
-      var own = S.owned.indexOf(i) >= 0, cur = S.veh === i;
-      h += '<div class="item"><div class="top"><b>' + v.name + '</b></div><p>' + v.desc + ' سرعتها ' + v.run + ' م/ث بأقصى سرعة.</p>' +
-        (cur ? '<button class="buy on" disabled>راكبها الحين</button>' : own ? '<button class="buy use" data-veh="' + i + '">اركب</button>' : '<button class="buy" data-buy="' + i + '"' + (S.money < v.cost ? ' disabled' : '') + '>اشتر · ' + fmt(v.cost) + ' م</button>') + '</div>';
-    });
-    if (S.veh !== 0) h += '<div class="item"><div class="top"><b>' + VEH[0].name + '</b></div><p>' + VEH[0].desc + '</p><button class="buy use" data-veh="0">انزل وامشي</button></div>';
-    h += '</div><button class="reset" id="reset">ابدأ اللعبة من الصفر</button>';
-    $('home').innerHTML = h;
+  /* ===================== Audio ===================== */
+  var AU = { ctx: null, on: true, master: null, mus: null, sfxG: null, eng: null, engGain: null, rainG: null, noise: null, type: '' };
+  try { AU.on = localStorage.getItem('dawam.snd') !== '0'; } catch (e) {}
+  var HIJAZ = [0, 1, 4, 5, 7, 8, 10, 12], mIdx = 3, mStep = 0, mNext = 0;
+  function auInit() {
+    var C = window.AudioContext || window.webkitAudioContext; if (!C) return;
+    if (AU.ctx) { if (AU.ctx.state === 'suspended') AU.ctx.resume(); return; }
+    try {
+      var c = AU.ctx = new C();
+      AU.master = c.createGain(); AU.master.gain.value = AU.on ? .8 : 0; AU.master.connect(c.destination);
+      AU.mus = c.createGain(); AU.mus.gain.value = .55; AU.mus.connect(AU.master);
+      AU.sfxG = c.createGain(); AU.sfxG.gain.value = .9; AU.sfxG.connect(AU.master);
+      var shaper = c.createWaveShaper(), curve = new Float32Array(256);
+      for (var q = 0; q < 256; q++) curve[q] = Math.tanh((q / 128 - 1) * 2.4);
+      shaper.curve = curve;
+      var lp = AU.lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 380; lp.Q.value = 1.3;
+      var shelf = c.createBiquadFilter(); shelf.type = 'lowshelf'; shelf.frequency.value = 130; shelf.gain.value = 2;
+      var pk = c.createBiquadFilter(); pk.type = 'peaking'; pk.frequency.value = 190; pk.Q.value = .9; pk.gain.value = 9;
+      AU.eng = c.createOscillator(); AU.eng.type = 'sawtooth'; AU.eng.frequency.value = 34;
+      AU.eng2 = c.createOscillator(); AU.eng2.type = 'square'; AU.eng2.frequency.value = 34;
+      AU.eng3 = c.createOscillator(); AU.eng3.type = 'sawtooth'; AU.eng3.frequency.value = 34.4;
+      AU.type = 'sawtooth';
+      var mixer = c.createGain(), g2 = c.createGain(), g3 = c.createGain(); g2.gain.value = .75; g3.gain.value = .6;
+      AU.eng.connect(mixer); AU.eng2.connect(g2); g2.connect(mixer); AU.eng3.connect(g3); g3.connect(mixer);
+      var pulse = c.createGain(); pulse.gain.value = .78;
+      AU.lfo = c.createOscillator(); AU.lfo.type = 'sine'; AU.lfo.frequency.value = 14;
+      AU.lfoG = c.createGain(); AU.lfoG.gain.value = .22; AU.lfo.connect(AU.lfoG); AU.lfoG.connect(pulse.gain);
+      mixer.connect(shaper); shaper.connect(lp); lp.connect(shelf); shelf.connect(pk); pk.connect(pulse);
+      AU.engGain = c.createGain(); AU.engGain.gain.value = 0; pulse.connect(AU.engGain); AU.engGain.connect(AU.master);
+      AU.eng.start(); AU.eng2.start(); AU.eng3.start(); AU.lfo.start();
+      var len = c.sampleRate * 2, buf = c.createBuffer(1, len, c.sampleRate), d = buf.getChannelData(0);
+      for (var i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+      AU.noise = buf;
+      var rs = c.createBufferSource(); rs.buffer = buf; rs.loop = true;
+      var hp = c.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 1500;
+      AU.rainG = c.createGain(); AU.rainG.gain.value = 0; rs.connect(hp); hp.connect(AU.rainG); AU.rainG.connect(AU.master); rs.start();
+      var ns = c.createBufferSource(); ns.buffer = buf; ns.loop = true;
+      var nl = c.createBiquadFilter(); nl.type = 'lowpass'; nl.frequency.value = 360;
+      AU.engNoise = c.createGain(); AU.engNoise.gain.value = 0; ns.connect(nl); nl.connect(AU.engNoise); AU.engNoise.connect(AU.master); ns.start();
+      mNext = c.currentTime + .2; setInterval(musicTick, 120);
+    } catch (e) { AU.ctx = null; }
   }
-  function toHome() { mode = 'home'; R = makeRun(); $('end').hidden = true; $('home').hidden = false; $('home').scrollTop = 0; renderHome(); refresh(); }
-  function startRun() { R = makeRun(); mode = 'run'; $('home').hidden = true; $('end').hidden = true; refresh(); }
-
-  $('home').addEventListener('click', function (e) {
-    var b = e.target.closest('button'); if (!b) return;
-    if (b.id === 'reset') {
-      if (b.dataset.sure) { S = fresh(); save(); toHome(); } else { b.dataset.sure = '1'; b.textContent = 'متأكد؟ اضغط مرة ثانية وكل تقدمك يروح'; }
-      return;
-    }
-    var u, i;
-    if (b.dataset.up) { u = UPG.filter(function (x) { return x.id === b.dataset.up; })[0]; var p = price(u, S.up[u.id]); if (S.money >= p && S.up[u.id] < MAXLV) { S.money -= p; S.up[u.id]++; } }
-    else if (b.dataset.buy) { i = +b.dataset.buy; if (S.money >= VEH[i].cost && S.owned.indexOf(i) < 0) { S.money -= VEH[i].cost; S.owned.push(i); S.veh = i; } }
-    else if (b.dataset.veh) { i = +b.dataset.veh; if (S.owned.indexOf(i) >= 0) S.veh = i; }
-    save(); var st = $('home').scrollTop; R.st = maxSt(); renderHome(); $('home').scrollTop = st; refresh();
-  });
-
-  /* ---------- HUD ---------- */
-  function refresh() {
-    var live = mode === 'run' && R ? Math.floor(R.earn) : 0;
-    $('bal').textContent = fmt(S.money + live);
-    $('day').textContent = S.day;
-    $('vehname').textContent = VEH[S.veh].name;
-    var t = R && (mode === 'run' || mode === 'end') ? R.t : 0, lim = R ? R.limit : limitOf(S.day);
-    var m = 360 + 120 * clamp(t / lim, 0, 1), hh = Math.floor(m / 60), mm = Math.floor(m % 60);
-    var ck = $('clock'); ck.textContent = hh + ':' + (mm < 10 ? '0' : '') + mm + ' ص'; ck.classList.toggle('late', mode === 'run' && lim - t < 10);
-    var p = R ? clamp(R.x / R.dist, 0, 1) : 0;
-    $('prog').style.width = (p * 100) + '%'; $('dot').style.left = (p * 100) + '%';
-    $('left').textContent = fmt(R ? Math.max(0, R.dist - R.x) : distOf(S.day)) + ' م';
-    $('stam').style.width = (R ? clamp(R.st / maxSt(), 0, 1) * 100 : 100) + '%';
-    $('stamwrap').classList.toggle('tired', !!(R && R.tired));
-    var go = $('go');
-    go.className = mode === 'run' ? 'run' : ''; go.textContent = mode === 'run' ? (R && R.tired ? 'البنزين خلص! دور على جالون' : 'دوس بنزين') : mode === 'end' ? 'رجّع للبيت' : 'اطلع للشغل';
-    $('pausebtn').style.visibility = mode === 'run' ? 'visible' : 'hidden';
+  function tone(f, t, dur, type, vol, dest, slideTo) {
+    var c = AU.ctx, o = c.createOscillator(), g = c.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t); if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t + dur);
+    g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(vol, t + .015); g.gain.exponentialRampToValueAtTime(.0005, t + dur);
+    o.connect(g); g.connect(dest || AU.sfxG); o.start(t); o.stop(t + dur + .05);
   }
-
-  /* ---------- input ---------- */
-  var go = $('go'), cv = $('cv');
-  function setHold(v) { if (R && mode === 'run' && !R.paused) R.hold = v; go.classList.toggle('down', v); }
-  function pressGo() { if (mode === 'home') startRun(); else if (mode === 'end') toHome(); }
-  go.addEventListener('pointerdown', function (e) { e.preventDefault(); try { go.setPointerCapture(e.pointerId); } catch (x) {} if (mode === 'run') setHold(true); else pressGo(); });
-  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (ev) { go.addEventListener(ev, function () { setHold(false); }); });
-  cv.addEventListener('pointerdown', function (e) { if (mode === 'run') { e.preventDefault(); try { cv.setPointerCapture(e.pointerId); } catch (x) {} setHold(true); } });
-  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (ev) { cv.addEventListener(ev, function () { setHold(false); }); });
-  go.addEventListener('contextmenu', function (e) { e.preventDefault(); });
-  function togglePause(v) {
-    if (mode !== 'run') return;
-    R.paused = v === undefined ? !R.paused : v; if (R.paused) R.hold = false;
-    $('pause').hidden = !R.paused; go.classList.remove('down');
+  function burst(t, dur, vol, freq) {
+    var c = AU.ctx, s = c.createBufferSource(), g = c.createGain(), f = c.createBiquadFilter();
+    s.buffer = AU.noise; f.type = 'lowpass'; f.frequency.value = freq;
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.001, t + dur);
+    s.connect(f); f.connect(g); g.connect(AU.sfxG); s.start(t, Math.random()); s.stop(t + dur + .05);
   }
-  $('pausebtn').addEventListener('click', function () { togglePause(); });
-  $('pause').addEventListener('click', function () { togglePause(false); });
-  document.addEventListener('visibilitychange', function () { if (document.hidden) togglePause(true); });
-  var HOLDKEYS = { Space: 1, ArrowRight: 1, KeyD: 1 };
-  document.addEventListener('keydown', function (e) {
-    if (HOLDKEYS[e.code]) { if (mode === 'run') { e.preventDefault(); setHold(true); } else if (e.code === 'Space' && !e.repeat && document.activeElement && document.activeElement.tagName !== 'BUTTON') { e.preventDefault(); pressGo(); } }
-    else if (e.code === 'Enter' && !e.repeat && mode === 'end') { e.preventDefault(); pressGo(); }
-    else if (e.code === 'KeyP' || e.code === 'Escape') togglePause();
-  });
-  document.addEventListener('keyup', function (e) { if (HOLDKEYS[e.code]) setHold(false); });
-
-  /* ---------- drawing ---------- */
-  var ctx = cv.getContext('2d'), W = 0, H = 0, PX = 7, YS = 13;
-  function resize() {
-    var r = $('stage').getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
-    W = Math.max(1, Math.round(r.width)); H = Math.max(1, Math.round(r.height));
-    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    PX = clamp(W / 100, 5, 9); YS = PX * 1.8;
+  function chime(f, t, dur, vol) { tone(f, t, dur, 'sine', vol); tone(f * 2.01, t, dur * .6, 'sine', vol * .4); }
+  function sfx(n) {
+    if (!AU.ctx || !AU.on) return;
+    var c = AU.ctx, t = c.currentTime;
+    if (n === 'fuel') { burst(t, .12, .12, 500); chime(784, t + .04, .25, .13); chime(1175, t + .13, .3, .12); }
+    else if (n === 'crash') { burst(t, .5, .6, 700); burst(t + .02, .25, .35, 2500); tone(110, t, .45, 'sawtooth', .3, null, 38); tone(60, t, .5, 'sine', .35, null, 30); tone(1800, t, .18, 'square', .05, null, 1100); tone(2700, t + .02, .16, 'square', .04, null, 1600); }
+    else if (n === 'careful') { burst(t, .12, .08, 2200); tone(520, t, .07, 'triangle', .08); }
+    else if (n === 'click') { tone(300, t, .05, 'triangle', .12, null, 180); }
+    else if (n === 'tick') { tone(1800, t, .03, 'square', .05, null, 900); }
+    else if (n === 'buy' || n === 'toll') { burst(t, .03, .1, 6000); chime(1319, t + .02, .22, .12); chime(1760, t + .1, .35, .12); }
+    else if (n === 'win') { [392, 523, 659, 784, 1046].forEach(function (f, i) { chime(f, t + i * .1, .5, .13); }); tone(196, t, .9, 'triangle', .1); }
+    else if (n === 'lose') { [330, 311, 294, 262].forEach(function (f, i) { tone(f, t + i * .24, .38, 'sawtooth', .1, null, f * .93); }); }
+    else if (n === 'radar') { burst(t, .04, .25, 5000); tone(1500, t + .05, .08, 'square', .1); tone(1500, t + .2, .08, 'square', .1); }
+    else if (n === 'honk') { tone(415, t, .3, 'sawtooth', .08); tone(523, t, .3, 'sawtooth', .08); tone(415, t + .42, .4, 'sawtooth', .08); tone(523, t + .42, .4, 'sawtooth', .08); }
+    else if (n === 'siren') { tone(600, t, .35, 'sawtooth', .09, null, 1000); tone(1000, t + .35, .35, 'sawtooth', .09, null, 600); tone(415, t, .6, 'sawtooth', .08); tone(523, t, .6, 'sawtooth', .08); }
+    else if (n === 'boing') { tone(180, t, .35, 'sine', .22, null, 700); tone(360, t + .05, .3, 'triangle', .1, null, 900); }
+    else if (n === 'ach') { [784, 988, 1175, 1568].forEach(function (f, i) { chime(f, t + i * .09, .4, .13); }); }
   }
-  window.addEventListener('resize', resize);
-
-  function person(x, y, ph, lean, run, tired, still) {
-    var a = still ? 0 : Math.sin(ph) * (run ? 1 : .6), s = .8;
-    ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-    ctx.strokeStyle = '#1f2433'; ctx.lineWidth = 7;
-    [a, -a].forEach(function (k) { ctx.beginPath(); ctx.moveTo(0, -22); ctx.lineTo(Math.sin(k) * 20, -22 + Math.cos(k) * 22); ctx.stroke(); });
-    ctx.fillStyle = '#12151f'; [a, -a].forEach(function (k) { ctx.fillRect(Math.sin(k) * 20 - 2, -3, 9, 4); });
-    ctx.translate(0, -22); ctx.rotate(lean);
-    ctx.fillStyle = '#f4f6f8'; ctx.beginPath(); ctx.moveTo(-8, 0); ctx.lineTo(-7, -26); ctx.quadraticCurveTo(0, -30, 7, -26); ctx.lineTo(8, 0); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = '#c0322e'; ctx.beginPath(); ctx.moveTo(1, -25); ctx.lineTo(4, -23); ctx.lineTo(3, -10); ctx.lineTo(1, -7); ctx.lineTo(-1, -10); ctx.lineTo(-1, -23); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = '#d9a67c'; ctx.beginPath(); ctx.arc(2, -36, 8, 0, 6.3); ctx.fill();
-    ctx.fillStyle = '#2a1d16'; ctx.beginPath(); ctx.arc(1, -38, 8, Math.PI * 1.02, Math.PI * 1.95); ctx.fill();
-    ctx.strokeStyle = '#dfe3e8'; ctx.lineWidth = 5;
-    var ar = -a * 1.1; ctx.beginPath(); ctx.moveTo(0, -22); ctx.lineTo(Math.sin(ar) * 14 + 4, -22 + Math.cos(ar) * 14); ctx.stroke();
-    ctx.fillStyle = '#5a3a22'; ctx.fillRect(Math.sin(ar) * 14 + 1, -22 + Math.cos(ar) * 14 + 1, 16, 12);
-    if (tired) { ctx.fillStyle = '#6fc3ff'; ctx.beginPath(); ctx.arc(-9, -44, 2.2, 0, 6.3); ctx.fill(); ctx.beginPath(); ctx.arc(12, -46, 2.2, 0, 6.3); ctx.fill(); }
-    ctx.restore();
-  }
-  function wheel(x, y, r, rot) {
-    ctx.strokeStyle = '#15181c'; ctx.lineWidth = 3.5; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.3); ctx.stroke();
-    ctx.lineWidth = 1.2; ctx.strokeStyle = '#8a9099';
-    for (var i = 0; i < 3; i++) { var an = rot + i * 1.047; ctx.beginPath(); ctx.moveTo(x - Math.cos(an) * r, y - Math.sin(an) * r); ctx.lineTo(x + Math.cos(an) * r, y + Math.sin(an) * r); ctx.stroke(); }
-  }
-  var CARCOL = [['#c98a52', '#9a6234'], ['#eef1f4', '#b9c0c8'], ['#2f7a55', '#1f5a3e'], ['#e0362d', '#a8231c']];
-  function carWheel(x, y, r, rot) {
-    ctx.fillStyle = '#16191d'; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.3); ctx.fill();
-    ctx.fillStyle = '#c9ced4'; ctx.beginPath(); ctx.arc(x, y, r * .62, 0, 6.3); ctx.fill();
-    ctx.strokeStyle = '#6c737b'; ctx.lineWidth = 2;
-    for (var i = 0; i < 5; i++) { var an = rot + i * 1.2566; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + Math.cos(an) * r * .6, y + Math.sin(an) * r * .6); ctx.stroke(); }
-    ctx.fillStyle = '#3a4046'; ctx.beginPath(); ctx.arc(x, y, r * .16, 0, 6.3); ctx.fill();
-  }
-  function vehicle(sx, sy, ang, hold) {
-    var i = S.veh, col = CARCOL[i] || CARCOL[1], sport = i === 3, suv = i === 2, old = i === 0;
-    var rw = suv ? 12 : sport ? 9.5 : 10.5, sxs = (sport ? 1.12 : old ? .95 : 1.05) * 1.15, sys = (suv ? 1.2 : sport ? .82 : old ? 1.05 : 1) * 1.15;
-    var lift = suv ? 5 : 0, rot = R.x * 1.1, bump = R.v > 1 ? Math.sin(R.x * 2.1) * 1 : 0, wx1 = -25 * sxs, wx2 = 27 * sxs;
-    ctx.save(); ctx.translate(sx, sy + bump); ctx.rotate(-ang);
-    ctx.fillStyle = 'rgba(0,0,0,.28)'; ctx.beginPath(); ctx.ellipse(0, 1, 52 * sxs, 4, 0, 0, 6.3); ctx.fill();
-    if (hold && R.st > 0) {
-      var fl = 10 + Math.random() * 16; ctx.fillStyle = '#ff8a3d'; ctx.beginPath(); ctx.moveTo(-44 * sxs, -13 - lift); ctx.lineTo(-44 * sxs - fl, -11 - lift); ctx.lineTo(-44 * sxs, -9 - lift); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#ffe08a'; ctx.beginPath(); ctx.moveTo(-44 * sxs, -12.5 - lift); ctx.lineTo(-44 * sxs - fl * .5, -11 - lift); ctx.lineTo(-44 * sxs, -9.5 - lift); ctx.closePath(); ctx.fill();
-    }
-    ctx.save(); ctx.translate(0, -lift); ctx.scale(sxs, sys);
-    var g = ctx.createLinearGradient(0, -46, 0, -9); g.addColorStop(0, col[0]); g.addColorStop(1, col[1]);
-    ctx.fillStyle = g; ctx.beginPath();
-    ctx.moveTo(-43, -10); ctx.lineTo(-43, -25); ctx.quadraticCurveTo(-42, -28, -37, -28.5); ctx.lineTo(-25, -29);
-    ctx.quadraticCurveTo(-19, -30, -15, -39); ctx.quadraticCurveTo(-12, -45, -4, -45.5); ctx.lineTo(8, -45.5);
-    ctx.quadraticCurveTo(14, -45, 20, -33); ctx.quadraticCurveTo(23, -29, 29, -28.5); ctx.lineTo(39, -26.5);
-    ctx.quadraticCurveTo(44, -24.5, 44, -18); ctx.lineTo(44, -10); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = 'rgba(0,0,0,.22)'; ctx.fillRect(-43, -14, 87, 4);
-    ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(-38, -26); ctx.lineTo(-20, -27); ctx.stroke();
-    var gl = ctx.createLinearGradient(0, -44, 0, -30); gl.addColorStop(0, '#bfe3f7'); gl.addColorStop(1, '#6fa9c9');
-    ctx.fillStyle = gl; ctx.beginPath(); ctx.moveTo(-21, -30.5); ctx.quadraticCurveTo(-17, -31, -14, -38.5); ctx.quadraticCurveTo(-11, -43, -4, -43.2); ctx.lineTo(-1.5, -43.2); ctx.lineTo(-1.5, -30.5); ctx.closePath(); ctx.fill();
-    ctx.beginPath(); ctx.moveTo(1.5, -43.2); ctx.lineTo(8, -43.2); ctx.quadraticCurveTo(12.5, -42.8, 17.5, -32.5); ctx.lineTo(17.5, -30.5); ctx.lineTo(1.5, -30.5); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = '#d9a67c'; ctx.beginPath(); ctx.arc(6, -37, 4.8, 0, 6.3); ctx.fill(); ctx.fillStyle = '#f4f6f8'; ctx.beginPath(); ctx.arc(6, -39.4, 5, Math.PI, 0); ctx.fill(); ctx.fillStyle = '#c0322e'; ctx.fillRect(4.5, -33, 3, 3);
-    ctx.fillStyle = 'rgba(255,255,255,.3)'; ctx.beginPath(); ctx.moveTo(-10, -42.5); ctx.lineTo(-5, -42.5); ctx.lineTo(-11, -31); ctx.lineTo(-16, -31); ctx.closePath(); ctx.fill();
-    ctx.strokeStyle = 'rgba(0,0,0,.35)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(-1.5, -29.5); ctx.lineTo(-1.5, -12); ctx.moveTo(-15, -29.5); ctx.lineTo(-17, -12); ctx.stroke();
-    ctx.fillStyle = 'rgba(0,0,0,.4)'; ctx.fillRect(-8, -26, 5, 1.6); ctx.fillRect(4, -26, 5, 1.6);
-    if (suv) { ctx.fillStyle = '#1b2a22'; ctx.fillRect(-10, -49, 24, 2.6); ctx.fillRect(-8, -47, 2.6, 2); ctx.fillRect(10, -47, 2.6, 2); }
-    if (sport) { ctx.fillStyle = '#6e130f'; ctx.fillRect(-46, -38, 15, 2.6); ctx.fillRect(-42, -36, 2.6, 8); ctx.fillStyle = '#fff'; ctx.fillRect(-20, -20, 56, 1.8); }
-    if (old) { ctx.fillStyle = 'rgba(80,40,10,.45)'; ctx.beginPath(); ctx.arc(-30, -18, 2.6, 0, 6.3); ctx.arc(30, -22, 1.8, 0, 6.3); ctx.fill(); }
-    ctx.fillStyle = '#fff4c2'; ctx.beginPath(); ctx.moveTo(44, -24); ctx.lineTo(39.5, -25.5); ctx.lineTo(39.5, -20.5); ctx.lineTo(44, -20); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = '#b0181c'; ctx.fillRect(-43.2, -25, 2.6, 5);
-    ctx.fillStyle = '#2a2d31'; ctx.fillRect(41, -12, 4, 3); ctx.fillRect(-45, -12, 4, 3);
-    ctx.restore();
-    ctx.fillStyle = '#1c1f23';
-    [wx1, wx2].forEach(function (wx) { ctx.beginPath(); ctx.arc(wx, -rw, rw + 3.5, Math.PI, 0); ctx.fill(); });
-    carWheel(wx1, -rw, rw, rot); carWheel(wx2, -rw, rw, rot);
-    if (hold && R.v > 8 && Math.abs(slopeAt(R.x)) < .35) { ctx.fillStyle = 'rgba(210,200,180,.35)'; for (var k = 0; k < 3; k++) { ctx.beginPath(); ctx.arc(-50 * sxs - k * 11 - (performance.now() / 14 + k * 9) % 14, -5 - k * 3, 4 + k * 2, 0, 6.3); ctx.fill(); } }
-    ctx.restore();
-  }
-  function vehicleOld(sx, sy, ang, hold) {
-    var rot = R.x * 1.4, ph = R.phase * 1.1, tired = R.tired;
-    ctx.save(); ctx.translate(sx, sy); ctx.rotate(-ang);
-    var lean = hold ? .22 : .08;
-    if (S.veh === 0) { person(0, 0, ph, lean, hold, tired); }
-    else if (S.veh === 1) {
-      wheel(-19, -12, 12, rot); wheel(19, -12, 12, rot);
-      ctx.strokeStyle = '#d04a2a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-19, -12); ctx.lineTo(-4, -28); ctx.lineTo(12, -28); ctx.lineTo(19, -12); ctx.moveTo(-4, -28); ctx.lineTo(0, -12); ctx.lineTo(-19, -12); ctx.moveTo(12, -28); ctx.lineTo(15, -36); ctx.stroke();
-      person(-3, -10, ph * 1.6, lean + .15, true, tired);
-    } else if (S.veh === 2) {
-      wheel(-20, -8, 8, rot); wheel(22, -8, 8, rot);
-      ctx.fillStyle = '#2c3138'; ctx.fillRect(-22, -14, 42, 5);
-      ctx.strokeStyle = '#2c3138'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(21, -10); ctx.lineTo(18, -44); ctx.lineTo(12, -44); ctx.stroke();
-      person(-2, -12, 0, lean, false, tired, true);
-    } else {
-      ctx.fillStyle = '#e8ecef'; ctx.beginPath(); ctx.moveTo(-36, -12); ctx.lineTo(-36, -26); ctx.quadraticCurveTo(-22, -30, -14, -42); ctx.lineTo(14, -42); ctx.quadraticCurveTo(26, -32, 38, -26); ctx.lineTo(38, -12); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#9ed0f0'; ctx.beginPath(); ctx.moveTo(-15, -28); ctx.lineTo(-10, -39); ctx.lineTo(12, -39); ctx.lineTo(22, -28); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#d9a67c'; ctx.beginPath(); ctx.arc(4, -33, 5, 0, 6.3); ctx.fill(); ctx.fillStyle = '#f4f6f8'; ctx.fillRect(-1, -29, 10, 5);
-      ctx.fillStyle = '#ffe9a8'; ctx.fillRect(34, -22, 5, 4); ctx.fillStyle = '#c0322e'; ctx.fillRect(-37, -22, 3, 4);
-      wheel(-22, -9, 9, rot); wheel(24, -9, 9, rot);
-      ctx.fillStyle = '#e8ecef'; ctx.beginPath(); ctx.arc(-22, -13, 11, Math.PI, 0); ctx.fill(); ctx.beginPath(); ctx.arc(24, -13, 11, Math.PI, 0); ctx.fill();
-      wheel(-22, -9, 9, rot); wheel(24, -9, 9, rot);
-    }
-    ctx.restore();
-  }
-  function palm(x, y, k) {
-    var h = 48 + hs(k) * 22, lean = (hs(k + 9) - .5) * 14;
-    ctx.strokeStyle = '#6b4f2a'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x, y); ctx.quadraticCurveTo(x + lean, y - h / 2, x + lean * 1.2, y - h); ctx.stroke();
-    var tx = x + lean * 1.2, ty = y - h; ctx.strokeStyle = '#2f7a3a'; ctx.lineWidth = 3;
-    for (var i = 0; i < 7; i++) { var a = -Math.PI + i * (Math.PI / 6), L = 24; ctx.beginPath(); ctx.moveTo(tx, ty); ctx.quadraticCurveTo(tx + Math.cos(a) * L * .6, ty + Math.sin(a) * L * .6 - 8, tx + Math.cos(a) * L, ty + Math.sin(a) * L + 6); ctx.stroke(); }
-  }
-  function lamp(x, y) {
-    ctx.strokeStyle = '#3b4148'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y - 58); ctx.lineTo(x + 14, y - 62); ctx.stroke();
-    ctx.fillStyle = '#ffe7a0'; ctx.fillRect(x + 11, y - 63, 8, 4);
-  }
-  function drawOffice(sx, sy) {
-    var w = 24 * PX, h = 190;
-    ctx.fillStyle = '#2d5b8a'; ctx.fillRect(sx, sy - h, w, h);
-    ctx.fillStyle = '#1d4468'; ctx.fillRect(sx + w - 10, sy - h, 10, h);
-    ctx.fillStyle = '#bfe0ff';
-    for (var r = 0; r < 6; r++) for (var c = 0; c < 4; c++) ctx.fillRect(sx + 14 + c * ((w - 40) / 4), sy - h + 36 + r * 24, (w - 40) / 4 - 8, 14);
-    ctx.fillStyle = '#17324d'; ctx.fillRect(sx + 18, sy - 36, 26, 36);
-    ctx.fillStyle = '#ffc72c'; ctx.fillRect(sx - 4, sy - h - 26, w + 8, 26);
-    ctx.fillStyle = '#1a1a14'; ctx.font = '700 17px "IBM Plex Sans Arabic", sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('الشركة', sx + w / 2, sy - h - 12);
-  }
-  function drawStall(sx, sy) {
-    ctx.fillStyle = '#7a5a3a'; ctx.fillRect(sx, sy - 34, 70, 34);
-    for (var i = 0; i < 7; i++) { ctx.fillStyle = i % 2 ? '#ffffff' : '#c0322e'; ctx.fillRect(sx - 6 + i * 12, sy - 74, 12, 16); }
-    ctx.fillStyle = '#5d4329'; ctx.fillRect(sx, sy - 58, 4, 24); ctx.fillRect(sx + 66, sy - 58, 4, 24);
-    ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(sx + 35, sy - 48, 9, 0, 6.3); ctx.fill();
-    ctx.fillStyle = '#c98f63'; ctx.beginPath(); ctx.arc(sx + 35, sy - 47, 6, 0, 6.3); ctx.fill();
-    ctx.fillStyle = '#ffffff'; ctx.fillRect(sx + 28, sy - 40, 14, 8);
-  }
-  function drawHouse(sx, sy) {
-    ctx.fillStyle = '#d8c7a6'; ctx.fillRect(sx, sy - 80, 120, 80);
-    ctx.fillStyle = '#9a8a6c'; ctx.fillRect(sx - 6, sy - 88, 132, 10);
-    ctx.fillStyle = '#6b4f2a'; ctx.fillRect(sx + 84, sy - 46, 22, 46);
-    ctx.fillStyle = '#9ed0f0'; ctx.fillRect(sx + 16, sy - 60, 26, 24); ctx.fillRect(sx + 52, sy - 60, 22, 24);
-  }
-  var SKY = { top0: [58, 74, 122], top1: [95, 179, 232], hor0: [246, 178, 107], hor1: [207, 233, 247], sil0: [101, 101, 140], sil1: [150, 178, 204] };
-  function draw(dt) {
-    if (!R) return;
-    var t = (mode === 'run' || mode === 'end') ? clamp(R.t / R.limit, 0, 1) : 0, te = t * t * (3 - 2 * t);
-    var camX = R.x - W * .28 / PX, base = H * .64;
-    R.camH += (hAt(R.x) - R.camH) * Math.min(1, dt * 4 || 1);
-    var Y = function (x) { return base - (hAt(x) - R.camH) * YS; };
-    var g = ctx.createLinearGradient(0, 0, 0, base); g.addColorStop(0, mix(SKY.top0, SKY.top1, te)); g.addColorStop(1, mix(SKY.hor0, SKY.hor1, te));
-    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-    var sunY = lerp(H * .66, H * .2, te), sunX = W * .78;
-    var sg = ctx.createRadialGradient(sunX, sunY, 4, sunX, sunY, 70); sg.addColorStop(0, 'rgba(255,230,150,.95)'); sg.addColorStop(1, 'rgba(255,230,150,0)');
-    ctx.fillStyle = sg; ctx.fillRect(sunX - 80, sunY - 80, 160, 160);
-    ctx.fillStyle = '#ffd36b'; ctx.beginPath(); ctx.arc(sunX, sunY, 17, 0, 6.3); ctx.fill();
-    ctx.fillStyle = 'rgba(255,255,255,.55)';
-    for (var i = 0; i < 4; i++) { var cx = ((i * 290 - camX * PX * .06) % (W + 300) + (W + 300)) % (W + 300) - 150, cy = H * (.12 + (i % 3) * .08); ctx.beginPath(); ctx.ellipse(cx, cy, 50, 12, 0, 0, 6.3); ctx.ellipse(cx + 26, cy - 8, 30, 11, 0, 0, 6.3); ctx.fill(); }
-    var off = camX * PX * .18, c0 = Math.floor(off / 64) - 1, sil = mix(SKY.sil0, SKY.sil1, te);
-    ctx.fillStyle = sil;
-    for (var k = c0; k < c0 + W / 64 + 3; k++) { var bh = 34 + hs(k) * 80, bw = 46 + hs(k + 3) * 14; ctx.fillRect(k * 64 - off, base - bh + 20, bw, bh + 80); if (hs(k + 7) > .6) ctx.fillRect(k * 64 - off + bw / 2 - 2, base - bh + 4, 4, 16); }
-
-    var xs = [], ys = [], sx;
-    for (sx = -8; sx <= W + 8; sx += 4) { var wx = camX + sx / PX; xs.push(sx); ys.push(Y(wx)); }
-    ctx.fillStyle = '#4a4038'; ctx.beginPath(); ctx.moveTo(xs[0], H + 4); xs.forEach(function (x, i) { ctx.lineTo(x, ys[i]); }); ctx.lineTo(xs[xs.length - 1], H + 4); ctx.closePath(); ctx.fill();
-
-    var k0 = Math.floor(camX / 53) - 2, k1 = Math.floor((camX + W / PX) / 53) + 2, k2;
-    for (k2 = k0; k2 <= k1; k2++) { var px = k2 * 53 + Math.floor(hs(k2) * 17); if (px > 6 && px < R.dist + 70) palm((px - camX) * PX, Y(px) - 2, k2); }
-    if (R.dist) { drawHouse((-18 - camX) * PX, Y(-18)); drawStall((10 - camX) * PX, Y(10)); drawOffice((R.dist - camX) * PX, Y(R.dist)); }
-
-    ctx.fillStyle = '#2e3135'; ctx.beginPath(); ctx.moveTo(xs[0], ys[0]); xs.forEach(function (x, i) { ctx.lineTo(x, ys[i]); });
-    for (var j = xs.length - 1; j >= 0; j--) ctx.lineTo(xs[j], ys[j] + 28); ctx.closePath(); ctx.fill();
-    ctx.strokeStyle = '#aeb2b8'; ctx.lineWidth = 5; ctx.lineJoin = 'round'; ctx.beginPath(); xs.forEach(function (x, i) { i ? ctx.lineTo(x, ys[i]) : ctx.moveTo(x, ys[i]); }); ctx.stroke();
-    ctx.save(); ctx.setLineDash([14, 12]); ctx.lineDashOffset = camX * PX; ctx.strokeStyle = '#e8e2c3'; ctx.lineWidth = 2; ctx.beginPath(); xs.forEach(function (x, i) { i ? ctx.lineTo(x, ys[i] + 15) : ctx.moveTo(x, ys[i] + 15); }); ctx.stroke(); ctx.restore();
-
-    var l0 = Math.floor(camX / 41) - 1, l1 = Math.floor((camX + W / PX) / 41) + 1;
-    for (k2 = l0; k2 <= l1; k2++) { var lx = k2 * 41 + 20; if (lx > 4 && lx < R.dist + 20) lamp((lx - camX) * PX, Y(lx) - 2); }
-    var bob = Math.sin(performance.now() / 260) * 3;
-    R.cups.forEach(function (c) {
-      if (c.got) return; var cx2 = (c.x - camX) * PX; if (cx2 < -20 || cx2 > W + 20) return; var cy2 = Y(c.x) - 40 + bob;
-      ctx.fillStyle = 'rgba(255,199,44,.9)'; ctx.beginPath(); ctx.arc(cx2, cy2, 19, 0, 6.3); ctx.fill();
-      ctx.fillStyle = '#d6342c'; ctx.fillRect(cx2 - 9, cy2 - 9, 18, 19); ctx.fillStyle = '#a92520'; ctx.fillRect(cx2 - 9, cy2 - 3, 18, 3);
-      ctx.fillStyle = '#d6342c'; ctx.fillRect(cx2 + 1, cy2 - 14, 8, 6); ctx.fillStyle = '#2a2a2a'; ctx.fillRect(cx2 - 3, cy2 - 14, 4, 4);
-    });
-
-    var pxs = W * .28, py = Y(R.x), ang = Math.atan(slopeAt(R.x) * YS / PX), running = R.hold && !R.tired && mode === 'run';
-    if (running && R.v > 5) { ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 2; for (var q = 0; q < 4; q++) { var qx = pxs - 50 - q * 18 - (performance.now() / 8 + q * 30) % 30, qy = py - 12 - q * 11; ctx.beginPath(); ctx.moveTo(qx, qy); ctx.lineTo(qx - 18, qy); ctx.stroke(); } }
-    ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.beginPath(); ctx.ellipse(pxs, py + 2, 22, 4, 0, 0, 6.3); ctx.fill();
-    vehicle(pxs, py, ang, running);
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = '700 16px "IBM Plex Sans Arabic", sans-serif';
-    R.floats.forEach(function (f) { var p = 1 - f.life / f.max; ctx.globalAlpha = 1 - p; ctx.fillStyle = '#fff'; ctx.strokeStyle = '#0b6e4f'; ctx.lineWidth = 4; ctx.strokeText(f.text, pxs, py - 80 - p * 30); ctx.fillText(f.text, pxs, py - 80 - p * 30); ctx.globalAlpha = 1; });
-    var sl = slopeAt(R.x);
-    if (mode === 'run' && Math.abs(sl) > .12) { var up = sl > 0; ctx.fillStyle = up ? 'rgba(229,72,77,.92)' : 'rgba(94,211,138,.95)'; var bw2 = 92; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(W - bw2 - 10, 10, bw2, 28, 6) : ctx.rect(W - bw2 - 10, 10, bw2, 28); ctx.fill(); ctx.fillStyle = '#fff'; ctx.font = '700 14px "IBM Plex Sans Arabic", sans-serif'; ctx.fillText(up ? 'طلعة صعبة' : 'نزلة', W - bw2 / 2 - 10, 25); }
-  }
-
-  /* ---------- loop ---------- */
-  function frame(ts) {
-    requestAnimationFrame(frame);
-    var dt = Math.min(.05, (ts - last) / 1000 || 0); last = ts;
-    if (mode === 'run' && !R.paused) { step(dt); if (mode === 'run') refresh(); }
-    draw(dt);
-  }
-  resize(); R = makeRun(); toHome();
-  requestAnimationFrame(frame);
-})();
-</script>
-
-</body></html>
+  function musicTick() {
+    var c = AU.ctx; if (!c) return;
+    if (!AU.on) { mNext = c.currentTime + .15; return; }
+    while (mNext < c.currentTime + .35) {
+      var t = mNext;
+      if (mStep % 16 === 0) tone(73.4, t, 4.4, 'sine', .08, AU.mus);
+      if (mStep % 4 === 0) tone(95, t, .14, 'sine', .16, AU.mus, 45);
+      if (Math.random() < .62) {
+        mIdx = clamp(mIdx + (
