@@ -1412,13 +1412,30 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     var c = { key: ($('elkey') || {}).value || '', v: {} }; (document.querySelectorAll('#vr .elv') || []).forEach(function (i) { c.v[i.dataset.w] = i.value.trim(); });
     try { localStorage.setItem('dawam.el', JSON.stringify(c)); } catch (e) {} return c;
   }
-  function elFetch(who, kind) {
+  function elAutoPick() {
+    var c = EL_CFG();
+    return fetch('https://api.elevenlabs.io/v1/voices', { headers: { 'xi-api-key': c.key } }).then(function (r) { if (!r.ok) throw new Error('voices ' + r.status); return r.json(); }).then(function (j) {
+      var L = j.voices || []; if (!L.length) throw new Error('no voices');
+      var g = function (v) { return ((v.labels || {}).gender || '').toLowerCase(); }, a = function (v) { return ((v.labels || {}).age || '').toLowerCase(); };
+      var F = L.filter(function (v) { return g(v) === 'female'; }), M = L.filter(function (v) { return g(v) === 'male'; });
+      if (!F.length) F = L; if (!M.length) M = L;
+      var old = F.filter(function (v) { return /old|middle/.test(a(v)); }), yng = M.filter(function (v) { return /young/.test(a(v)); }), bossP = M.filter(function (v) { return /middle|old/.test(a(v)); });
+      var used = {}, pick = function (arr, fb) { var v = arr.filter(function (x) { return !used[x.voice_id]; })[0] || fb.filter(function (x) { return !used[x.voice_id]; })[0] || fb[0]; used[v.voice_id] = 1; return v.voice_id; };
+      var nv = {}; nv.boss = pick(bossP, M); nv.son = pick(yng, M); nv.mom = pick(old, F); nv.wife = pick(F, F);
+      try { localStorage.setItem('dawam.el', JSON.stringify({ key: c.key, v: nv })); } catch (e) {}
+      ELC = {}; try { localStorage.removeItem('dawam.el.cache'); } catch (e) {}
+      document.querySelectorAll('#vr .elv').forEach(function (i) { if (nv[i.dataset.w]) i.value = nv[i.dataset.w]; });
+      return nv;
+    });
+  }
+  function elFetch(who, kind, retried) {
     var c = EL_CFG(), ck = who + '_' + kind;
     if (!c.key || ELC[ck]) return Promise.resolve(ELC[ck] || null);
     return fetch('https://api.elevenlabs.io/v1/text-to-speech/' + (c.v[who] || EL_DEF[who]) + '?output_format=mp3_44100_64', {
       method: 'POST', headers: { 'xi-api-key': c.key, 'Content-Type': 'application/json', Accept: 'audio/mpeg' },
       body: JSON.stringify({ text: EL_TXT[who][kind], model_id: 'eleven_multilingual_v2', voice_settings: { stability: who === 'son' ? .3 : .45, similarity_boost: .75, style: .35 } })
-    }).then(function (r) { if (!r.ok) return r.text().then(function (tt) { var d = ''; try { var j = JSON.parse(tt); d = (j.detail && (j.detail.status || j.detail.message)) || ''; } catch (e) {} throw new Error(r.status + ' ' + String(d).slice(0, 60)); }); return r.blob(); }).then(function (b) {
+    }).then(function (r) { if (!r.ok) return r.text().then(function (tt) { var d = ''; if (r.status === 404 && !retried) throw new Error('RETRY'); try { var j = JSON.parse(tt); d = (j.detail && (j.detail.status || j.detail.message)) || ''; } catch (e) {} throw new Error(r.status + ' ' + String(d).slice(0, 60)); }); return r.blob(); }).catch(function (er) { if (er && er.message === 'RETRY') return elAutoPick().then(function () { return elFetch(who, kind, true); }); throw er; }).then(function (b) {
+      if (typeof b === 'string') return b;
       return new Promise(function (ok) { var fr = new FileReader(); fr.onload = function () { ELC[ck] = fr.result; try { localStorage.setItem('dawam.el.cache', JSON.stringify(ELC)); } catch (e) {} ok(fr.result); }; fr.readAsDataURL(b); });
     });
   }
