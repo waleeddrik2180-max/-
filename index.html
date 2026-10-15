@@ -187,47 +187,6 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 #app.photo .hud{visibility:hidden}
 #app.photo .ctl{opacity:.18;transition:opacity .3s}
 #app.photo .ctl:active{opacity:1}
-#phonebtn{position:absolute;right:10px;bottom:12px;z-index:6;width:58px;height:58px;border-radius:50%;border:3px solid #fff;background:#25d366;font-size:28px;display:grid;place-items:center;padding:0;box-shadow:0 4px 12px rgba(0,0,0,.4)}
-#phonebtn[hidden]{display:none}
-#phonebtn i{position:absolute;top:-8px;right:-8px;min-width:22px;height:22px;border-radius:11px;background:#e5484d;color:#fff;font:700 13px/18px var(--body);font-style:normal;text-align:center;padding:0 5px;border:2px solid #fff}
-#phonebtn i[hidden]{display:none}
-#phonebtn.vib{animation:vibr .09s 14 alternate}
-@keyframes vibr{from{transform:translate(-3px,-2px) rotate(-9deg)}to{transform:translate(3px,2px) rotate(9deg)}}
-#wa{position:absolute;right:8px;top:8px;bottom:80px;width:min(330px,calc(100% - 16px));z-index:7;display:flex;flex-direction:column;background:#0b141a;border:2px solid #25d366;border-radius:14px;overflow:hidden;color:#e9edef;font-size:14px}
-#wa[hidden]{display:none}
-#wa .wah{display:flex;align-items:center;gap:8px;background:#075e54;padding:8px 10px;flex:none}#wa .wah b{flex:1;font-size:15px}
-#wa .wah button{background:none;border:0;color:#fff;font-size:20px;padding:0 6px;line-height:1}
-#wa .was{background:#1f2c34;color:#ffd36b;padding:6px 10px;font-size:12px;flex:none;display:flex;justify-content:space-between;gap:8px}
-#wa .wal{flex:1;overflow-y:auto}
-#wa .war{display:flex;align-items:center;gap:10px;width:100%;text-align:start;background:none;border:0;border-bottom:1px solid #1f2c34;padding:9px 10px;color:inherit}
-#wa .av{width:40px;height:40px;border-radius:50%;background:#2a3942;display:grid;place-items:center;font-size:22px;flex:none}
-#wa .wn{flex:1;min-width:0}#wa .wn b{display:block}#wa .wn small{display:block;color:#8696a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#wa .ub{background:#25d366;color:#07140c;border-radius:11px;min-width:22px;height:22px;font:700 12px/22px var(--body);text-align:center;padding:0 6px}
-#wa .wam{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding:10px;background:#0d1418}
-#wa .bb{max-width:82%;padding:6px 10px;border-radius:10px;line-height:1.4;background:#202c33;align-self:flex-start}
-#wa .bb.me{background:#005c4b;align-self:flex-end}#wa .bb small{display:block;text-align:end;color:#8696a0;font-size:10px}
-#wa .wac{display:flex;gap:8px;padding:8px;background:#1f2c34;flex:none}#wa .wac button{flex:1;padding:9px 6px;border-radius:999px;border:0;background:#25d366;color:#07140c;font:700 14px inherit}
-#wa .wac button.no{background:#3a4a54;color:#fff}
-#menu{position:absolute;inset:0;z-index:7;display:grid;place-items:center;background:rgba(10,14,22,.72);padding:12px;overflow:auto}
-#menu[hidden]{display:none}
-#menu .mb{width:min(360px,100%);background:var(--sign);border:2px solid #fff;border-radius:14px;padding:12px;display:grid;gap:10px;color:#fff}
-#menu .mb h3{margin:0;font:400 20px var(--display)}#menu .mb p{margin:0;font-size:13px;color:#ffd36b}
-#menu .mg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-#menu .mg button{display:grid;justify-items:center;gap:2px;padding:10px 6px;border-radius:12px;border:2px solid #fff;background:#1f2a35;color:#fff;font:700 15px inherit}
-#menu .mg button span{font-size:30px}
-#menu .mt{height:6px;background:rgba(255,255,255,.2);border-radius:3px;overflow:hidden}#menu .mt i{display:block;height:100%;width:100%;background:#ffc72c}
-#vrbtn{position:absolute;top:10px;inset-inline-start:56px;z-index:6;font-size:18px}
-#vrbtn[hidden]{display:none}
-#vr{position:absolute;inset:0;z-index:9;background:rgba(10,14,22,.85);display:grid;place-items:center;padding:10px}#vr[hidden]{display:none}
-#vr .vb{width:min(440px,100%);max-height:100%;overflow:auto;background:var(--sign);border:2px solid #fff;border-radius:14px;padding:12px;color:#fff;display:grid;gap:8px}
-#vr h3{margin:0;font:400 20px var(--display);display:flex;justify-content:space-between}#vr p{margin:0;font-size:12px;color:#ffd36b}
-#vr input[type=text],#vr input[type=password]{width:100%;padding:7px;border-radius:8px;border:0;font:inherit;color:#111;direction:ltr}
-#vr .vw{font-weight:700;margin-top:4px}#vr .vl{display:flex;align-items:center;gap:6px;background:#1f2a35;border-radius:10px;padding:6px 8px;font-size:13px}#vr .vl span{flex:1}
-#vr .vl button{padding:6px 9px;border-radius:8px;border:0;background:#3a4a54;color:#fff;font:700 13px inherit}#vr .vl button.rec{background:#e5484d}#vr .vl button.has{background:#25d366;color:#07140c}
-#call{position:absolute;right:8px;top:8px;width:min(260px,calc(100% - 16px));z-index:8;background:#111b21;border:2px solid #25d366;border-radius:16px;padding:12px;text-align:center;color:#fff;display:grid;gap:6px}
-#call[hidden]{display:none}#call .cav{font-size:46px;animation:vibr .12s infinite alternate}#call b{font-size:18px}#call small{color:#8696a0}
-#call .cb{display:flex;gap:8px}#call .cb button{flex:1;padding:10px;border-radius:999px;border:0;font:700 15px inherit;color:#fff;background:#e5484d}#call .cb button.ok{background:#25d366;color:#07140c}
-@media (prefers-reduced-motion:reduce){#phonebtn.vib{animation:none}}
 </style></head><body>
 <div id="app">
   <header class="hud">
@@ -265,12 +224,6 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     <canvas id="cv"></canvas>
     <section class="sheet" id="home"></section>
     <section class="sheet" id="end" hidden></section>
-    <button id="phonebtn" type="button" hidden><span aria-hidden="true">📱</span><i id="phbadge" hidden></i></button>
-    <div id="wa" hidden></div>
-    <div id="call" hidden></div>
-    <button id="vrbtn" class="iconbtn" type="button" hidden>🎙</button>
-    <div id="vr" hidden></div>
-    <div id="menu" hidden></div>
     <div id="toast" hidden></div>
     <div id="pause" hidden></div>
     <div id="wheel" hidden></div>
@@ -331,28 +284,6 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
       fpEarly: 'بصمة بدري! 🌟', fpLast: 'بصمة بآخر لحظة 😅', goalDone: 'هدف اليوم تحقق: وصلت بدون ما تصدم حلال ✓', goalT: 'هدف اليوم: وصّل بدون ما تصدم حلال',
       bonusT: function (b) { return 'مكافأة +' + b; }, recNew: '🏆 رقم قياسي جديد!', km: 'كم', shopFri: 'عرض الجمعة: خصم 30%', shopPricey: 'محطة الطريق السريع: الأسعار أغلى',
       wxN: ['✨ نجوم', '🌧️ مطر', '🌫️ ضباب', '🌙 صافي'], favPh: '★ المفضلة', favAdd: '★ احفظ',
-      elT: 'صوت ذكي (ElevenLabs)', elKey: 'مفتاح API', elVid: 'رقم الصوت', elGen: '⚡ ولّد كل الأصوات', elBusy: 'جاري التوليد...', elOk: 'تم توليد الأصوات', elFail: 'فشل التوليد، تأكد من المفتاح والإنترنت', elClr: 'مسح الأصوات المولّدة',
-      vrAll: 'جملة وحدة لكل الطلبات (تكفي)',
-      vrT: 'تسجيل الأصوات', vrHint: 'سجّل صوتك بالجملة (3-5 ثواني). لو ما سجلت يشتغل الصوت الآلي.', vrRec: '🎙 سجّل', vrStop: '⏹ وقّف', vrPlay: '▶', vrDel: '🗑', vrUp: '📁', vrErr: 'ما اشتغل المايك، اسمح له أو ارفع ملف صوت', vrLine: function (w, k) { return { pharmacy: 'من الصيدلية', restaurant: 'من المطعم', grocery: 'من البقالة' }[k]; }, vrSay: 'قل مثلا: "جيب لي الطلب {k}، بسرعة!"',
-      callIn: 'يتصل بك...', callAns: 'رد', callRej: 'رفض', callOn: 'مكالمة جارية',
-      phoneAria: 'الجوال', waT: 'واتساب', waEmpty: 'ما فيه رسائل', waAcc: 'أبشر 👍', waDec: 'ما أقدر 🙏', waAccTxt: 'أبشر، أجيبه الحين', waDecTxt: 'آسف ما أقدر الحين', waClose: 'إغلاق', waBack: 'رجوع', waNew: 'رسالة جديدة، ردّ بسرعة', waGo: 'روح', waSecs: 'ث',
-      famName: { boss: 'المدير', wife: 'زوجتي', son: 'ولدي', mom: 'أمي' }, famYou: { boss: 'المدير', wife: 'زوجتك', son: 'ولدك', mom: 'أمك' }, famTo: { boss: 'للمدير', wife: 'لزوجتك', son: 'لولدك', mom: 'لأمك' },
-      storeN: { pharmacy: 'الصيدلية', restaurant: 'المطعم', grocery: 'البقالة' },
-      itm: { pharmacy: ['بنادول', 'لصقات جروح', 'شراب كحة', 'ترمومتر', 'فيتامين سي', 'كمامات'], restaurant: ['برجر', 'بيتزا', 'شاورما', 'كبسة', 'شوربة', 'دجاج مقلي'], grocery: ['حليب', 'خبز', 'عصير', 'تمر', 'قهوة', 'شيبس'] },
-      famAsk: {
-        mom: function (i, s) { return 'يا ولدي جيب لي ' + i + ' من ' + s; }, wife: function (i, s) { return 'هلا حبيبي، جيب لي ' + i + ' من ' + s; },
-        son: function (i, s) { return 'يبا ابي ' + i + ' من ' + s + '!!'; }, boss: function (i, s) { return 'يا موظفنا الشريف، جيب لي ' + i + ' من ' + s; } },
-      famUrg: { mom: 'هات الطلب بسرعة يا ولدي', wife: 'هات الطلب وتعال بسرعة', son: 'هات الطلب يبا بسرعة!', boss: 'هات الطلب بسرعة قبل لا توصل' },
-      famThanks: { mom: 'الله يرضى عليك يا ولدي ❤️', wife: 'تسلم يا قلبي 😍', son: 'يييي شكراا يبا 🥳', boss: 'ممتاز، الله يعطيك العافية 👏' },
-      famAngry: { mom: { wrong: 'مو هذا اللي طلبته يا ولدي!', late: 'تأخرت علي يا ولدي..', miss: 'عدّيت المكان وما وقفت!' }, wife: { wrong: 'مو هذا اللي طلبته! 😒', late: 'وين الطلب؟ تأخرت!', miss: 'عدّيت المحل وما وقفت؟!' }, son: { wrong: 'يبا مو هذا اللي طلبته 😭', late: 'يبا تأخرت 😢', miss: 'يبا عدّيت المحل!' }, boss: { wrong: 'غلط! مو هذا اللي طلبته.', late: 'تأخرت عليّ.', miss: 'عدّيت المكان وما وقفت!' } },
-      famExp: { mom: 'خلاص يا ولدي ما يحتاج', wife: 'خلاص ما يحتاج 😒', son: 'خلاص يبا ☹️', boss: 'خلاص، ما يحتاج.' },
-      bossW1: 'باقي نص الوقت على بصمة الحضور ⏰', bossW2: 'وينك؟ البصمة بتفوتك!',
-      bnStore: function (s) { return '🏪 ' + s + ' قدامك، وقّف'; }, bnDrop: function (w) { return '👋 وصّل الطلب ' + w + '، وقّف'; },
-      stripGoStore: function (s) { return '🏪 روح ' + s + ' ووقّف عندها'; }, stripGoDrop: function (w) { return '👋 وصّل الطلب ' + w; },
-      menuHead: function (s) { return 'اختر الطلب بسرعة · ' + s; },
-      reqBoughtF: 'تم شراء الطلب', reqBoughtT: function (c) { return 'اشتريت الطلب (-' + c + ' م)، وصّله بسرعة!'; }, reqDoneF: 'وصّلت الطلب!', reqFailF: 'زعّلتهم!', reqBroke: 'رصيدك ما يكفي للطلب',
-      reqDoneT: function (w, b) { return 'وصّلت الطلب ' + w + ' ودعت لك! +' + b + ' م'; }, reqFailT: function (w) { return 'زعّلت ' + w + '، ما وصل الطلب'; },
-      eFam: 'مكافآت الطلبات',
       shopBtn: '🛒 شراء', shopTitle: 'بقالة المحطة', shopBal: 'رصيدك:', shopEn: 'طاقة', shopSec: 'ث', shopClose: 'إغلاق', shopDone: function (n) { return 'اشتريت ' + n; },
       shopItems: { water: 'ماء', tea: 'شاهي', milktea: 'حليب شاهي', karak: 'كرك', eggs: 'ساندوش بيض بالجبن', liver: 'ساندوش كبده بالجبن' },
       radioNoEmbed: 'صاحب المقطع مانع تشغيله خارج يوتيوب، جرب مقطع ثاني', radioNet: 'ما قدرت أحمّل يوتيوب، تأكد من الإنترنت', radioFile: 'افتح اللعبة من رابط http (مو ملف محلي) عشان يشتغل اليوتيوب',
@@ -407,7 +338,6 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
       achT: function (n, m) { return 'الإنجازات (' + n + '/' + m + ')'; },
       toastAch: function (n, r) { return 'إنجاز جديد: ' + n + ' (+' + r + ' م)'; },
       ach: {
-        family: ['ولد الأهل', 'وصّل 5 طلبات للعايلة والمدير وأنت بالطريق.'],
         camelfree: ['ما صدمت حلال', 'وصلت الدوام الحماسي بدون ما تصدم إبل.'],
         early5: ['موظف مثالي', 'سجلت بصمة بدري 5 مرات.'],
         calm20: ['سواق الروقان', 'قطعت 20 كم في طريق الروقان.'],
@@ -510,28 +440,6 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
       fpEarly: 'Early clock-in! 🌟', fpLast: 'Last-second clock-in 😅', goalDone: 'Daily goal done: arrived without hitting a camel ✓', goalT: 'Daily goal: arrive without hitting a camel',
       bonusT: function (b) { return 'Bonus +' + b; }, recNew: '🏆 New record!', km: 'km', shopFri: 'Friday deal: 30% off', shopPricey: 'Highway station: higher prices',
       wxN: ['✨ Stars', '🌧️ Rain', '🌫️ Fog', '🌙 Clear'], favPh: '★ Favorites', favAdd: '★ Save',
-      elT: 'Smart voice (ElevenLabs)', elKey: 'API key', elVid: 'Voice ID', elGen: '⚡ Generate all voices', elBusy: 'Generating...', elOk: 'Voices generated', elFail: 'Failed, check key and internet', elClr: 'Clear generated voices',
-      vrAll: 'One line for all orders (enough)',
-      vrT: 'Voice recorder', vrHint: 'Record your voice for each line (3-5 s). Unrecorded lines use the robot voice.', vrRec: '🎙 Record', vrStop: '⏹ Stop', vrPlay: '▶', vrDel: '🗑', vrUp: '📁', vrErr: 'Mic failed, allow it or upload an audio file', vrLine: function (w, k) { return { pharmacy: 'from the pharmacy', restaurant: 'from the restaurant', grocery: 'from the grocery' }[k]; }, vrSay: 'Say e.g. "Bring me the order {k}, hurry!"',
-      callIn: 'is calling...', callAns: 'Answer', callRej: 'Decline', callOn: 'On call',
-      phoneAria: 'Phone', waT: 'WhatsApp', waEmpty: 'No messages', waAcc: 'On it 👍', waDec: 'Cannot now 🙏', waAccTxt: 'On it, getting it now', waDecTxt: 'Sorry, I cannot right now', waClose: 'Close', waBack: 'Back', waNew: 'New message, reply fast', waGo: 'Go', waSecs: 's',
-      famName: { boss: 'Boss', wife: 'Wife', son: 'Son', mom: 'Mom' }, famYou: { boss: 'the boss', wife: 'your wife', son: 'your son', mom: 'your mom' }, famTo: { boss: 'to the boss', wife: 'to your wife', son: 'to your son', mom: 'to your mom' },
-      storeN: { pharmacy: 'the pharmacy', restaurant: 'the restaurant', grocery: 'the grocery' },
-      itm: { pharmacy: ['Painkillers', 'Plasters', 'Cough syrup', 'Thermometer', 'Vitamin C', 'Face masks'], restaurant: ['Burger', 'Pizza', 'Shawarma', 'Kabsa', 'Soup', 'Fried chicken'], grocery: ['Milk', 'Bread', 'Juice', 'Dates', 'Coffee', 'Chips'] },
-      famAsk: {
-        mom: function (i, s) { return 'Son, bring me ' + i + ' from ' + s; }, wife: function (i, s) { return 'Hi love, bring me ' + i + ' from ' + s; },
-        son: function (i, s) { return 'Dad I want ' + i + ' from ' + s + '!!'; }, boss: function (i, s) { return 'Dear honest employee, bring me ' + i + ' from ' + s; } },
-      famUrg: { mom: 'Bring the order quickly, son', wife: 'Bring the order and hurry', son: 'Bring the order dad, fast!', boss: 'Bring the order fast, before you arrive' },
-      famThanks: { mom: 'God bless you my son ❤️', wife: 'Thank you my love 😍', son: 'Yaaay thanks dad 🥳', boss: 'Excellent, well done 👏' },
-      famAngry: { mom: { wrong: 'That is not what I asked for, son!', late: 'You were too slow, son..', miss: 'You drove past it!' }, wife: { wrong: 'That is not what I asked for! 😒', late: 'Where is my order? You are late!', miss: 'You drove past the shop?!' }, son: { wrong: 'Dad that is not what I asked 😭', late: 'Dad you are late 😢', miss: 'Dad you passed the shop!' }, boss: { wrong: 'Wrong! That is not what I asked.', late: 'You were too slow.', miss: 'You drove right past it!' } },
-      famExp: { mom: 'Never mind son', wife: 'Never mind 😒', son: 'Okay dad ☹️', boss: 'Never mind.' },
-      bossW1: 'Half your time is gone for the clock-in ⏰', bossW2: 'Where are you? You will miss the clock-in!',
-      bnStore: function (s) { return '🏪 Stop at ' + s; }, bnDrop: function (w) { return '👋 Deliver ' + w + ', stop'; },
-      stripGoStore: function (s) { return '🏪 Go to ' + s + ' and stop'; }, stripGoDrop: function (w) { return '👋 Deliver ' + w; },
-      menuHead: function (s) { return 'Pick the order fast · ' + s; },
-      reqBoughtF: 'Order bought', reqBoughtT: function (c) { return 'Order bought (-' + c + ' m). Deliver it fast!'; }, reqDoneF: 'Order delivered!', reqFailF: 'You let them down!', reqBroke: 'Not enough money for the order',
-      reqDoneT: function (w, b) { return 'Delivered ' + w + '! +' + b + ' m'; }, reqFailT: function (w) { return 'You let ' + w + ' down, no delivery'; },
-      eFam: 'Order bonuses',
       shopBtn: '🛒 Buy', shopTitle: 'Station shop', shopBal: 'Balance:', shopEn: 'energy', shopSec: 's', shopClose: 'Close', shopDone: function (n) { return 'Bought ' + n; },
       shopItems: { water: 'Water', tea: 'Tea', milktea: 'Milk tea', karak: 'Karak', eggs: 'Egg & cheese sandwich', liver: 'Liver & cheese sandwich' },
       radioNoEmbed: 'This video cannot be embedded, try another', radioNet: 'Could not load YouTube, check your connection', radioFile: 'Open the game over http (not a local file) so YouTube can play',
@@ -586,7 +494,6 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
       achT: function (n, m) { return 'Achievements (' + n + '/' + m + ')'; },
       toastAch: function (n, r) { return 'Achievement unlocked: ' + n + ' (+' + r + ' m)'; },
       ach: {
-        family: ['Family Hero', 'Deliver 5 orders for family and your boss while driving.'],
         camelfree: ['Camel-free', 'Arrived at the Rush Challenge without hitting a camel.'],
         early5: ['Model employee', 'Clocked in early 5 times.'],
         calm20: ['Calm driver', 'Drove 20 km on the Calm Road.'],
@@ -705,7 +612,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
   var STICK = [
     { id: 'none', cost: 0 }, { id: 'stripe', cost: 400 }, { id: 'flame', cost: 800 }, { id: 'star', cost: 600 }, { id: 'palm', cost: 600 }
   ];
-  var ACH_IDS = ['first', 'streak3', 'streak10', 'rich', 'maxup', 'collector', 'desert', 'toll', 'night', 'allroads', 'clean', 'radarfree', 'rain', 'special', 'fast', 'painter', 'daily7', 'camelfree', 'early5', 'calm20', 'family'];
+  var ACH_IDS = ['first', 'streak3', 'streak10', 'rich', 'maxup', 'collector', 'desert', 'toll', 'night', 'allroads', 'clean', 'radarfree', 'rain', 'special', 'fast', 'painter', 'daily7', 'camelfree', 'early5', 'calm20'];
   var ACH_REWARD = 250;
   var QT = { arrive: { n: [1, 2], r: 200 }, meters: { n: [2500, 4000], r: 250 }, cans: { n: [5, 8], r: 150 }, early: { n: [1, 2], r: 300 } };
   var QIDS = ['arrive', 'meters', 'cans', 'early'];
@@ -837,8 +744,6 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     else if (n === 'win') { [392, 523, 659, 784, 1046].forEach(function (f, i) { chime(f, t + i * .1, .5, .13); }); tone(196, t, .9, 'triangle', .1); }
     else if (n === 'lose') { [330, 311, 294, 262].forEach(function (f, i) { tone(f, t + i * .24, .38, 'sawtooth', .1, null, f * .93); }); }
     else if (n === 'radar') { burst(t, .04, .25, 5000); tone(1500, t + .05, .08, 'square', .1); tone(1500, t + .2, .08, 'square', .1); }
-    else if (n === 'rtone') { chime(880, t, .14, .15); chime(1175, t + .16, .14, .15); chime(880, t + .5, .14, .15); chime(1175, t + .66, .14, .15); }
-    else if (n === 'ping') { chime(1480, t, .12, .12); chime(1976, t + .11, .2, .12); }
     else if (n === 'honk') { tone(415, t, .3, 'sawtooth', .08); tone(523, t, .3, 'sawtooth', .08); tone(415, t + .42, .4, 'sawtooth', .08); tone(523, t + .42, .4, 'sawtooth', .08); }
     else if (n === 'siren') { tone(600, t, .35, 'sawtooth', .09, null, 1000); tone(1000, t + .35, .35, 'sawtooth', .09, null, 600); tone(415, t, .6, 'sawtooth', .08); tone(523, t, .6, 'sawtooth', .08); }
     else if (n === 'boing') { tone(180, t, .35, 'sine', .22, null, 700); tone(360, t + .05, .3, 'triangle', .1, null, 900); }
@@ -871,7 +776,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     }
     AU.eng.frequency.setTargetAtTime(f, t, .09); AU.eng2.frequency.setTargetAtTime(f, t, .09); AU.eng3.frequency.setTargetAtTime(f * 1.012, t, .09);
     AU.lfo.frequency.setTargetAtTime(f / 2, t, .09); AU.lp.frequency.setTargetAtTime(cut, t, .12);
-    AU.engGain.gain.setTargetAtTime(AU.on && running ? (hold ? (ev ? .05 : .2) : (ev ? .015 : .09)) * (talking ? .12 : 1) : 0, t, .15);
+    AU.engGain.gain.setTargetAtTime(AU.on && running ? (hold ? (ev ? .05 : .2) : (ev ? .015 : .09)) : 0, t, .15);
     AU.engNoise.gain.setTargetAtTime(AU.on && running && !ev ? (hold ? .02 + Math.min(.05, v * .0025) : .006) : 0, t, .2);
     AU.rainG.gain.setTargetAtTime(AU.on && running && R.rain > .5 ? .09 : 0, t, .3);
     AU.master.gain.setTargetAtTime(AU.on ? .8 : 0, t, .05);
@@ -896,7 +801,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     function u(id, c) { if (c && !S.ach[id]) { S.ach[id] = 1; got.push(id); } }
     u('first', s.arrivals >= 1); u('streak3', s.streak >= 3); u('streak10', s.streak >= 10);
     var X = {}; try { X = JSON.parse(localStorage.getItem('dawam.cnt') || '{}'); } catch (e) {}
-    u('camelfree', X.clean >= 1); u('family', X.fam >= 5); u('early5', X.early >= 5); u('calm20', X.calmKm >= 20);
+    u('camelfree', X.clean >= 1); u('early5', X.early >= 5); u('calm20', X.calmKm >= 20);
     u('rich', S.money >= 10000);
     u('maxup', UPG.some(function (x) { return S.up[x.id] >= MAXLV; }));
     u('collector', S.owned.length >= 3);
@@ -1341,278 +1246,8 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
       run.charges = na + 1;
       run.haz = run.haz.filter(function (h) { return run.amb.every(function (a) { return Math.abs(h.x - a.x) > 40; }); });
     }
-    run.reqs = []; run.famBonus = 0; run.famDone = 0; run.chat = { boss: [], wife: [], son: [], mom: [] }; run.unread = { boss: 0, wife: 0, son: 0, mom: 0 };
-    if (!rt.calm) {
-      var fr2 = rng(S.day * 271 + 17 + seedAdd), nq = Math.min(3, [1, 1, 2][getDiff()] + (S.day >= 6 ? 1 : 0)), whos = ['mom', 'wife', 'son', 'boss'];
-      var clearAt = function (px) { return run.ev.every(function (e) { return e.type === 'storm' || Math.abs(e.x - px) > 55; }); };
-      for (var qi = 0; qi < nq; qi++) {
-        var who = whos[Math.floor(fr2() * 4)], kind = FAM_OPTS[who][Math.floor(fr2() * 3)], pool = REQ_ITEMS[who][kind], item = pool[Math.floor(fr2() * pool.length)];
-        var tr0 = Math.round(dist * (.1 + .27 * qi) + fr2() * 30), sx0 = tr0 + 150 + Math.round(fr2() * 40), tries = 0;
-        while (!clearAt(sx0) && tries++ < 6) sx0 += 40;
-        var dx0 = sx0 + 110 + Math.round(fr2() * 40); tries = 0;
-        while (!clearAt(dx0) && tries++ < 6) dx0 += 40;
-        if (dx0 > dist - 70) continue;
-        var rq = { who: who, kind: kind, item: item, trig: tr0, st: 0, bought: false, tLeft: 0, tMax: 1, accT: 0, menuOpen: false, menuT: 0,
-          store: { type: 'store', x: sx0, len: 34, kind: kind, rq: run.reqs.length, k: 0, t: 0, done: false, entered: false },
-          drop: { type: 'drop', x: dx0, len: 26, who: who, rq: run.reqs.length, k: 0, t: 0, done: false, entered: false } };
-        run.reqs.push(rq); run.ev.push(rq.store, rq.drop);
-      }
-    }
     return run;
   }
-  var FAM_OPTS = { mom: ['pharmacy', 'grocery', 'restaurant'], wife: ['restaurant', 'grocery', 'pharmacy'], son: ['restaurant', 'grocery', 'pharmacy'], boss: ['grocery', 'restaurant', 'pharmacy'] };
-  var REQ_ITEMS = { mom: { pharmacy: [0, 2, 4], grocery: [0, 1, 3], restaurant: [4, 3] }, wife: { pharmacy: [0, 4], grocery: [0, 1, 2], restaurant: [1, 2, 3] }, son: { pharmacy: [1, 2], grocery: [2, 5, 0], restaurant: [0, 1, 5, 2] }, boss: { pharmacy: [0], grocery: [4, 3], restaurant: [0, 2, 5] } };
-  var STORES = { pharmacy: { emo: '💊', col: '#e8f5ee', roof: '#1f9d63', cost: 25, e: ['💊', '🩹', '🧴', '🌡️', '🍊', '😷'] }, restaurant: { emo: '🍔', col: '#fff1d6', roof: '#d6342c', cost: 35, e: ['🍔', '🍕', '🌯', '🍛', '🍲', '🍗'] }, grocery: { emo: '🛒', col: '#e6efff', roof: '#2f6fe0', cost: 18, e: ['🥛', '🍞', '🧃', '🌴', '☕', '🍟'] } };
-  var FAM_EMO = { mom: '👵', wife: '👩', son: '👦', boss: '👔' }, WA_ORDER = ['boss', 'wife', 'son', 'mom'];
-  function famCost(kind) { return STORES[kind].cost + 2 * Math.floor(S.day / 2); }
-  function activeReq() { return R && R.reqs ? R.reqs.filter(function (o) { return o.st === 2; })[0] : null; }
-  function incomingReq() { return R && R.reqs ? R.reqs.filter(function (o) { return o.st === 1; })[0] : null; }
-  function unreadTotal() { var n = 0; if (R && R.unread) for (var k in R.unread) n += R.unread[k]; return n; }
-  function pad2(n) { return (n < 10 ? '0' : '') + n; }
-  function say(who, text, me) {
-    if (!R || !R.chat) return;
-    var d = new Date(); R.chat[who].push({ t: text, me: !!me, at: pad2(d.getHours()) + ':' + pad2(d.getMinutes()) });
-    if (!me) { if (!(waOpen && waView === who)) R.unread[who]++; vibe(); }
-    R.waKey = '';
-  }
-  function vibe() {
-    var b = $('phonebtn'); b.classList.remove('vib'); void b.offsetWidth; b.classList.add('vib'); sfx('ping');
-    try { if (navigator.vibrate) navigator.vibrate([120, 60, 120]); } catch (e) {}
-  }
-  var talking = false, VOICE = { son: [1.3, 1.02], wife: [1.08, .98], mom: [.95, .92], boss: [.86, .97] }, callQ = null, ringI = 0, VLIST = [];
-  function loadVoices() { try { VLIST = window.speechSynthesis ? speechSynthesis.getVoices() : []; } catch (e) { VLIST = []; } }
-  loadVoices(); try { if (window.speechSynthesis) speechSynthesis.onvoiceschanged = loadVoices; } catch (e) {}
-  var V_FEM = /zariyah|hoda|salma|laila|leila|amira|female|fatima|noura|زارية|هدى|سلمى/i, V_MALE = /hamed|naayf|maged|shakir|hamza|male|فهد|حامد|نايف/i;
-  function pickVoice(who) {
-    var lang = LANG === 'en' ? 'en' : 'ar', l = VLIST.filter(function (v) { return (v.lang || '').toLowerCase().indexOf(lang) === 0; });
-    if (!l.length) return null;
-    var fem = who === 'wife' || who === 'mom', best = null, bs = -9;
-    l.forEach(function (v) {
-      var sc = 0, n = v.name || '';
-      if (/natural|neural|online/i.test(n)) sc += 6; else if (/google/i.test(n)) sc += 3;
-      if (/sa/i.test(v.lang)) sc += 2;
-      if (V_FEM.test(n)) sc += fem ? 4 : -4; else if (V_MALE.test(n)) sc += fem ? -4 : 4;
-      if (sc > bs) { bs = sc; best = v; }
-    });
-    return best;
-  }
-  var VOX = {}, vrRecr = null, vrKey = '', vrAud = null;
-  try { VOX = JSON.parse(localStorage.getItem('dawam.voice') || '{}'); } catch (e) { VOX = {}; }
-  function saveVox() { try { localStorage.setItem('dawam.voice', JSON.stringify(VOX)); } catch (e) { toast('تعذر الحفظ (الملف كبير)'); } }
-  function playClip(src, done) { try { if (vrAud) vrAud.pause(); vrAud = new Audio(src); vrAud.onended = vrAud.onerror = done || function () {}; var pr = vrAud.play(); if (pr && pr.catch) pr.catch(function () { if (done) done(); }); return true; } catch (e) { return false; } }
-  var EL_KEY = 'sk_e1203e0e6297e1967bc1f427760667178fd98768c4457e26';
-  var EL_DEF = { mom: 'EXAVITQu4vr4xnSDxMZu', wife: '21m00Tcm4TlvDq8ikWAM', son: 'TxGEqnHWrfWFTfGW9XjX', boss: 'pNInz6obpgDQGcFmaJgB' };
-  var EL_TXT = { mom: { pharmacy: 'يا ولدي، مرّ لي على الصيدلية وجيب لي الدوا، بسرعة الله يرضى عليك!', restaurant: 'يا ولدي، مرّ لي على المطعم وجيب لي أكل، بسرعة الله يرضى عليك!', grocery: 'يا ولدي، مرّ لي على البقالة وجيب لي الغرض، بسرعة الله يرضى عليك!' },
-    wife: { pharmacy: 'هلا حبيبي، مرّ على الصيدلية وجيب لي الطلب، وتعال بسرعة!', restaurant: 'هلا حبيبي، مرّ على المطعم وجيب لي الطلب، وتعال بسرعة!', grocery: 'هلا حبيبي، مرّ على البقالة وجيب لي الطلب، وتعال بسرعة!' },
-    son: { pharmacy: 'يبا يبا! مرّ على الصيدلية وجيب لي الطلب، بسرعة يبا!', restaurant: 'يبا يبا! مرّ على المطعم وجيب لي الطلب، بسرعة يبا!', grocery: 'يبا يبا! مرّ على البقالة وجيب لي الطلب، بسرعة يبا!' },
-    boss: { pharmacy: 'يا موظفنا الشريف، مرّ على الصيدلية وجيب لي الطلب، قبل لا توصل الدوام!', restaurant: 'يا موظفنا الشريف، مرّ على المطعم وجيب لي الطلب، قبل لا توصل الدوام!', grocery: 'يا موظفنا الشريف، مرّ على البقالة وجيب لي الطلب، قبل لا توصل الدوام!' } };
-  var ELC = {}; try { ELC = JSON.parse(localStorage.getItem('dawam.el.cache') || '{}'); } catch (e) { ELC = {}; }
-  function EL_CFG() { var c = {}; try { c = JSON.parse(localStorage.getItem('dawam.el') || '{}'); } catch (e) {} c.v = c.v || {}; if (!c.key) c.key = EL_KEY; return c; }
-  function elSaveCfg() {
-    var c = { key: ($('elkey') || {}).value || '', v: {} }; (document.querySelectorAll('#vr .elv') || []).forEach(function (i) { c.v[i.dataset.w] = i.value.trim(); });
-    try { localStorage.setItem('dawam.el', JSON.stringify(c)); } catch (e) {} return c;
-  }
-  function elAutoPick() {
-    var c = EL_CFG();
-    return fetch('https://api.elevenlabs.io/v1/voices', { headers: { 'xi-api-key': c.key } }).then(function (r) { if (!r.ok) throw new Error('voices ' + r.status); return r.json(); }).then(function (j) {
-      var L = j.voices || []; if (!L.length) throw new Error('no voices');
-      var g = function (v) { return ((v.labels || {}).gender || '').toLowerCase(); }, a = function (v) { return ((v.labels || {}).age || '').toLowerCase(); };
-      var F = L.filter(function (v) { return g(v) === 'female'; }), M = L.filter(function (v) { return g(v) === 'male'; });
-      if (!F.length) F = L; if (!M.length) M = L;
-      var old = F.filter(function (v) { return /old|middle/.test(a(v)); }), yng = M.filter(function (v) { return /young/.test(a(v)); }), bossP = M.filter(function (v) { return /middle|old/.test(a(v)); });
-      var used = {}, pick = function (arr, fb) { var v = arr.filter(function (x) { return !used[x.voice_id]; })[0] || fb.filter(function (x) { return !used[x.voice_id]; })[0] || fb[0]; used[v.voice_id] = 1; return v.voice_id; };
-      var nv = {}; nv.boss = pick(bossP, M); nv.son = pick(yng, M); nv.mom = pick(old, F); nv.wife = pick(F, F);
-      try { localStorage.setItem('dawam.el', JSON.stringify({ key: c.key, v: nv })); } catch (e) {}
-      ELC = {}; try { localStorage.removeItem('dawam.el.cache'); } catch (e) {}
-      document.querySelectorAll('#vr .elv').forEach(function (i) { if (nv[i.dataset.w]) i.value = nv[i.dataset.w]; });
-      return nv;
-    });
-  }
-  function elFetch(who, kind, retried) {
-    var c = EL_CFG(), ck = who + '_' + kind;
-    if (!c.key || ELC[ck]) return Promise.resolve(ELC[ck] || null);
-    return fetch('https://api.elevenlabs.io/v1/text-to-speech/' + (c.v[who] || EL_DEF[who]) + '?output_format=mp3_44100_64', {
-      method: 'POST', headers: { 'xi-api-key': c.key, 'Content-Type': 'application/json', Accept: 'audio/mpeg' },
-      body: JSON.stringify({ text: EL_TXT[who][kind], model_id: 'eleven_multilingual_v2', voice_settings: { stability: who === 'son' ? .3 : .45, similarity_boost: .75, style: .35 } })
-    }).then(function (r) { if (!r.ok) return r.text().then(function (tt) { var d = ''; if (r.status === 404 && !retried) throw new Error('RETRY'); try { var j = JSON.parse(tt); d = (j.detail && (j.detail.status || j.detail.message)) || ''; } catch (e) {} throw new Error(r.status + ' ' + String(d).slice(0, 60)); }); return r.blob(); }).catch(function (er) { if (er && er.message === 'RETRY') return elAutoPick().then(function () { return elFetch(who, kind, true); }); throw er; }).then(function (b) {
-      if (typeof b === 'string') return b;
-      return new Promise(function (ok) { var fr = new FileReader(); fr.onload = function () { ELC[ck] = fr.result; try { localStorage.setItem('dawam.el.cache', JSON.stringify(ELC)); } catch (e) {} ok(fr.result); }; fr.readAsDataURL(b); });
-    });
-  }
-  function elGenAll() {
-    elSaveCfg(); var m = $('elmsg'); if (m) m.textContent = tx('elBusy');
-    var jobs = [], ws = ['mom', 'wife', 'son', 'boss'], ks = ['pharmacy', 'restaurant', 'grocery'], i = 0;
-    ws.forEach(function (w) { ks.forEach(function (k) { jobs.push([w, k]); }); });
-    (function next() {
-      if (i >= jobs.length) { var m2 = $('elmsg'); if (m2) m2.textContent = tx('elOk'); return; }
-      var j = jobs[i++]; elFetch(j[0], j[1]).then(next).catch(function (er) { var m3 = $('elmsg'); if (m3) m3.textContent = tx('elFail') + ' (' + (er && er.message ? er.message : 'net') + ')'; });
-    })();
-  }
-  function renderVR() {
-    if ($('elkey')) elSaveCfg();
-    var el0 = EL_CFG(), h = '<div class="vb"><h3><span>🎙 ' + tx('vrT') + '</span><button type="button" class="iconbtn" data-v="x">✕</button></h3><p>' + tx('vrHint') + '</p>' +
-      '<div class="vw">🤖 ' + tx('elT') + '</div><input type="password" id="elkey" placeholder="' + tx('elKey') + '" value="' + (el0.key || '') + '">' +
-      ['mom', 'wife', 'son', 'boss'].map(function (w) { return '<input type="text" class="elv" data-w="' + w + '" placeholder="' + tx('famName')[w] + ' · ' + tx('elVid') + '" value="' + (el0.v[w] || EL_DEF[w]) + '">'; }).join('') +
-      '<div class="vl"><button type="button" class="has" data-v="elgen">' + tx('elGen') + '</button><button type="button" data-v="elclr">' + tx('elClr') + '</button><span id="elmsg"></span></div>';
-    ['mom', 'wife', 'son', 'boss'].forEach(function (w) {
-      h += '<div class="vw">' + FAM_EMO[w] + ' ' + tx('famName')[w] + '</div>';
-      ['all', 'pharmacy', 'restaurant', 'grocery'].forEach(function (k) {
-        var key = k === 'all' ? w : w + '_' + k, has = !!VOX[key], rec = vrKey === key;
-        h += '<div class="vl"><span>' + (k === 'all' ? '⭐ ' + tx('vrAll') : STORES[k].emo + ' ' + tx('vrLine')(w, k)) + '</span><button type="button" class="' + (rec ? 'rec' : '') + '" data-v="rec" data-k="' + key + '">' + (rec ? tx('vrStop') : tx('vrRec')) + '</button>' +
-          '<label class="vl" style="padding:0;background:none"><button type="button" onclick="this.nextElementSibling.click()">' + tx('vrUp') + '</button><input type="file" accept="audio/*" hidden data-v="up" data-k="' + key + '"></label>' +
-          (has ? '<button type="button" class="has" data-v="play" data-k="' + key + '">' + tx('vrPlay') + '</button><button type="button" data-v="del" data-k="' + key + '">' + tx('vrDel') + '</button>' : '') + '</div>';
-      });
-    });
-    $('vr').innerHTML = h + '</div>';
-  }
-  function fileToVox(key, blob) {
-    var r = new FileReader(); r.onload = function () { VOX[key] = r.result; saveVox(); renderVR(); }; r.readAsDataURL(blob);
-  }
-  $('vrbtn').addEventListener('click', function () { renderVR(); $('vr').hidden = false; this.blur(); });
-  $('vr').addEventListener('change', function (e) { var f = e.target; if (f.dataset.v === 'up' && f.files[0]) fileToVox(f.dataset.k, f.files[0]); });
-  $('vr').addEventListener('click', function (e) {
-    var b = e.target.closest('button'); if (!b || !b.dataset.v) return; var v = b.dataset.v, k = b.dataset.k;
-    if (v === 'elgen') { elGenAll(); return; }
-    if (v === 'elclr') { ELC = {}; try { localStorage.removeItem('dawam.el.cache'); } catch (e2) {} return; }
-    if (v === 'x') { elSaveCfg(); if (vrRecr) { try { vrRecr.stop(); } catch (e2) {} } vrKey = ''; if (vrAud) vrAud.pause(); $('vr').hidden = true; }
-    else if (v === 'play') playClip(VOX[k]);
-    else if (v === 'del') { delete VOX[k]; saveVox(); renderVR(); }
-    else if (v === 'rec') {
-      if (vrRecr) { vrRecr.stop(); return; }
-      if (!navigator.mediaDevices || !window.MediaRecorder) { toast(tx('vrErr')); return; }
-      navigator.mediaDevices.getUserMedia({ audio: true }).then(function (st) {
-        var ch = [], mr = new MediaRecorder(st); vrRecr = mr; vrKey = k;
-        mr.ondataavailable = function (ev) { if (ev.data.size) ch.push(ev.data); };
-        mr.onstop = function () { st.getTracks().forEach(function (t) { t.stop(); }); vrRecr = null; vrKey = ''; if (ch.length) fileToVox(k, new Blob(ch, { type: mr.mimeType })); else renderVR(); };
-        mr.start(); setTimeout(function () { if (vrRecr === mr && mr.state === 'recording') mr.stop(); }, 9000); renderVR();
-      }).catch(function () { toast(tx('vrErr')); });
-    }
-  });
-  function speak(who, text, kind) {
-    var clip = VOX[who + '_' + kind] || VOX[who] || (LANG !== 'en' && kind && ELC[who + '_' + kind]);
-    if (clip) { talking = true; if (playClip(clip, function () { talking = false; })) return; talking = false; }
-    try {
-      if (!window.speechSynthesis) return; speechSynthesis.cancel(); if (!VLIST.length) loadVoices();
-      var u = new SpeechSynthesisUtterance(text), v = VOICE[who], vo = pickVoice(who);
-      u.lang = LANG === 'en' ? 'en-US' : 'ar-SA'; if (vo) { u.voice = vo; u.lang = vo.lang; }
-      var nat = vo && /natural|neural|online/i.test(vo.name);
-      u.pitch = nat ? 1 + (v[0] - 1) * .5 : v[0]; u.rate = v[1]; u.volume = 1;
-      talking = true; u.onend = u.onerror = function () { talking = false; }; speechSynthesis.speak(u);
-    } catch (e) {}
-  }
-  function endCall() { talking = false; try { if (vrAud) vrAud.pause(); } catch (e) {} callQ = null; clearInterval(ringI); $('call').hidden = true; try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {} }
-  function startCall(q) {
-    callQ = q; q.callT = 12; if (LANG !== 'en') elFetch(q.who, q.kind).catch(function () {});
-    $('call').innerHTML = '<div class="cav">' + FAM_EMO[q.who] + '</div><b>' + tx('famName')[q.who] + '</b><small>' + tx('callIn') + '</small><div class="cb"><button type="button" class="ok" data-c="ans">📞 ' + tx('callAns') + '</button><button type="button" data-c="rej">✖ ' + tx('callRej') + '</button></div>';
-    $('call').hidden = false; clearInterval(ringI); sfx('rtone'); ringI = setInterval(function () { sfx('rtone'); try { if (navigator.vibrate) navigator.vibrate([300, 200, 300]); } catch (e) {} }, 1500);
-  }
-  $('call').addEventListener('click', function (e) {
-    var b = e.target.closest('button'); if (!b || !callQ) return; var q = callQ;
-    clearInterval(ringI);
-    if (b.dataset.c === 'ans') {
-      $('call').innerHTML = '<div class="cav">' + FAM_EMO[q.who] + '</div><b>' + tx('famName')[q.who] + '</b><small>' + tx('callOn') + '</small>';
-      speak(q.who, reqText(q) + '، ' + tx('famUrg')[q.who] + '!', q.kind);
-      if (q.st === 1) acceptReq(q); setTimeout(function () { if (callQ === q) { callQ = null; $('call').hidden = true; } }, 5500);
-    } else { endCall(); if (q.st === 1) declineReq(q); }
-  });
-  function reqText(q) { return tx('famAsk')[q.who](tx('itm')[q.kind][q.item], tx('storeN')[q.kind]); }
-  function failReq(q, why) {
-    q.st = 4; R.t += 3; addFloat('reqFailF'); sfx('honk'); toast(tx('reqFailT')(tx('famYou')[q.who]));
-    say(q.who, tx('famAngry')[q.who][why]); if (q.menuOpen) closeMenu(q);
-  }
-  function acceptReq(q) {
-    q.st = 2; q.tMax = q.tLeft = Math.max(18, (q.drop.x - R.x) / (VEH[S.veh].run * .6) * [1.3, 1, .85][getDiff()] + 14);
-    say(q.who, tx('waAccTxt'), true); sfx('click');
-  }
-  function declineReq(q) { q.st = 4; say(q.who, tx('waDecTxt'), true); say(q.who, tx('famExp')[q.who]); }
-  function buyReq(q, right) {
-    var c = famCost(q.kind), fr = Math.min(R.earn, c); R.earn -= fr; S.money -= (c - fr); R.t += 2; save();
-    if (right) { q.bought = true; addFloat('reqBoughtF'); sfx('buy'); toast(tx('reqBoughtT')(c)); } else failReq(q, 'wrong');
-  }
-  function openMenu(q) {
-    var ord = [0, 1, 2, 3, 4, 5]; for (var i = 5; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = ord[i]; ord[i] = ord[j]; ord[j] = t; }
-    q.menuOpen = true; q.menuT = q.menuMax = 9; sfx('click');
-    $('menu').innerHTML = '<div class="mb"><h3>' + STORES[q.kind].emo + ' ' + tx('menuHead')(tx('storeN')[q.kind]) + '</h3><p>' + FAM_EMO[q.who] + ' ' + reqText(q) + '</p><div class="mg">' +
-      ord.map(function (k) { return '<button type="button" data-i="' + k + '"><span aria-hidden="true">' + STORES[q.kind].e[k] + '</span>' + tx('itm')[q.kind][k] + '</button>'; }).join('') + '</div><div class="mt"><i id="menubar"></i></div></div>';
-    $('menu').hidden = false;
-  }
-  function closeMenu(q) { if (q) q.menuOpen = false; $('menu').hidden = true; }
-  $('menu').addEventListener('click', function (e) {
-    var b = e.target.closest('button'); if (!b || !R) return; var q = activeReq(); if (!q || !q.menuOpen) return;
-    closeMenu(q); buyReq(q, +b.dataset.i === q.item);
-  });
-  function famStep(dt) {
-    if (!R.reqs) return;
-    var bf = (R.limit - R.t) / R.limit;
-    if (!R.rt.calm) { if (!R.bw1 && bf < .5) { R.bw1 = 1; say('boss', tx('bossW1')); } else if (!R.bw2 && bf < .2) { R.bw2 = 1; say('boss', tx('bossW2')); } }
-    R.reqs.forEach(function (q) {
-      if (q.st === 0 && R.x >= q.trig && !activeReq() && !incomingReq()) { q.st = 1; q.accT = 18; say(q.who, reqText(q)); say(q.who, tx('famUrg')[q.who]); startCall(q); }
-      if (q.st === 1) { if (callQ === q) { q.callT -= dt; if (q.callT <= 0) endCall(); } q.accT -= dt; if (q.accT <= 0) { q.st = 4; say(q.who, tx('famExp')[q.who]); } return; }
-      if (q.st !== 2) return;
-      q.tLeft -= dt;
-      var s = q.store, d = q.drop, inS = R.x >= s.x && R.x <= s.x + s.len;
-      if (!q.bought) {
-        if (q.menuOpen) {
-          q.menuT -= dt; var mb = $('menubar'); if (mb) mb.style.width = Math.max(0, q.menuT / q.menuMax * 100) + '%';
-          if (!inS) closeMenu(q); else if (q.menuT <= 0) { closeMenu(q); failReq(q, 'late'); }
-        } else if (inS && R.v < 2.5) {
-          if (shopMoney() < famCost(q.kind)) { if (!q.broke) { q.broke = 1; addFloat('reqBroke'); sfx('honk'); } } else openMenu(q);
-        } else if (R.x > s.x + s.len + 8) failReq(q, 'miss');
-      } else if (R.x >= d.x && R.x <= d.x + d.len && R.v < 3) {
-        var fl = Math.max(0, q.tLeft) / q.tMax, bonus = Math.round((50 + 12 * S.day) * (q.who === 'boss' ? 1.4 : 1) * (1 + fl) * mult());
-        q.st = 3; R.famBonus += bonus; R.famDone++; addFloat('reqDoneF'); sfx('ach'); toast(tx('reqDoneT')(tx('famTo')[q.who], bonus)); say(q.who, tx('famThanks')[q.who]);
-        try { var X3 = JSON.parse(localStorage.getItem('dawam.cnt') || '{}'); X3.fam = (X3.fam || 0) + 1; localStorage.setItem('dawam.cnt', JSON.stringify(X3)); } catch (e) {}
-      } else if (q.bought && R.x > d.x + d.len + 8) failReq(q, 'miss');
-      if (q.st === 2 && q.tLeft <= 0) failReq(q, 'late');
-    });
-  }
-
-  /* واتساب */
-  var waOpen = false, waView = 'list';
-  function renderWA() {
-    var el = $('wa');
-    if (!waOpen || !R || !R.chat) { el.hidden = true; return; }
-    el.hidden = false;
-    var aq = activeReq(), iq = incomingReq(), h = '', strip = '';
-    if (aq) strip = '<div class="was"><span>' + (aq.bought ? tx('stripGoDrop')(tx('famTo')[aq.who]) : tx('stripGoStore')(tx('storeN')[aq.kind])) + '</span><b>' + Math.max(0, Math.ceil(aq.tLeft)) + ' ' + tx('waSecs') + '</b></div>';
-    else if (iq) strip = '<div class="was"><span>' + tx('waNew') + '</span><b>' + Math.max(0, Math.ceil(iq.accT)) + ' ' + tx('waSecs') + '</b></div>';
-    if (waView === 'list') {
-      h = '<div class="wah"><b>💬 ' + tx('waT') + '</b><button type="button" data-wa="close" aria-label="' + tx('waClose') + '">✕</button></div>' + strip + '<div class="wal">' +
-        WA_ORDER.map(function (w) {
-          var m = R.chat[w], last = m.length ? m[m.length - 1].t : tx('waEmpty'), u = R.unread[w];
-          return '<button type="button" class="war" data-wa="open" data-w="' + w + '"><span class="av">' + FAM_EMO[w] + '</span><span class="wn"><b>' + tx('famName')[w] + '</b><small>' + last + '</small></span>' + (u ? '<span class="ub">' + u + '</span>' : '') + '</button>';
-        }).join('') + '</div>';
-    } else {
-      var w = waView, m = R.chat[w], inc = iq && iq.who === w;
-      h = '<div class="wah"><button type="button" data-wa="back" aria-label="' + tx('waBack') + '">‹</button><span class="av">' + FAM_EMO[w] + '</span><b>' + tx('famName')[w] + '</b><button type="button" data-wa="close" aria-label="' + tx('waClose') + '">✕</button></div>' + strip +
-        '<div class="wam" id="wam">' + (m.length ? m.map(function (x) { return '<div class="bb' + (x.me ? ' me' : '') + '">' + x.t + '<small>' + x.at + '</small></div>'; }).join('') : '<div style="color:#8696a0;text-align:center;margin-top:20px">' + tx('waEmpty') + '</div>') + '</div>' +
-        (inc ? '<div class="wac"><button type="button" data-wa="acc">' + tx('waAcc') + '</button><button type="button" class="no" data-wa="dec">' + tx('waDec') + '</button></div>' : '');
-      var sc = null;
-    }
-    var keep = el.querySelector('.wal, .wam'), top = keep ? keep.scrollTop : 0, wasChat = !!el.querySelector('.wam');
-    el.innerHTML = h;
-    var nm = el.querySelector('.wam'); if (nm) nm.scrollTop = nm.scrollHeight; else { var nl = el.querySelector('.wal'); if (nl) nl.scrollTop = wasChat ? 0 : top; }
-  }
-  function waTick() {
-    if (callQ && (!R || mode !== 'run' || callQ.st > 2)) endCall();
-    var pb = $('phonebtn'), on = !!(R && mode === 'run' && R.chat && !R.rt.calm);
-    pb.hidden = !on; var u = on ? unreadTotal() : 0, bd = $('phbadge'); bd.hidden = !u; bd.textContent = u;
-    if (!on) { if (waOpen) { waOpen = false; $('wa').hidden = true; } if (!$('menu').hidden) $('menu').hidden = true; return; }
-    var aq = activeReq(), iq = incomingReq(), key = [waOpen, waView, u, aq ? Math.ceil(aq.tLeft) + '' + aq.bought : '', iq ? Math.ceil(iq.accT) : '', R.chat.boss.length + R.chat.wife.length + R.chat.son.length + R.chat.mom.length, LANG].join('|');
-    if (waOpen && R.waKey !== key) { R.waKey = key; renderWA(); }
-  }
-  $('phonebtn').addEventListener('click', function () {
-    if (!R || mode !== 'run') return; waOpen = !waOpen; if (waOpen) { waView = 'list'; sfx('click'); } R.waKey = ''; waTick(); this.blur();
-  });
-  $('wa').addEventListener('click', function (e) {
-    var b = e.target.closest('button'); if (!b || !R) return; var a = b.dataset.wa;
-    if (a === 'close') { waOpen = false; $('wa').hidden = true; }
-    else if (a === 'back') { waView = 'list'; }
-    else if (a === 'open') { waView = b.dataset.w; R.unread[waView] = 0; }
-    else if (a === 'acc') { var q1 = incomingReq(); if (q1) acceptReq(q1); }
-    else if (a === 'dec') { var q2 = incomingReq(); if (q2) declineReq(q2); }
-    R.waKey = ''; waTick();
-  });
   function hAt(x) {
     var T = R.terr, w = Math.min(1, Math.max(0, x) / 90) * Math.min(1, Math.max(0, R.dist - x) / 90);
     if (x < 0 || x > R.dist) return 0;
@@ -1671,7 +1306,6 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
         if (R.x >= e.x - 45 && R.x <= e.x + e.len + 10) R.shopNear = e;
       }
     });
-    famStep(dt);
     R.ev.forEach(function (e) {
       if (e.type !== 'storm') return;
       if (!e.warned && R.x >= e.x - 80) { e.warned = 1; toast(tx('stormW')); }
@@ -1721,7 +1355,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     var earn = Math.floor(R.earn * (wreck ? .5 : 1)), arr = 0, tb = 0, con = 0, dayPlayed = S.day;
     if (ok) { arr = Math.round(R.dist * .25 * mult() * rt.arr * vm * bm); tb = Math.round(Math.max(0, R.limit - R.t) * 4 * rt.tb * vm * bm); if (!rt.calm) { S.day++; S.best = Math.max(S.best, S.day - 1); } }
     else if (!wreck && rt.consol) con = Math.round(earn * rt.consol);
-    var tot = earn + arr + tb + con + (R.ambBonus || 0) + (R.famBonus || 0); S.money += tot;
+    var tot = earn + arr + tb + con + (R.ambBonus || 0); S.money += tot;
     if (ok && !rt.calm && !S.ends.won && dayPlayed >= (rt.key === 'short' ? 100 : 50)) pendingEnd = 1;
     if (rt.camel) {
       toast(tx(ok ? 'fpOk' : 'fpFail'));
@@ -1750,7 +1384,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     S.top.sort(function (a, b) { return b.tot - a.tot; }); S.top = S.top.slice(0, 5);
     questAdd('meters', Math.floor(R.x)); questAdd('cans', R.cansGot || 0); if (ok) { questAdd('arrive', 1); if (R.t <= R.limit * .7) questAdd('early', 1); }
     save();
-    END = { ok: ok, wreck: !!wreck, vm: vm, earn: earn, arr: arr, tb: tb, con: con, tot: tot, fines: R.fines, toll: R.toll, ambB: R.ambBonus || 0, ambL: R.ambLost || 0, fam: R.famBonus || 0 };
+    END = { ok: ok, wreck: !!wreck, vm: vm, earn: earn, arr: arr, tb: tb, con: con, tot: tot, fines: R.fines, toll: R.toll, ambB: R.ambBonus || 0, ambL: R.ambLost || 0 };
     sfx(ok ? 'win' : 'lose');
     renderEnd();
     $('end').hidden = false; $('home').hidden = true;
@@ -1768,7 +1402,6 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
       '<div class="ln"><span>' + tx('eDist') + '</span><b>' + fmt(E.earn) + u + '</b></div>' +
       (E.ok ? '<div class="ln"><span>' + tx('eArr') + '</span><b>' + fmt(E.arr) + u + '</b></div><div class="ln"><span>' + tx('eTime') + '</span><b>' + fmt(E.tb) + u + '</b></div>' : '') +
       (E.con ? '<div class="ln"><span>' + tx('eCon') + '</span><b>' + fmt(E.con) + u + '</b></div>' : '') +
-      (E.fam ? '<div class="ln"><span>' + tx('eFam') + '</span><b>+' + fmt(E.fam) + u + '</b></div>' : '') +
       (E.ambB ? '<div class="ln"><span>' + tx('eAmbB') + '</span><b>+' + fmt(E.ambB) + u + '</b></div>' : '') +
       (E.ambL ? '<div class="ln note"><span>' + tx('eAmbL') + '</span><b>-' + fmt(E.ambL) + u + '</b></div>' : '') +
       (E.fines ? '<div class="ln note"><span>' + tx('eFineL') + '</span><b>-' + fmt(E.fines) + u + '</b></div>' : '') +
@@ -1929,7 +1562,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
   }
 
   function refresh() {
-    var live = mode === 'run' && R ? Math.floor(R.earn + (R.ambBonus || 0) + (R.famBonus || 0)) : 0, veh = VEH[S.veh];
+    var live = mode === 'run' && R ? Math.floor(R.earn + (R.ambBonus || 0)) : 0, veh = VEH[S.veh];
     $('bal').textContent = fmt(S.money + live);
     $('day').textContent = S.day + (special(S.day) ? ' ★' : '');
     $('vehname').textContent = tx('veh')[S.veh][0];
@@ -1955,8 +1588,6 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
       if (rn.dataset.sig !== sg2) { rn.dataset.sig = sg2; rn.innerHTML = avatarSVG(cc, 26) + '<span style="overflow:hidden;text-overflow:ellipsis">' + (cc.name ? String(cc.name).replace(/[<>&"]/g, '') + ' · ' : '') + '🛣️ ' + rnm + '</span>'; }
     }
     var ch = $('calmhome'); ch.textContent = tx('calmHomeBtn'); ch.hidden = !(R && mode === 'run' && R.rt.calm);
-    $('vrbtn').hidden = mode !== 'home';
-    waTick(); $('phonebtn').setAttribute('aria-label', tx('phoneAria'));
     var sb = $('shopbtn'); sb.textContent = tx('shopBtn'); sb.hidden = !(R && mode === 'run' && R.shopNear && !R.paused);
     var rb = $('radiobtn'); rb.hidden = S.route !== 'calm'; if (rb.hidden) $('radiopanel').hidden = true;
     rb.setAttribute('aria-label', tx('radioT')); $('radioin').placeholder = tx('radioPh'); $('radioplay').textContent = tx('radioPlay'); $('radiostop').textContent = tx('radioStop');
@@ -2208,24 +1839,6 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     ctx.fillStyle = '#c98f63'; ctx.beginPath(); ctx.arc(sx + 35, sy - 47, 6, 0, 6.3); ctx.fill();
     ctx.fillStyle = '#ffffff'; ctx.fillRect(sx + 28, sy - 40, 14, 8);
   }
-  function drawStore(cx, sy, kind, act) {
-    var st = STORES[kind], w = 124, pulse = act ? .5 + .5 * Math.sin(performance.now() / 180) : 0;
-    ctx.fillStyle = st.col; ctx.fillRect(cx - w / 2, sy - 74, w, 74);
-    ctx.fillStyle = st.roof; ctx.fillRect(cx - w / 2 - 6, sy - 86, w + 12, 14);
-    ctx.fillStyle = '#9ed0f0'; ctx.fillRect(cx - w / 2 + 10, sy - 56, 46, 30); ctx.fillStyle = '#5b4a38'; ctx.fillRect(cx + 14, sy - 52, 30, 52);
-    ctx.fillStyle = '#fff'; ctx.fillRect(cx - 44, sy - 112, 88, 24); ctx.strokeStyle = st.roof; ctx.lineWidth = 2; ctx.strokeRect(cx - 44, sy - 112, 88, 24);
-    ctx.fillStyle = '#17201b'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = '700 13px "IBM Plex Sans Arabic", sans-serif';
-    ctx.fillText(st.emo + ' ' + tx('storeN')[kind].replace(/^the /, ''), cx, sy - 99);
-    if (act) { ctx.globalAlpha = .55 + .45 * pulse; ctx.fillStyle = '#ffc72c'; ctx.font = '26px sans-serif'; ctx.fillText('⬇', cx, sy - 128 - pulse * 6); ctx.globalAlpha = 1; }
-  }
-  function drawDrop(cx, sy, e, act) {
-    var pulse = act ? .5 + .5 * Math.sin(performance.now() / 180) : 0;
-    ctx.font = '40px "Segoe UI Emoji", "Apple Color Emoji", sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
-    ctx.fillText(FAM_EMO[e.who], cx, sy - 4);
-    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(cx + 24, sy - 56, 13, 0, 6.3); ctx.fill();
-    ctx.fillStyle = '#d6342c'; ctx.font = '700 18px sans-serif'; ctx.textBaseline = 'middle'; ctx.fillText('!', cx + 24, sy - 55);
-    if (act) { ctx.globalAlpha = .55 + .45 * pulse; ctx.fillStyle = '#ffc72c'; ctx.font = '26px sans-serif'; ctx.fillText('⬇', cx, sy - 84 - pulse * 6); ctx.globalAlpha = 1; }
-  }
   function drawHouse(sx, sy) {
     ctx.fillStyle = '#d8c7a6'; ctx.fillRect(sx, sy - 80, 120, 80);
     ctx.fillStyle = '#9a8a6c'; ctx.fillRect(sx - 6, sy - 88, 132, 10);
@@ -2356,15 +1969,6 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
       ctx.beginPath(); ctx.moveTo(22, -46); ctx.lineTo(30, -46); ctx.lineTo(40, -78); ctx.lineTo(32, -80); ctx.fill(); ctx.beginPath(); ctx.ellipse(40, -80, 10, 6, 0, 0, 6.3); ctx.fill();
       ctx.restore(); if (e.st === 1) { ctx.fillStyle = '#ffc72c'; ctx.font = '700 28px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('⚠', sx, sy - 100); }
     });
-    if (R.reqs && R.reqs.length) {
-      var aq0 = activeReq();
-      R.ev.forEach(function (e) {
-        if (e.type !== 'store' && e.type !== 'drop') return;
-        var sx = (e.x + e.len / 2 - camX) * PX; if (sx < -160 || sx > W + 160) return; var sy = Y(e.x + e.len / 2) + 2;
-        var q = R.reqs[e.rq];
-        if (e.type === 'store') drawStore(sx, sy, e.kind, aq0 === q && !q.bought); else if (q.st !== 3) drawDrop(sx, sy, e, aq0 === q && q.bought);
-      });
-    }
     if (R.rain > .02) {
       ctx.fillStyle = 'rgba(20,32,56,' + (.24 * R.rain) + ')'; ctx.fillRect(0, 0, W, H);
       ctx.strokeStyle = 'rgba(200,220,255,' + (.5 * R.rain) + ')'; ctx.lineWidth = 1.2; ctx.beginPath();
@@ -2397,8 +2001,6 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
       if (zone('jam', R.x)) lb.push({ t: tx('bnInJam'), c: 'rgba(255,138,61,.95)' }); else if (aheadEv('jam', R.x, 70)) lb.push({ t: tx('bnJam'), c: 'rgba(255,138,61,.95)' });
       if (R.rainNow) lb.push({ t: tx('bnRain'), c: 'rgba(60,110,190,.95)' });
       if (sandAt(R.x)) lb.push({ t: tx('bnSand'), c: 'rgba(190,140,50,.95)' }); else if (sandAhead(R.x, 50)) lb.push({ t: tx('bnSandAhead'), c: 'rgba(190,140,50,.9)' });
-      var aq = activeReq();
-      if (aq) { var tg = aq.bought ? aq.drop : aq.store, dd2 = tg.x - R.x; if (dd2 > -tg.len && dd2 < 170) lb.unshift({ t: aq.bought ? tx('bnDrop')(tx('famTo')[aq.who]) : tx('bnStore')(tx('storeN')[aq.kind]), c: 'rgba(47,111,224,.95)' }); }
       lb.slice(0, 3).forEach(function (b, i) { banner(b.t, 'l', 10 + i * 34, b.c); });
     }
   }
