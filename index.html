@@ -1400,7 +1400,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
   try { VOX = JSON.parse(localStorage.getItem('dawam.voice') || '{}'); } catch (e) { VOX = {}; }
   function saveVox() { try { localStorage.setItem('dawam.voice', JSON.stringify(VOX)); } catch (e) { toast('تعذر الحفظ (الملف كبير)'); } }
   function playClip(src, done) { try { if (vrAud) vrAud.pause(); vrAud = new Audio(src); vrAud.onended = vrAud.onerror = done || function () {}; var pr = vrAud.play(); if (pr && pr.catch) pr.catch(function () { if (done) done(); }); return true; } catch (e) { return false; } }
-  var EL_KEY = 'sk_26dee498813ff9c94d9e4577532ba8083aacfecf4002bb9c';
+  var EL_KEY = 'sk_e1203e0e6297e1967bc1f427760667178fd98768c4457e26';
   var EL_DEF = { mom: 'EXAVITQu4vr4xnSDxMZu', wife: '21m00Tcm4TlvDq8ikWAM', son: 'TxGEqnHWrfWFTfGW9XjX', boss: 'pNInz6obpgDQGcFmaJgB' };
   var EL_TXT = { mom: { pharmacy: 'يا ولدي، مرّ لي على الصيدلية وجيب لي الدوا، بسرعة الله يرضى عليك!', restaurant: 'يا ولدي، مرّ لي على المطعم وجيب لي أكل، بسرعة الله يرضى عليك!', grocery: 'يا ولدي، مرّ لي على البقالة وجيب لي الغرض، بسرعة الله يرضى عليك!' },
     wife: { pharmacy: 'هلا حبيبي، مرّ على الصيدلية وجيب لي الطلب، وتعال بسرعة!', restaurant: 'هلا حبيبي، مرّ على المطعم وجيب لي الطلب، وتعال بسرعة!', grocery: 'هلا حبيبي، مرّ على البقالة وجيب لي الطلب، وتعال بسرعة!' },
@@ -1418,7 +1418,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     return fetch('https://api.elevenlabs.io/v1/text-to-speech/' + (c.v[who] || EL_DEF[who]) + '?output_format=mp3_44100_64', {
       method: 'POST', headers: { 'xi-api-key': c.key, 'Content-Type': 'application/json', Accept: 'audio/mpeg' },
       body: JSON.stringify({ text: EL_TXT[who][kind], model_id: 'eleven_multilingual_v2', voice_settings: { stability: who === 'son' ? .3 : .45, similarity_boost: .75, style: .35 } })
-    }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); }).then(function (b) {
+    }).then(function (r) { if (!r.ok) return r.text().then(function (tt) { var d = ''; try { var j = JSON.parse(tt); d = (j.detail && (j.detail.status || j.detail.message)) || ''; } catch (e) {} throw new Error(r.status + ' ' + String(d).slice(0, 60)); }); return r.blob(); }).then(function (b) {
       return new Promise(function (ok) { var fr = new FileReader(); fr.onload = function () { ELC[ck] = fr.result; try { localStorage.setItem('dawam.el.cache', JSON.stringify(ELC)); } catch (e) {} ok(fr.result); }; fr.readAsDataURL(b); });
     });
   }
@@ -1428,7 +1428,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     ws.forEach(function (w) { ks.forEach(function (k) { jobs.push([w, k]); }); });
     (function next() {
       if (i >= jobs.length) { var m2 = $('elmsg'); if (m2) m2.textContent = tx('elOk'); return; }
-      var j = jobs[i++]; elFetch(j[0], j[1]).then(next).catch(function () { var m3 = $('elmsg'); if (m3) m3.textContent = tx('elFail'); });
+      var j = jobs[i++]; elFetch(j[0], j[1]).then(next).catch(function (er) { var m3 = $('elmsg'); if (m3) m3.textContent = tx('elFail') + ' (' + (er && er.message ? er.message : 'net') + ')'; });
     })();
   }
   function renderVR() {
