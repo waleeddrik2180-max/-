@@ -1,4 +1,4 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>طريق الدوام</title>
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>طريق الدوام - النسخة المطوّرة</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Lalezar&family=Lilita+One&display=swap">
@@ -18,6 +18,14 @@ button{font:inherit;color:inherit;cursor:pointer}
 .bal{min-width:0}.bal .lbl{font-size:12px;opacity:.85}
 .bal b{font:400 28px/1.1 var(--display);font-variant-numeric:tabular-nums}
 .bal .unit{font:400 18px var(--display)}
+.speedbox{display:flex;align-items:center;justify-content:center;position:relative;width:178px;height:104px;margin:0 auto 2px;overflow:hidden;color:#f8fafc;filter:drop-shadow(0 5px 8px #0008)}
+.speedbox .gauge-face{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.speedbox .gauge-readout{position:absolute;left:0;right:0;bottom:5px;display:flex;align-items:baseline;justify-content:center;gap:4px;font:600 11px var(--body);color:#cbd5e1;letter-spacing:.4px}
+.speedbox .gauge-readout b{font:400 29px/1 var(--display);font-variant-numeric:tabular-nums;color:#fff;text-shadow:0 0 8px #5cc8ff66}
+.speedbox .gauge-readout span{font-size:10px;color:#aab6c6}
+.speedbox .needle{transform-origin:90px 82px;transform:rotate(-120deg);transition:transform .12s linear}
+.speedbox .gauge-cap{filter:drop-shadow(0 1px 2px #000)}
+@media(max-width:460px){.speedbox{width:156px;height:94px}.speedbox .gauge-readout b{font-size:26px}.speedbox .needle{transform-origin:78px 74px}}
 .plate{margin-inline-start:auto;background:var(--plate);color:var(--plate-ink);border-radius:6px;padding:2px 12px;font:700 20px/1.3 var(--body);font-variant-numeric:tabular-nums;border:2px solid #1a1a14;white-space:nowrap}
 .plate.late{background:var(--danger);color:#fff}
 .day{font-size:13px;color:var(--muted);white-space:nowrap}.day b{color:var(--sign-ink);font-size:16px}
@@ -39,6 +47,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 .hearts[hidden]{display:none}
 #stage{position:relative;min-height:0;background:#7eb6d6;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
 canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+/* Softer, less saturated scenery for comfortable long play sessions */
+#cv{filter:saturate(.82) brightness(1.035) contrast(.97)}
 .sheet{position:absolute;inset:0;overflow-y:auto;padding:16px;background:var(--asphalt);display:flex;flex-direction:column;gap:16px}
 .sheet[hidden]{display:none}
 .sheet h2{margin:0;font:400 26px/1.2 var(--display);text-wrap:balance}
@@ -147,6 +157,17 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 @media (prefers-reduced-motion:reduce){#wheelrot{transition:none}}
 .gorow{display:flex;gap:10px;width:min(100%,460px)}
 .gorow #go{flex:1;width:auto;min-width:0}
+#pedals{display:none;width:min(100%,460px);gap:14px;align-items:stretch;direction:ltr}
+#pedals[hidden]{display:none!important}
+#pedals:not([hidden]){display:flex}
+.pedal{flex:1;min-width:0;height:76px;border-radius:18px;border:3px solid rgba(255,255,255,.9);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font:400 19px/1.1 var(--display);touch-action:none;user-select:none;-webkit-user-select:none;box-shadow:0 5px 0 rgba(0,0,0,.35);transition:transform .05s,box-shadow .05s}
+.pedal svg{width:31px;height:31px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.pedal:active,.pedal.pressed{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.35)}
+#brake{background:linear-gradient(#f04449,#b51f2c);color:#fff}
+#accelerator{background:linear-gradient(#29d879,#08783d);color:#fff}
+#accelerator.pressed{background:linear-gradient(#16a85b,#075c31)}
+#brake.pressed{background:linear-gradient(#c92732,#7f111b)}
+@media(max-width:460px){.pedal{height:68px;font-size:17px}}
 #defbtn{flex:none;width:96px;height:64px;border-radius:14px;border:3px solid #fff;background:#2f6fe0;color:#fff;display:grid;place-items:center;align-content:center;font:400 17px/1.05 var(--display);touch-action:manipulation;user-select:none;-webkit-user-select:none;box-shadow:0 5px 0 #1d4aa8;padding:0 4px}
 #defbtn svg{width:24px;height:24px;fill:#fff}
 #defbtn:active{transform:translateY(4px);box-shadow:0 1px 0 #1d4aa8}
@@ -175,8 +196,8 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 @keyframes cf{to{transform:translateY(105vh) rotate(540deg)}}
 @media (prefers-reduced-motion:reduce){.ch{transition:none}.confetti{display:none}}
 #snapbtn[hidden],#roadname[hidden],#designpanel[hidden],#retrybtn[hidden],#calmhome[hidden],#photobtn[hidden],#radiobtn[hidden],#radiopanel[hidden],#shoppanel[hidden],#shopbtn[hidden]{display:none!important}
-#shoppanel{position:absolute;inset:0;z-index:8;background:rgba(10,14,22,.82);display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
-.shopbox{width:min(380px,100%);display:grid;gap:8px;background:var(--sign);border:2px solid #fff;border-radius:12px;padding:14px;color:#fff}
+#shoppanel{position:absolute;inset:0;z-index:8;background:rgba(10,14,22,.82);display:flex;align-items:center;justify-content:center;padding:10px;overflow-y:auto}
+.shopbox{width:min(340px,100%);max-height:calc(100% - 12px);overflow-y:auto;display:grid;gap:6px;background:var(--sign);border:2px solid #fff;border-radius:12px;padding:10px;color:#fff;font-size:14px}
 .shopbox h3{margin:0}
 #designpanel{position:absolute;inset:0;z-index:9;background:rgba(10,14,22,.88);display:flex;padding:16px;overflow-y:auto}
 #designpanel .shopbox{margin:auto}
@@ -187,6 +208,20 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 #app.photo .hud{visibility:hidden}
 #app.photo .ctl{opacity:.18;transition:opacity .3s}
 #app.photo .ctl:active{opacity:1}
+
+/* In-game phone + simulated livestream community */
+#phonebtn{position:absolute;top:10px;inset-inline-end:10px;z-index:7;background:#176b52;color:#fff;border:2px solid #fff;border-radius:12px;padding:9px 13px;font:700 15px var(--body);box-shadow:0 3px 0 #073d2d}
+#phonepanel{position:absolute;inset:0;z-index:20;background:rgba(5,10,16,.84);display:flex;align-items:center;justify-content:center;padding:10px}
+#phonepanel[hidden]{display:none}
+.phonebox{width:min(420px,100%);max-height:96%;overflow:auto;background:#101b20;border:3px solid #42c995;border-radius:24px;padding:12px;box-shadow:0 12px 50px #000a;display:grid;gap:10px}
+.phhead{display:flex;align-items:center;justify-content:space-between;font-weight:700;font-size:18px}
+.phhead button,.phtabs button,.phaction{border:0;border-radius:10px;padding:8px 11px;background:#26383e;color:#fff}
+.phtabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.phtabs button{font-size:12px;padding:8px 5px}.phtabs button.active{background:#16835e}
+.phscreen{background:#17282d;border-radius:14px;padding:10px;display:grid;gap:8px;min-height:200px}
+.phmsg{background:#263d42;border-radius:12px;padding:9px;font-size:13px}.phmsg b{display:block;color:#7be0b4;margin-bottom:3px}
+.phaction{background:#ffc72c;color:#191b16;font-weight:700}.phaction.secondary{background:#30464b;color:#fff}.phrow{display:flex;gap:6px;flex-wrap:wrap}.phstat{display:flex;justify-content:space-between;background:#24383e;border-radius:10px;padding:8px;font-size:13px}
+#streamchat{display:grid;gap:6px;max-height:220px;overflow:auto}.streamline{background:#20343a;padding:7px 9px;border-radius:10px;font-size:13px}.streamline b{color:#8ee8c0}.donate{color:#ffdb70;font-weight:700}.phnote{font-size:11px;color:#b8c8c9}
+@media(max-width:460px){.phonebox{border-radius:18px;padding:9px}.phscreen{min-height:180px}}
 </style></head><body>
 <div id="app">
   <header class="hud">
@@ -221,6 +256,8 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     <button id="snapbtn" class="iconbtn" hidden style="position:absolute;top:10px;inset-inline-start:10px;z-index:6;font-size:18px">📸</button>
     <div id="roadname" hidden style="position:absolute;top:8px;left:50%;transform:translateX(-50%);z-index:5;display:flex;align-items:center;gap:8px;background:rgba(10,14,22,.66);color:#fff;border-radius:999px;padding:3px 14px 3px 8px;font:700 14px inherit;white-space:nowrap;pointer-events:none;max-width:70%;overflow:hidden"></div>
     <div id="radioholder" style="position:absolute;width:200px;height:200px;opacity:0;pointer-events:none;z-index:-1"></div>
+    <button id="phonebtn" type="button">📱 جوالي</button>
+    <div id="phonepanel" hidden><div class="phonebox"><div class="phhead"><span>📱 جوالك</span><button id="phoneclose" type="button">✕</button></div><div class="phtabs"><button id="phfamily" class="active" type="button">💬 العائلة</button><button id="phstream" type="button">🔴 البث</button><button id="phgoals" type="button">🏁 التحديات</button></div><div id="phscreen" class="phscreen"></div><div class="phnote">البث والتعليقات والداعمون شخصيات افتراضية داخل اللعبة، والمبالغ تضاف لرصيدك داخل اللعبة.</div></div></div>
     <canvas id="cv"></canvas>
     <section class="sheet" id="home"></section>
     <section class="sheet" id="end" hidden></section>
@@ -231,6 +268,23 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
   </main>
   <footer class="ctl">
     <div class="gorow"><button id="go" type="button"></button><button id="defbtn" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h4l8-5v16l-8-5H3z"/><path d="M18 8q3 4 0 8" stroke="#fff" fill="none" stroke-width="2" stroke-linecap="round"/></svg><span id="deft"></span></button></div>
+    <div class="speedbox" id="speedometer" role="img" aria-label="عداد سرعة تناظري بالكيلومتر في الساعة">
+      <svg class="gauge-face" viewBox="0 0 180 108" aria-hidden="true">
+        <defs><linearGradient id="gaugeMetal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d7e0e8"/><stop offset=".25" stop-color="#525f6d"/><stop offset=".6" stop-color="#151d27"/><stop offset="1" stop-color="#8d9aa8"/></linearGradient><radialGradient id="gaugeGlass" cx="50%" cy="35%" r="75%"><stop stop-color="#263746"/><stop offset="1" stop-color="#070b10"/></radialGradient></defs>
+        <path d="M8 88 A82 82 0 0 1 172 88 L161 88 A71 71 0 0 0 19 88Z" fill="url(#gaugeMetal)" stroke="#05080b" stroke-width="2"/>
+        <path d="M15 88 A75 75 0 0 1 165 88 L155 88 A65 65 0 0 0 25 88Z" fill="url(#gaugeGlass)"/>
+        <path d="M24 83 A67 67 0 0 1 156 83" fill="none" stroke="#d7e1eb" stroke-width="1.3" opacity=".9"/>
+        <g stroke="#f1f5f9" stroke-width="2" stroke-linecap="round"><path d="M25 82l8 -2"/><path d="M32 54l8 4"/><path d="M52 32l5 8"/><path d="M90 22v10"/><path d="M128 32l-5 8"/><path d="M148 54l-8 4"/><path d="M155 82l-8 -2"/></g>
+        <g fill="#e8eef5" font-family="Arial,sans-serif" font-size="8" text-anchor="middle"><text x="23" y="75">0</text><text x="35" y="51">40</text><text x="54" y="34">80</text><text x="90" y="19">120</text><text x="126" y="34">160</text><text x="145" y="51">200</text><text x="157" y="75">240</text></g>
+        <path d="M90 82 L90 34" class="needle" id="speedNeedle" stroke="#ff4d59" stroke-width="3" stroke-linecap="round"/><circle class="gauge-cap" cx="90" cy="82" r="5" fill="#d7e0e8" stroke="#252d36" stroke-width="2"/>
+        <path d="M18 88 A72 72 0 0 0 162 88" fill="none" stroke="#111820" stroke-width="3"/>
+      </svg>
+      <div class="gauge-readout"><b id="speed">0</b><span>كم/س</span></div>
+    </div>
+    <div id="pedals" hidden>
+      <button id="brake" class="pedal" type="button" aria-label="فرامل"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12"/><path d="M16 8v10M16 23h.01"/></svg><span id="braket">فرامل</span></button>
+      <button id="accelerator" class="pedal" type="button" aria-label="البنزين"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M8 27V5h16v22z"/><path d="M12 9v14M16 9v14M20 9v14"/><path d="M16 2v5m-4-3 4 4 4-4"/></svg><span id="gast">البنزين</span></button>
+    </div>
     <div class="keys" id="keys"></div>
   </footer>
 </div>
@@ -624,7 +678,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
   function fresh() {
     return { money: 0, day: 1, up: { shoes: 0, thermos: 0, alarm: 0, bag: 0, gym: 0 }, veh: 0, owned: [0], best: 0, route: 'long',
       stats: { runs: 0, arrivals: 0, total: 0, streak: 0, bestStreak: 0, bestTrip: 0, routes: {} }, top: [], ach: {},
-      daily: { last: '', streak: 0 }, quests: { date: '', list: [] }, wheel: { last: '' }, adm: 0, ends: {}, dbl: 0, ownPaint: ['def'], ownSticker: ['none'], paint: 'def', sticker: 'none' };
+      job: { rank: 0, streak: 0, warnings: 0, extraDay: 0, promotions: 0, lastResult: '' }, daily: { last: '', streak: 0 }, quests: { date: '', list: [] }, wheel: { last: '' }, adm: 0, ends: {}, dbl: 0, ownPaint: ['def'], ownSticker: ['none'], paint: 'def', sticker: 'none' };
   }
   function load() {
     try {
@@ -642,6 +696,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
         }
         if (Array.isArray(j.top)) f.top = j.top.filter(function (t) { return t && ROUTES[t.route]; }).slice(0, 5);
         if (j.ach && typeof j.ach === 'object') ACH_IDS.forEach(function (id) { if (j.ach[id]) f.ach[id] = 1; });
+        if (j.job && typeof j.job === 'object') f.job = { rank: Math.max(0, Math.min(4, +j.job.rank || 0)), streak: Math.max(0, +j.job.streak || 0), warnings: Math.max(0, +j.job.warnings || 0), extraDay: j.job.extraDay ? 1 : 0, promotions: Math.max(0, +j.job.promotions || 0), lastResult: typeof j.job.lastResult === 'string' ? j.job.lastResult : '' };
         if (j.daily && typeof j.daily.last === 'string') f.daily = { last: j.daily.last, streak: Math.max(0, +j.daily.streak || 0) };
         if (j.quests && typeof j.quests.date === 'string' && Array.isArray(j.quests.list)) f.quests = { date: j.quests.date, list: j.quests.list.filter(function (q) { return q && QT[q.t] && +q.n > 0; }).slice(0, 3).map(function (q) { return { t: q.t, n: +q.n, p: Math.max(0, +q.p || 0), r: Math.max(0, +q.r || 0), c: q.c ? 1 : 0 }; }) };
         if (j.wheel && typeof j.wheel.last === 'string') f.wheel = { last: j.wheel.last };
@@ -1121,19 +1176,40 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
   function shopPrice(it) { return Math.round((it.id === shopOffer() ? .6 : 1) * (it.p + Math.floor(S.day / 2)) * (R.shopNear && R.shopNear.mul || 1) * (new Date().getDay() === 5 ? .7 : 1)); }
   function shopMoney() { return S.money + Math.floor(R.earn); }
   function renderShop() {
-    var T = tx('shopItems'), h = '<div class="shopbox"><h3>' + tx('shopTitle') + '</h3>' + (new Date().getDay() === 5 ? '<div>' + tx('shopFri') + '</div>' : '') + (R.shopNear && R.shopNear.mul > 1 ? '<div>' + tx('shopPricey') + '</div>' : '') + '<div>' + tx('shopBal') + ' ' + fmt(shopMoney()) + '</div>';
+    var T = tx('shopItems'), isEv = !!VEH[S.veh].ev, fuelName = isEv ? (LANG === 'ar' ? 'شحن كهربائي' : 'EV charging') : (LANG === 'ar' ? 'تعبئة بنزين' : 'Refuel');
+    var h = '<div class="shopbox"><h3>⛽ ' + (LANG === 'ar' ? 'محطة الطريق' : 'Roadside Station') + '</h3><div class="muted">' + (LANG === 'ar' ? 'التعبئة من المحطات فقط — لا توجد عبوات بنزين على الطريق.' : 'Refuel at stations only — no roadside fuel cans.') + '</div>' + (new Date().getDay() === 5 ? '<div>' + tx('shopFri') + '</div>' : '') + (R.shopNear && R.shopNear.mul > 1 ? '<div>' + tx('shopPricey') + '</div>' : '') + '<div>' + tx('shopBal') + ' ' + fmt(shopMoney()) + '</div>';
+    h += '<div style="background:linear-gradient(135deg,#1c2734,#101820);border:1px solid #536574;border-radius:12px;padding:12px;margin:10px 0;text-align:center;color:#fff"><div style="font-size:30px">' + (isEv ? '🔌' : '⛽') + '</div><b>' + fuelName + '</b><div style="margin:5px 0;opacity:.85">' + (LANG === 'ar' ? 'الخزان الحالي: ' : 'Tank: ') + Math.floor(R.st) + ' / ' + Math.floor(maxSt()) + '</div><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">';
+    [{pct:25,label:LANG === 'ar'?'+25%':' +25%',cost:25},{pct:50,label:LANG === 'ar'?'+50%':' +50%',cost:50},{pct:100,label:LANG === 'ar'?'تعبئة كاملة':'Full tank',cost:100}].forEach(function (o) { var amount = Math.max(0, Math.min(maxSt()-R.st, maxSt()*o.pct/100)); var cost = Math.ceil(amount * (R.shopNear && R.shopNear.mul || 1) * (isEv ? 1.2 : 1.5)); h += '<button class="buy" data-fuel="' + o.pct + '"' + (!amount || shopMoney() < cost ? ' disabled' : '') + ' style="padding:8px 10px">' + o.label + '<small style="display:block">' + fmt(cost) + '</small></button>'; });
+    h += '</div><small style="display:block;margin-top:7px;opacity:.75">' + (LANG === 'ar' ? 'السعر حسب الكمية وفلوسك؛ تقدر تعبي جزء أو فل' : 'Pay for the amount you add; partial or full refill') + '</small></div>';
+    var dmg = Math.max(0, (R.hpMax || 3) - (R.hp || 0));
+    var repairCost = dmg * 35;
+    h += '<div style="background:linear-gradient(135deg,#263a32,#111d19);border:1px solid #4d8067;border-radius:12px;padding:12px;margin:10px 0;color:#fff;text-align:center"><div style="font-size:28px">🧰 🔧</div><b>' + (LANG === 'ar' ? 'ورشة الميكانيكي' : 'Mechanic workshop') + '</b><div style="margin:5px 0;opacity:.85">' + (LANG === 'ar' ? 'حالة السيارة: ' : 'Vehicle condition: ') + Math.max(0, R.hp || 0) + '/' + (R.hpMax || 3) + '</div><button class="buy" data-repair="1" ' + (!dmg || shopMoney() < repairCost ? 'disabled' : '') + ' style="width:100%">' + (LANG === 'ar' ? '🔧 إصلاح السيارة بالكامل · ' : '🔧 Fully repair car · ') + fmt(repairCost) + '</button><small style="display:block;margin-top:5px;opacity:.8">' + (LANG === 'ar' ? '٣٥ ريال داخل اللعبة لكل نقطة ضرر' : '35 in-game credits per damage point') + '</small></div><h4>' + (LANG === 'ar' ? 'بقالة المحطة' : 'Station shop') + '</h4>';
     SHOP.forEach(function (it) {
       var p = shopPrice(it);
       h += '<button class="buy" data-shop="' + it.id + '"' + (shopMoney() < p ? ' disabled' : '') + ' style="display:flex;justify-content:space-between;gap:8px;width:100%;text-align:start"><span>' + it.emo + ' ' + T[it.id] + '<small style="display:block;opacity:.8">+' + Math.round(it.st * 100) + '% ' + tx('shopEn') + ' · ' + it.sec + tx('shopSec') + (it.hp ? ' · +❤' : '') + (it.id === shopOffer() ? ' · ' + tx('shopDeal') : '') + '</small></span><b>' + fmt(p) + '</b></button>';
     });
     $('shoppanel').innerHTML = h + '<button id="shopclose" class="buy use" style="width:100%">' + tx('shopClose') + '</button></div>';
   }
-  function openShop() { if (!R || mode !== 'run' || R.paused || !R.shopNear) return; R.paused = true; R.hold = false; renderShop(); $('shoppanel').hidden = false; refresh(); }
+  function openShop() { if (!R || mode !== 'run' || R.paused || !R.shopNear) return; R.paused = true; R.hold = false; R.braking = false; renderShop(); $('shoppanel').hidden = false; refresh(); }
   function closeShop() { $('shoppanel').hidden = true; if (R) R.paused = false; refresh(); }
   $('shopbtn').addEventListener('click', openShop);
   $('shoppanel').addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
     if (b.id === 'shopclose') { closeShop(); return; }
+    if (b.dataset.repair) {
+      var damage = Math.max(0, (R.hpMax || 3) - (R.hp || 0));
+      var repairCost = damage * 35;
+      if (!damage) { toast(LANG === 'ar' ? 'سيارتك سليمة وما تحتاج إصلاح' : 'Your car is already in good condition'); return; }
+      if (shopMoney() < repairCost) { toast(LANG === 'ar' ? 'فلوسك ما تكفي للإصلاح' : 'Not enough money for repairs'); return; }
+      var repairFromEarn = Math.min(R.earn, repairCost); R.earn -= repairFromEarn; S.money -= (repairCost - repairFromEarn);
+      R.hp = R.hpMax || 3; R.t += 3; save(); sfx('buy'); toast(LANG === 'ar' ? 'تم إصلاح السيارة بالكامل! 🔧' : 'Vehicle fully repaired! 🔧'); renderShop(); refresh(); return;
+    }
+    if (b.dataset.fuel) {
+      var pct = +b.dataset.fuel, cap = maxSt(), amount = Math.max(0, Math.min(cap - R.st, cap * pct / 100));
+      var cost = Math.ceil(amount * (R.shopNear && R.shopNear.mul || 1) * (VEH[S.veh].ev ? 1.2 : 1.5));
+      if (!amount || shopMoney() < cost) { toast(LANG === 'ar' ? 'فلوسك ما تكفي أو الخزان فل' : 'Not enough money or tank is full'); return; }
+      var fromEarn = Math.min(R.earn, cost); R.earn -= fromEarn; S.money -= (cost - fromEarn); R.st = Math.min(cap, R.st + amount); R.dry = false; R.t += 2; save(); sfx('fuel'); toast((LANG === 'ar' ? 'تمت التعبئة! -' : 'Refueled! -') + fmt(cost)); renderShop(); refresh(); return;
+    }
     var it = SHOP.filter(function (x) { return x.id === b.dataset.shop; })[0]; if (!it) return;
     var p = shopPrice(it); if (shopMoney() < p) return;
     var fr = Math.min(R.earn, p); R.earn -= fr; S.money -= (p - fr);
@@ -1214,10 +1290,10 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     var r = rng(S.day * 7919 + 13 + seedAdd), c = rng(S.day * 31 + 5), hz = rng(S.day * 57 + 3), er = rng(S.day * 83 + seedAdd + 9);
     var hp0 = (rt.haz || rt.camel) ? 3 + VEH[S.veh].hp : 0;
     var run = {
-      x: 0, v: 0, st: maxSt(), tired: false, t: 0, earn: 0, hold: false, paused: false, dist: dist, limit: limitOf(S.day, rt.key), rt: rt, hp: hp0, hpMax: hp0, haz: [],
+      x: 0, v: 0, st: maxSt(), tired: false, t: 0, earn: 0, hold: false, braking: false, brakeTime: 0, brakeTap: 0, paused: false, dist: dist, limit: limitOf(S.day, rt.key), rt: rt, hp: hp0, hpMax: hp0, haz: [],
       terr: { A: (26 + .6 * Math.min(S.day, 12)) * rt.amp, p1: r() * 6.28, p2: r() * 6.28, p3: r() * 6.28, f1: 6.283 / (300 + r() * 110), f2: 6.283 / (140 + r() * 50), f3: 6.283 / (80 + r() * 20) },
       cups: [], phase: 0, floats: [], camH: 0, view: 0, ev: [], sand: [], sp: special(S.day), rain: 0, rainNow: false, rainSeen: false,
-      fines: 0, radars: 0, flash: 0, toll: 0
+      fines: 0, radars: 0, flash: 0, toll: 0, bodyDamage: 0, lastTrafficHit: -999
     };
     var x = 80; while (x < dist - 60) { run.cups.push({ x: x, got: false }); x += 80 + c() * 120; }
     if (rt.haz) { x = 110 + hz() * 30; while (x < dist - 60) { run.haz.push({ x: x, hit: false, k: Math.floor(hz() * 1000) }); x += 70 + hz() * 80; } }
@@ -1234,11 +1310,12 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     if (rt.camel) {
       run.ev = []; var cr = rng(S.day * 131 + 7), nc = Math.max(1, 2 + Math.min(4, Math.floor(S.day / 3)) + [-1, 0, 2][getDiff()]), shx = Math.round(dist * .5), sh2 = Math.round(dist * .82);
       for (var q = 1; q <= nc; q++) { var cx0 = Math.round(dist * q / (nc + 1) * .85 + 40 + cr() * 20); if (Math.abs(cx0 - shx) > 50 && Math.abs(cx0 - sh2) > 50) run.ev.push({ type: 'camel', x: cx0, len: 0, k: q, st: 0, t: 0, done: false, entered: false }); }
-      run.ev.push({ type: 'shop', x: shx, len: 30, k: 0, t: 0, done: false, entered: false, mul: 1 });
-      run.ev.push({ type: 'shop', x: sh2, len: 30, k: 1, t: 0, done: false, entered: false, mul: 1.3 });
       run.limit *= [1.3, 1, .8][getDiff()];
       run.ev.push({ type: 'storm', x: Math.round(dist * .3), len: 120 + Math.min(100, S.day * 8), k: 0, t: 0, done: false, entered: false });
     }
+    // Fuel stations on every road, including the shortcut and rush challenge.
+    run.ev.push({ type: 'shop', x: Math.round(dist * .38), len: 30, k: 0, t: 0, done: false, entered: false, mul: 1 });
+    run.ev.push({ type: 'shop', x: Math.round(dist * .72), len: 30, k: 1, t: 0, done: false, entered: false, mul: 1.15 });
     run.amb = []; run.charges = 0; run.ambBonus = 0; run.ambLost = 0;
     if (rt.key === 'short') {
       var na = S.day < 3 ? 1 : S.day < 8 ? 2 : 3, fr = na === 1 ? [.5] : na === 2 ? [.36, .7] : [.28, .52, .78], ar = rng(S.day * 977 + 11);
@@ -1273,11 +1350,19 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     var gas = R.hold && R.st > 0, top = veh.run * sp * (rt.key === 'short' ? veh.shortMul : 1) * (rt.spd || 1);
     if (jam) top *= .55; if (rain) top *= .9; if (sandHit) top *= .62;
     var acc;
-    if (gas) acc = (top - R.v) * 1.8;
-    else if (R.hold) acc = -R.v * .9;
-    else acc = rain ? -R.v * 1.2 - (R.v > 0 ? 1.8 : 0) : -R.v * 2.2 - (R.v > 0 ? 3 : 0);
-    acc -= slope > 0 ? slope * 9 * gym : slope * 9;
+    if (R.braking) {
+      R.brakeTime = (R.brakeTime || 0) + dt;
+      // الفرملة تتدرج: اللمسة الخفيفة تهدي، والاستمرار بالضغط يوقف السيارة.
+      var brakeForce = Math.min(42, 7 + R.brakeTime * 55);
+      acc = -Math.max(brakeForce, R.v * (0.7 + R.brakeTime * 1.8));
+    } else if ((R.brakeTap || 0) > 0) {
+      R.brakeTap = Math.max(0, R.brakeTap - dt);
+      acc = -Math.min(10, 4 + R.v * 0.35);
+    } else if (gas) acc = (top - R.v) * 1.8;
+    else acc = -R.v * 0.08; // ترك السيارة تتحدر بدل ما توقف عند رفع الإصبع
+    if (!R.braking && !(R.brakeTap > 0)) acc -= slope > 0 ? slope * 9 * gym : slope * 9;
     R.v = Math.max(0, R.v + acc * dt);
+    if (R.braking && R.v < 0.7) R.v = 0;
     var dx = R.v * dt; R.x += dx; R.earn += dx * mult() * rt.rate * (R.sp === 'holiday' ? 2 : 1); R.t += dt;
     if (gas) {
       R.st -= 2 * veh.drain * (1 + Math.max(0, slope) * 1.5 * gym) * (sandHit ? 1.5 : 1) * dt;
@@ -1285,12 +1370,23 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     }
     if (veh.ev && slope < -.08) { R.st = Math.min(maxSt(), R.st + (-slope) * 3 * dt); if (R.st > 0) R.dry = false; }
     R.tired = R.st <= 0;
-    R.cups.forEach(function (c) { if (!c.got && Math.abs(c.x - R.x) < 3) { c.got = true; R.cansGot = (R.cansGot || 0) + 1; R.st = Math.min(maxSt(), R.st + 25); R.dry = false; addFloat(veh.ev ? 'plusCharge' : 'plusFuel'); sfx('fuel'); } });
+    // Fuel cans removed: refuel only at eligible roadside stations.
     R.ev.forEach(function (e) {
       if (e.type === 'radar' && !e.done && R.x >= e.x) {
         e.done = true; R.radars++;
         if (R.v > RADAR_LIM) { var fine = Math.min(Math.floor(R.earn), 40 + 10 * S.day); R.earn -= fine; R.fines += fine; R.flash = .3; addFloat('fine'); sfx('radar'); }
         else addFloat('radarOk');
+      }
+      // Dense traffic is now physically risky: speed through a jam can damage the car.
+      if (e.type === 'jam' && !e.trafficChecked && R.x >= e.x && R.x <= e.x + e.len) {
+        e.trafficChecked = true;
+        if (R.v > 15 && R.x - R.lastTrafficHit > 45) {
+          R.lastTrafficHit = R.x; R.bodyDamage = Math.min(3, R.bodyDamage + 1);
+          if (R.hpMax > 0) R.hp = Math.max(0, R.hp - 1);
+          R.v *= .32; R.st = Math.max(0, R.st - 7); R.t += 1.2; R.flash = .22;
+          var crashCost = Math.min(Math.max(0, S.money), 25 + 10 * R.bodyDamage); S.money -= crashCost; R.fines = (R.fines || 0) + crashCost;
+          addFloat('crash'); sfx('crash'); toast(LANG === 'ar' ? 'صدمة بالزحمة! ضرر بالسيارة وخصم ' + crashCost + ' من رصيدك. خفف السرعة!' : 'Traffic collision! Car damaged; ' + crashCost + ' deducted. Slow down!');
+        }
       }
     });
     if (!R.tutDone) { R.tutDone = 1; tutorial(); }
@@ -1303,7 +1399,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
         else if (e.st >= 2) e.t += dt;
       } else if (e.type === 'shop') {
         if (!e.warned && R.x >= e.x - 70) { e.warned = 1; addFloat('shopF'); }
-        if (R.x >= e.x - 45 && R.x <= e.x + e.len + 10) R.shopNear = e;
+        if (R.x >= e.x - 45 && R.x <= e.x + e.len + 10) { R.shopNear = e; if(!e.deliveryChecked){e.deliveryChecked=true;phoneDeliveryArrival();} }
       }
     });
     R.ev.forEach(function (e) {
@@ -1350,12 +1446,37 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
   function addFloat(key) { R.floats.push({ key: key, life: 1.2, max: 1.2 }); }
 
   function finish(ok, wreck) {
-    mode = 'end'; R.hold = false;
+    mode = 'end'; R.hold = false; R.braking = false;
     var rt = R.rt, vm = VEH[S.veh].arr, bm = R.sp === 'holiday' ? 2 : R.sp === 'boss' ? 1.6 : 1;
     var earn = Math.floor(R.earn * (wreck ? .5 : 1)), arr = 0, tb = 0, con = 0, dayPlayed = S.day;
     if (ok) { arr = Math.round(R.dist * .25 * mult() * rt.arr * vm * bm); tb = Math.round(Math.max(0, R.limit - R.t) * 4 * rt.tb * vm * bm); if (!rt.calm) { S.day++; S.best = Math.max(S.best, S.day - 1); } }
     else if (!wreck && rt.consol) con = Math.round(earn * rt.consol);
-    var tot = earn + arr + tb + con + (R.ambBonus || 0); S.money += tot;
+    var tot = earn + arr + tb + con + (R.ambBonus || 0);
+    // Career progression is tied to successful commute arrivals.
+    if (!R.rt.calm) {
+      if (ok) {
+        S.job.streak++;
+        S.job.lastResult = 'ontime';
+        var jobBonus = 100 + S.job.rank * 75;
+        tot += jobBonus;
+        toast('🏢 حضور ممتاز! مكافأة وظيفية +' + fmt(jobBonus));
+        if (S.job.extraDay) { S.job.extraDay = 0; toast('✅ خلصت الدوام الإضافي.'); }
+        var needed = [3, 5, 7, 10];
+        if (S.job.rank < 4 && S.job.streak >= needed[S.job.rank]) {
+          S.job.rank++; S.job.promotions++; S.job.streak = 0;
+          var promoBonus = 500 * S.job.rank; tot += promoBonus;
+          toast('🎉 ترقية! رتبتك الجديدة: ' + ['موظف جديد','موظف','موظف متميز','مشرف','مدير قسم'][S.job.rank] + ' · مكافأة ' + fmt(promoBonus));
+        }
+      } else {
+        S.job.streak = 0; S.job.warnings++;
+        S.job.lastResult = 'late';
+        if (S.job.warnings % 2 === 0) S.job.extraDay = 1;
+        var penalty = Math.min(tot, 150 + S.job.rank * 100);
+        tot -= penalty;
+        toast('⚠️ تأخرت عن الدوام! خصم ' + fmt(penalty) + (S.job.extraDay ? '، وعليك دوام إضافي غدًا.' : ''));
+      }
+    }
+    S.money += tot;
     if (ok && !rt.calm && !S.ends.won && dayPlayed >= (rt.key === 'short' ? 100 : 50)) pendingEnd = 1;
     if (rt.camel) {
       toast(tx(ok ? 'fpOk' : 'fpFail'));
@@ -1428,7 +1549,10 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     var d = distOf(S.day), lim = limitOf(S.day), h = '', says = tx('says'), sp = special(S.day), di = dailyInfo();
     h += '<h2>' + tx('hTitle')(S.day) + '</h2>';
     if (S.adm) h += '<div class="sect adm"><h3>' + tx('admT') + '</h3><div class="admrow"><button class="buy" data-end="1">' + tx('admEnd') + '</button></div></div>';
+    var jobNames = ['موظف جديد', 'موظف', 'موظف متميز', 'مشرف', 'مدير قسم'];
+    var jobNeed = [3, 5, 7, 10];
     h += '<div class="mission"><span>' + tx('mDist')(fmt(d)) + '</span><span>' + tx('mTime')(Math.round(lim)) + '</span></div>';
+    h += '<div class="daily jobcard"><b>🏢 المسار الوظيفي · ' + jobNames[S.job.rank] + '</b><span>سلسلة الحضور: ' + S.job.streak + (S.job.rank < 4 ? ' / ' + jobNeed[S.job.rank] + ' أيام للترقية' : ' · أعلى رتبة') + '</span><span>الإنذارات: ' + S.job.warnings + ' · الترقيات: ' + S.job.promotions + '</span>' + (S.job.extraDay ? '<strong>⚠️ عليك دوام إضافي بسبب التأخير السابق.</strong>' : '') + '</div>';
     if (sp) h += '<div class="special ' + sp + '"><b>★ ' + tx(sp === 'boss' ? 'spBossT' : 'spHolidayT') + '</b><span>' + tx(sp === 'boss' ? 'spBossD' : 'spHolidayD') + '</span></div>';
     if (di.can) h += '<div class="daily"><b>' + tx('dailyT') + '</b><span>' + tx('dailyD')(fmt(di.amount), di.streak) + '</span><button class="buy" data-daily="1">' + tx('dailyBtn') + '</button></div>';
     ensureQuests();
@@ -1564,6 +1688,9 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
   function refresh() {
     var live = mode === 'run' && R ? Math.floor(R.earn + (R.ambBonus || 0)) : 0, veh = VEH[S.veh];
     $('bal').textContent = fmt(S.money + live);
+    var speedKmh = Math.round((R && mode === 'run' ? R.v : 0) * 3.6);
+    $('speed').textContent = String(speedKmh);
+    var needle = $('speedNeedle'); if (needle) needle.style.transform = 'rotate(' + (-120 + Math.max(0, Math.min(240, speedKmh)) + (speedKmh > 0 ? 0 : 0)) + 'deg)';
     $('day').textContent = S.day + (special(S.day) ? ' ★' : '');
     $('vehname').textContent = tx('veh')[S.veh][0];
     $('t-fuel').textContent = veh.ev ? tx('charge') : tx('fuel');
@@ -1591,26 +1718,37 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     var sb = $('shopbtn'); sb.textContent = tx('shopBtn'); sb.hidden = !(R && mode === 'run' && R.shopNear && !R.paused);
     var rb = $('radiobtn'); rb.hidden = S.route !== 'calm'; if (rb.hidden) $('radiopanel').hidden = true;
     rb.setAttribute('aria-label', tx('radioT')); $('radioin').placeholder = tx('radioPh'); $('radioplay').textContent = tx('radioPlay'); $('radiostop').textContent = tx('radioStop');
-    var go = $('go');
-    if (mode === 'run' && R) {
-      go.className = R.hold ? 'run' : 'idle';
-      go.textContent = R.hold ? (R.tired ? (veh.ev ? tx('bStopDryEv') : tx('bStopDry')) : tx('bStop')) : tx('bDrive');
-    } else {
+    var go = $('go'), pedalMode = mode === 'run' && !!R;
+    go.hidden = pedalMode;
+    $('pedals').hidden = !pedalMode;
+    if (!pedalMode) {
       go.className = '';
       go.textContent = mode === 'end' ? tx('bHome') : tx('bGo');
     }
+    $('accelerator').classList.toggle('pressed', !!(R && R.hold));
+    $('brake').classList.toggle('pressed', !!(R && !R.hold));
     $('pausebtn').style.visibility = mode === 'run' ? 'visible' : 'hidden';
-    var inRun = mode === 'run', sb = $('defbtn'), showD = !!(inRun && R && R.rt.key === 'short'); sb.hidden = !showD;
+    var inRun = mode === 'run'; var sb = $('defbtn'), showD = !!(inRun && R && R.rt.key === 'short'); sb.hidden = !showD;
     if (showD) { $('deft').textContent = tx('defBtn') + ' ×' + R.charges; sb.classList.toggle('alert', !!nextAmb(R.x, 90) && R.charges > 0); }
     $('homebtn').hidden = !inRun; document.querySelector('.day').hidden = inRun; $('langbtn').hidden = inRun;
   }
 
   var go = $('go'), cv = $('cv');
-  function setDrive(v) { if (R && mode === 'run' && !R.paused) { R.hold = v; refresh(); } }
+  function setDrive(v) { if (R && mode === 'run' && !R.paused) { R.hold = v; if (v) R.braking = false; refresh(); } }
+  function setBrake(v) { if (R && mode === 'run' && !R.paused) { if (v && !R.braking) R.brakeTime = 0; if (!v && R.braking) { R.brakeTap = 0.45; } R.braking = v; if (v) { R.hold = false; R.brakeTap = 0; } refresh(); } }
   function toggleDrive() { if (R && mode === 'run' && !R.paused) setDrive(!R.hold); }
   function pressGo() { if (!$('wheel').hidden || !$('ending').hidden) return; if (mode === 'home') startRun(); else if (mode === 'end') toHome(); }
   go.addEventListener('pointerdown', function (e) { e.preventDefault(); auInit(); if (mode === 'run') toggleDrive(); else pressGo(); });
   go.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  var gasBtn = $('accelerator'), brakeBtn = $('brake');
+  function gasDown(e) { e.preventDefault(); auInit(); if (mode === 'run' && R && !R.paused) setDrive(true); }
+  function gasUp(e) { if (e) e.preventDefault(); setDrive(false); }
+  gasBtn.addEventListener('pointerdown', gasDown);
+  ['pointerup','pointercancel','lostpointercapture'].forEach(function (ev) { gasBtn.addEventListener(ev, gasUp); });
+  gasBtn.addEventListener('contextmenu', function(e){e.preventDefault();});
+  brakeBtn.addEventListener('pointerdown', function(e){e.preventDefault();auInit();setBrake(true);});
+  ['pointerup','pointercancel','lostpointercapture'].forEach(function(ev){ brakeBtn.addEventListener(ev,function(e){if(e)e.preventDefault();setBrake(false);}); });
+  brakeBtn.addEventListener('contextmenu', function(e){e.preventDefault();});
   $('langbtn').addEventListener('click', function () { setLang(LANG === 'ar' ? 'en' : 'ar'); this.blur(); });
   $('sndbtn').addEventListener('click', function () {
     auInit(); AU.on = !AU.on;
@@ -1656,8 +1794,8 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
       if (mode === 'run') { e.preventDefault(); toggleDrive(); }
       else if (document.activeElement && document.activeElement.tagName !== 'BUTTON') { e.preventDefault(); pressGo(); }
     }
-    else if (e.code === 'ArrowRight' || e.code === 'KeyD') { if (mode === 'run') { e.preventDefault(); setDrive(true); } }
-    else if (e.code === 'ArrowLeft' || e.code === 'KeyA' || e.code === 'KeyS') { if (mode === 'run') { e.preventDefault(); setDrive(false); } }
+    else if (e.code === 'ArrowRight') { if (mode === 'run') { e.preventDefault(); setDrive(true); } }
+    else if (e.code === 'ArrowLeft' || e.code === 'KeyS') { if (mode === 'run') { e.preventDefault(); setDrive(false); } }
     else if (e.code === 'Enter' && !e.repeat && mode === 'end') { e.preventDefault(); pressGo(); }
     else if (e.code === 'Escape' && !$('wheel').hidden) closeWheel();
     else if ((e.code === 'KeyB' || e.code === 'KeyF' || e.code === 'ArrowUp') && mode === 'run') { e.preventDefault(); defend(); }
@@ -1832,12 +1970,22 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     ctx.fillStyle = '#1a1a14'; ctx.font = '700 17px "IBM Plex Sans Arabic", sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(tx('office'), sx + w / 2, sy - h - 12);
   }
   function drawStall(sx, sy) {
-    ctx.fillStyle = '#7a5a3a'; ctx.fillRect(sx, sy - 34, 70, 34);
-    for (var i = 0; i < 7; i++) { ctx.fillStyle = i % 2 ? '#ffffff' : '#c0322e'; ctx.fillRect(sx - 6 + i * 12, sy - 74, 12, 16); }
-    ctx.fillStyle = '#5d4329'; ctx.fillRect(sx, sy - 58, 4, 24); ctx.fillRect(sx + 66, sy - 58, 4, 24);
-    ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(sx + 35, sy - 48, 9, 0, 6.3); ctx.fill();
-    ctx.fillStyle = '#c98f63'; ctx.beginPath(); ctx.arc(sx + 35, sy - 47, 6, 0, 6.3); ctx.fill();
-    ctx.fillStyle = '#ffffff'; ctx.fillRect(sx + 28, sy - 40, 14, 8);
+    // Roadside service station: canopy, pumps, shopfront and sign.
+    ctx.save();
+    ctx.fillStyle = 'rgba(0,0,0,.22)'; ctx.fillRect(sx - 12, sy - 5, 112, 7);
+    ctx.fillStyle = '#e9e9e9'; ctx.fillRect(sx - 10, sy - 70, 92, 9);
+    ctx.fillStyle = '#d52f35'; ctx.fillRect(sx - 10, sy - 78, 92, 9);
+    ctx.fillStyle = '#f5f5f5'; ctx.fillRect(sx - 5, sy - 69, 7, 27); ctx.fillRect(sx + 67, sy - 69, 7, 27);
+    ctx.fillStyle = '#273746'; ctx.fillRect(sx + 2, sy - 39, 65, 37);
+    ctx.fillStyle = '#7fc9e8'; ctx.fillRect(sx + 8, sy - 33, 22, 14); ctx.fillRect(sx + 36, sy - 33, 23, 14);
+    ctx.fillStyle = '#f2c14e'; ctx.fillRect(sx + 8, sy - 15, 50, 5);
+    // Fuel pump and hose
+    ctx.fillStyle = '#f7f7f7'; ctx.fillRect(sx + 28, sy - 51, 19, 29); ctx.fillStyle = '#d52f35'; ctx.fillRect(sx + 28, sy - 51, 19, 6);
+    ctx.fillStyle = '#1e293b'; ctx.fillRect(sx + 31, sy - 43, 13, 7); ctx.fillStyle = '#b8f3d0'; ctx.fillRect(sx + 33, sy - 41, 9, 3);
+    ctx.strokeStyle = '#20252a'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(sx + 46, sy - 42); ctx.quadraticCurveTo(sx + 57, sy - 41, sx + 54, sy - 27); ctx.stroke();
+    ctx.fillStyle = '#20252a'; ctx.fillRect(sx + 51, sy - 29, 5, 8);
+    ctx.fillStyle = '#fff'; ctx.fillRect(sx - 8, sy - 91, 88, 12); ctx.fillStyle = '#d52f35'; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('FUEL • SHOP', sx + 36, sy - 82);
+    ctx.restore();
   }
   function drawHouse(sx, sy) {
     ctx.fillStyle = '#d8c7a6'; ctx.fillRect(sx, sy - 80, 120, 80);
@@ -1899,15 +2047,67 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     }
     ctx.fillStyle = night ? 'rgba(120,130,170,.25)' : 'rgba(255,255,255,.55)';
     for (var i = 0; i < 4; i++) { var cx = ((i * 290 - camX * PX * .06) % (W + 300) + (W + 300)) % (W + 300) - 150, cy = H * (.12 + (i % 3) * .08); ctx.beginPath(); ctx.ellipse(cx, cy, 50, 12, 0, 0, 6.3); ctx.ellipse(cx + 26, cy - 8, 30, 11, 0, 0, 6.3); ctx.fill(); }
+    // Rich, layered scenery: every route gets its own landscape, while keeping the original 2D gameplay.
+    var sceneryOff = camX * PX * .075;
+    var isSea = rt.key === 'corniche';
+    var isDesert = rt.key === 'desert' || rt.key === 'safar';
+    var isMountain = rt.key === 'long' || rt.key === 'highway' || rt.key === 'custom';
+    if (isSea) {
+      var seaY = base - 28;
+      var seaG = ctx.createLinearGradient(0, seaY, 0, H); seaG.addColorStop(0, night ? '#18364c' : '#79b8c6'); seaG.addColorStop(1, night ? '#091d31' : '#d0d9d0');
+      ctx.fillStyle = seaG; ctx.fillRect(0, seaY, W, H-seaY);
+      ctx.fillStyle = night ? 'rgba(132,190,214,.12)' : 'rgba(255,241,202,.32)';
+      for (var sw=0; sw<18; sw++) { var sy=seaY+8+sw*7; ctx.fillRect(((sw*37-sceneryOff*1.8)%(W+60)+W+60)%(W+60)-30, sy, 32+sw*2, 1.5); }
+    }
+    // Atmospheric mountain layers give the horizon depth on the long, highway and travel routes.
+    if (isMountain || isDesert || isSea || rt.key === 'night' || rt.key === 'calm') {
+      for (var layer=0; layer<3; layer++) {
+        var mBase = base - 25 + layer*16, mShift = sceneryOff*(.45+layer*.38), mCol;
+        if (night) mCol = ['#18233a','#202d45','#29364a'][layer];
+        else if (isDesert) mCol = ['#b69b78','#c7a77d','#d9bd8e'][layer];
+        else if (isSea) mCol = ['#6d8193','#8599a4','#9db0b3'][layer];
+        else mCol = ['#667b91','#8497a5','#a3b0b8'][layer];
+        ctx.fillStyle = mCol; ctx.beginPath(); ctx.moveTo(-10,H);
+        for (var mx=-20; mx<=W+30; mx+=10) {
+          var wave = Math.sin((mx+mShift+layer*43)/74)*13 + Math.sin((mx+mShift+layer*91)/31)*5 + hs(Math.floor((mx+mShift)/19)+layer*17)*15;
+          ctx.lineTo(mx, mBase - wave - layer*7);
+        }
+        ctx.lineTo(W+10,H); ctx.closePath(); ctx.globalAlpha = layer===0 ? .55 : (layer===1 ? .48 : .42); ctx.fill(); ctx.globalAlpha=1;
+      }
+    }
+    if (isDesert) {
+      for (var dune=0; dune<3; dune++) {
+        ctx.fillStyle = night ? ['#252b3d','#343345','#494052'][dune] : ['#c59b66','#d9b47c','#e6ca98'][dune];
+        ctx.beginPath(); ctx.moveTo(0,H);
+        for (var dx=0; dx<=W+8; dx+=8) ctx.lineTo(dx, base-18-dune*10-17*Math.sin((dx+sceneryOff*(.7+dune*.3))/105+dune)-7*Math.sin((dx+sceneryOff)/39));
+        ctx.lineTo(W,H); ctx.closePath(); ctx.globalAlpha=.45; ctx.fill(); ctx.globalAlpha=1;
+      }
+    }
     var off = camX * PX * .18, c0 = Math.floor(off / 64) - 1;
     if (rt.key === 'desert') {
       ctx.fillStyle = mix([196, 156, 98], [228, 198, 142], te); ctx.beginPath(); ctx.moveTo(0, H);
       for (var dx2 = 0; dx2 <= W + 8; dx2 += 8) ctx.lineTo(dx2, base - 28 - 22 * Math.sin((dx2 + off) / 110) - 14 * Math.sin((dx2 + off) / 53));
       ctx.lineTo(W, H); ctx.closePath(); ctx.fill();
     } else {
-      ctx.fillStyle = night ? '#141a38' : mix(SKY.sil0, SKY.sil1, te);
-      for (var k = c0; k < c0 + W / 64 + 3; k++) { var bh = 34 + hs(k) * 80, bw = 46 + hs(k + 3) * 14; ctx.fillRect(k * 64 - off, base - bh + 20, bw, bh + 80); if (hs(k + 7) > .6) ctx.fillRect(k * 64 - off + bw / 2 - 2, base - bh + 4, 4, 16); }
-      if (night) { ctx.fillStyle = 'rgba(255,230,140,.7)'; for (var k3 = c0; k3 < c0 + W / 64 + 3; k3++) { var bh3 = 34 + hs(k3) * 80; for (var wy = 0; wy < 3; wy++) if (hs(k3 * 7 + wy) > .55) ctx.fillRect(k3 * 64 - off + 8 + wy * 12, base - bh3 + 36, 4, 5); } }
+      // Distant skyline differs by route: denser towers for highway/city, low buildings for the calm route.
+      var cityColor = night ? '#141a38' : mix(SKY.sil0, SKY.sil1, te);
+      ctx.fillStyle = cityColor;
+      for (var k = c0; k < c0 + W / 64 + 4; k++) {
+        var dense = (rt.key === 'highway' || rt.key === 'corniche' || rt.key === 'night');
+        var bh = (dense ? 42 : 25) + hs(k) * (dense ? 94 : 58), bw = 34 + hs(k + 3) * 27, bx = k * 64 - off;
+        ctx.fillRect(bx, base - bh + 20, bw, bh + 80);
+        if (hs(k + 7) > .57 && dense) { ctx.fillRect(bx + bw*.43, base - bh + 4, 5, 17); ctx.fillRect(bx + bw*.43-5, base - bh + 11, 15, 3); }
+        if (night || te < .48) {
+          ctx.fillStyle = night ? 'rgba(255,220,140,.72)' : 'rgba(255,237,184,.45)';
+          for (var wy=0; wy<5; wy++) for (var wx=0; wx<3; wx++) if (hs(k*11+wy*5+wx)>.43) ctx.fillRect(bx+6+wx*9, base-bh+30+wy*13, 3, 4);
+          ctx.fillStyle = cityColor;
+        }
+      }
+      if (isSea) {
+        // Soft coastal skyline reflections and palms along the waterfront.
+        ctx.fillStyle = night ? 'rgba(255,202,115,.22)' : 'rgba(255,232,180,.28)';
+        for (var refl=0; refl<10; refl++) ctx.fillRect(W*.45+refl*19, base-5+(refl%3)*4, 12, 2);
+      }
     }
 
     var xs = [], ys = [], sx;
@@ -1936,14 +2136,13 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     R.haz.forEach(function (h) { if (h.hit) return; if (night && h.x - R.x > 45) return; var hx = (h.x - camX) * PX; if (hx < -60 || hx > W + 60) return; hazard(hx, Y(h.x) + 4); });
     R.amb.forEach(function (a) { if (a.s !== 'wait' && a.t > 2.7) return; var gx = (a.x - camX) * PX; if (gx < -260 || gx > W + 160) return; drawGang(gx, a, Y); });
     var bob = Math.sin(now / 260) * 3;
-    R.cups.forEach(function (c) {
-      if (c.got) return; var cx2 = (c.x - camX) * PX; if (cx2 < -20 || cx2 > W + 20) return; var cy2 = Y(c.x) - 40 + bob;
-      ctx.fillStyle = 'rgba(255,199,44,.9)'; ctx.beginPath(); ctx.arc(cx2, cy2, 19, 0, 6.3); ctx.fill();
-      ctx.fillStyle = '#d6342c'; ctx.fillRect(cx2 - 9, cy2 - 9, 18, 19); ctx.fillStyle = '#a92520'; ctx.fillRect(cx2 - 9, cy2 - 3, 18, 3);
-      ctx.fillStyle = '#d6342c'; ctx.fillRect(cx2 + 1, cy2 - 14, 8, 6); ctx.fillStyle = '#2a2a2a'; ctx.fillRect(cx2 - 3, cy2 - 14, 4, 4);
-    });
+    // No fuel cans on the road; stations are the only refueling source.
     R.ev.forEach(function (e) {
-      if (e.type === 'radar') { var rx = (e.x - camX) * PX; if (rx > -70 && rx < W + 70) radarObj(rx, Y(e.x) + 2, e.done); }
+      if (e.type === 'shop') {
+        var shopX = (e.x - camX) * PX;
+        if (shopX > -120 && shopX < W + 120) { var shopY = Y(e.x); drawStall(shopX, shopY + 2); ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.font = '700 14px \"IBM Plex Sans Arabic\", sans-serif'; var deliveryQ=null; if(typeof phoneRequests!=='undefined'&&phoneRequests){for(var di=phoneRequests.length-1;di>=0;di--){if(!phoneRequests[di].done){deliveryQ=phoneRequests[di];break;}}} ctx.fillText(deliveryQ?(deliveryQ.destination||'تسليم طلب'):tx('shopSign'), shopX + 35, shopY - 84); }
+      }
+      else if (e.type === 'radar') { var rx = (e.x - camX) * PX; if (rx > -70 && rx < W + 70) radarObj(rx, Y(e.x) + 2, e.done); }
       else if (e.type === 'jam') {
         if ((e.x + e.len - camX) * PX < -80 || (e.x - camX) * PX > W + 80) return;
         for (var xw = e.x + 6; xw < e.x + e.len; xw += 13) {
@@ -1956,12 +2155,22 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     var pxs = W * .28, py = Y(R.x), ang = Math.atan(slopeAt(R.x) * YS / PX), running = R.hold && !R.tired && mode === 'run';
     if (running && R.v > 5) { ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 2; for (var q = 0; q < 4; q++) { var qx = pxs - 50 - q * 18 - (now / 8 + q * 30) % 30, qy = py - 12 - q * 11; ctx.beginPath(); ctx.moveTo(qx, qy); ctx.lineTo(qx - 18, qy); ctx.stroke(); } }
     vehicle(pxs, py, ang, running);
+    // Visible wear after collisions: light smoke increases with accumulated damage.
+    if (R.bodyDamage > 0 && mode === 'run') {
+      ctx.save();
+      for (var sm = 0; sm < R.bodyDamage * 2; sm++) {
+        var sxm = pxs - 24 - sm * 5 - Math.sin(now / 180 + sm) * 4;
+        var sym = py - 36 - (now / 24 + sm * 13) % 28;
+        ctx.globalAlpha = .12 + .12 * Math.abs(Math.sin(now / 230 + sm));
+        ctx.fillStyle = '#d6dbe1'; ctx.beginPath(); ctx.arc(sxm, sym, 4 + (sm % 3), 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.restore();
+    }
 
     if (R.rt.camel) R.ev.forEach(function (e) {
       var sx = (e.x - camX) * PX;
       if (e.type === 'camel' && e.st === 1 && sx > W - 40) { ctx.save(); ctx.globalAlpha = .55 + .45 * Math.abs(Math.sin(R.t * 8)); ctx.fillStyle = '#ff3b30'; ctx.textAlign = 'right'; ctx.font = '700 18px "IBM Plex Sans Arabic", sans-serif'; ctx.fillText('⚠ 🐪 ' + Math.max(0, Math.round(e.x - R.x)) + 'm ▶', W - 8, H * .5); ctx.restore(); return; }
       if (sx < -120 || sx > W + 120) return; var sy = Y(e.x);
-      if (e.type === 'shop') { drawStall(sx, sy + 2); ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.font = '700 14px "IBM Plex Sans Arabic", sans-serif'; ctx.fillText(tx('shopSign'), sx + 35, sy - 84); return; }
       if (e.type !== 'camel' || !(e.st === 1 || (e.st === 2 && e.t < 1) || (e.st === 3 && e.t < 1.5))) return;
       ctx.save(); ctx.globalAlpha = e.st === 2 ? 1 - e.t : Math.min(1, .3 + e.t * 3); ctx.translate(sx, sy + 3); ctx.fillStyle = '#b98a52';
       [-22, -12, 12, 22].forEach(function (lx) { ctx.fillRect(lx - 2, -30, 5, 30); });
@@ -2004,6 +2213,75 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
       lb.slice(0, 3).forEach(function (b, i) { banner(b.t, 'l', 10 + i * 34, b.c); });
     }
   }
+
+  /* Phone feature: family requests + simulated live viewers and in-game donations. */
+  var phoneState = {tab:'family', followers:0, stream:false, messages:[], lastGift:0, deliveries:0, streams:0, donations:0, claimedChallenges:[]};
+  try { var savedPhone = JSON.parse(localStorage.getItem('dawam.phone.bots.v1') || 'null'); if (savedPhone) phoneState = Object.assign(phoneState, savedPhone); } catch(e) {}
+  var familyChats = [
+    {name:'أمي ❤️', msg:'يمّه إذا فضيت مرّ خذ لنا أغراض البيت.', reward:90},
+    {name:'أبوي 👨', msg:'أبغى منك تمرّ علي بعد الدوام، الله يعافيك.', reward:120},
+    {name:'أختك 🌷', msg:'ممكن تجيب لي قهوة وأنت راجع؟', reward:65},
+    {name:'أخوك 😎', msg:'إذا وصلت علمني، عندي لك سالفة.', reward:55},
+    {name:'زوجتك 💗', msg:'لا تنسى تجيب العشاء وأنت راجع ❤️', reward:140},
+    {name:'ولدك 🧸', msg:'بابا أبي لعبة صغيرة! 🥹', reward:110},
+    {name:'بنتك 🎀', msg:'بابا جيب لي حلاوة إذا تقدر 🍬', reward:80}
+  ];
+  var streamNames = ['راكان','نوف','أبو فيصل','لمى','سعود_99','جود','تركي','ريما','مشعل','دانة','فهد','عبير','زياد','شوق'];
+  var streamLines = ['كفو والله استمر 🔥','محتواك رهيب 😂','يا سلام عليك يا بطل','منور البث ❤️','وصلناااا','الله يرزقك يا رب','ههههههههه','لا توقف البث!','تستاهل الدعم يا أسطورة','أول مرة أدخل عندك، رهيب'];
+  var phoneRequests = [];
+  try { phoneRequests = JSON.parse(localStorage.getItem('dawam.phone.requests.v1') || '[]'); } catch(e) { phoneRequests=[]; }
+  function savePhone(){ try{localStorage.setItem('dawam.phone.bots.v1',JSON.stringify(phoneState));localStorage.setItem('dawam.phone.requests.v1',JSON.stringify(phoneRequests));}catch(e){} }
+  function pRand(a){return a[Math.floor(Math.random()*a.length)];}
+  function phoneDeliveryArrival(){
+    if(!phoneRequests || !phoneRequests.length) return;
+    var q=null;
+    for(var i=phoneRequests.length-1;i>=0;i--){if(!phoneRequests[i].done&&!phoneRequests[i].arrived){q=phoneRequests[i];break;}}
+    if(!q) return;
+    q.arrived=true; q.done=true; phoneState.deliveries=(phoneState.deliveries||0)+1;
+    phoneEarn(q.reward,'تم تسليم الطلب عند '+(q.destination||'المتجر'));
+    checkPhoneAchievements();
+    savePhone();
+    if(!$('phonepanel').hidden) renderPhone();
+  }
+  function phoneOpen(){ $('phonepanel').hidden=false; renderPhone(); }
+  function phoneClose(){ $('phonepanel').hidden=true; }
+  function phoneEarn(amount, label){ S.money += amount; refresh(); toast(label+' +'+amount+' م'); }
+  var phoneChallenges=[{id:'deliver1',title:'🚗 أول توصيل',desc:'كمّل طلب توصيل واحد',goal:1,reward:100,progress:function(){return phoneState.deliveries||0;}},{id:'deliver3',title:'📦 مندوب نشيط',desc:'كمّل 3 طلبات توصيل',goal:3,reward:250,progress:function(){return phoneState.deliveries||0;}},{id:'support200',title:'💸 محبوب المتابعين',desc:'اجمع 200 م من دعم البث',goal:200,reward:180,progress:function(){return phoneState.donations||0;}}];
+  var phoneAchievements=[{title:'🥇 أول خطوة',desc:'أنجز أول طلب توصيل',test:function(){return (phoneState.deliveries||0)>=1;}},{title:'🚚 مندوب محترف',desc:'أنجز 5 طلبات توصيل',test:function(){return (phoneState.deliveries||0)>=5;}},{title:'🔴 نجم البث',desc:'ابدأ بثًا مباشرًا',test:function(){return (phoneState.streams||0)>=1;}},{title:'💰 داعموك يحبونك',desc:'اجمع 500 م من دعم البث',test:function(){return (phoneState.donations||0)>=500;}}];
+  function checkPhoneAchievements(){var now=phoneAchievements.filter(function(a){return a.test();}).length;var before=phoneState.achievements||0;phoneState.achievements=now;if(now>before)toast('🏆 إنجاز جديد! فتّش في التحديات');savePhone();}
+  function renderPhone(){
+    var root=$('phscreen'); root.innerHTML='';
+    $('phfamily').classList.toggle('active',phoneState.tab==='family'); $('phstream').classList.toggle('active',phoneState.tab==='stream'); $('phgoals').classList.toggle('active',phoneState.tab==='goals');
+    if(phoneState.tab==='family'){
+      var h=document.createElement('div');h.className='phstat';h.innerHTML='<span>رسائل العائلة</span><b>'+familyChats.length+' محادثات</b>';root.appendChild(h);
+      familyChats.forEach(function(c,i){var d=document.createElement('div');d.className='phmsg';d.innerHTML='<b>'+c.name+'</b><span>'+c.msg+'</span><div class="phrow" style="margin-top:8px"><button class="phaction" data-request="'+i+'">تمّ الطلب</button><button class="phaction secondary" data-ignore="'+i+'">لاحقاً</button></div>';root.appendChild(d);});
+      phoneRequests.forEach(function(q,i){var d=document.createElement('div');d.className='phmsg';var status=q.done?'مكتمل ✓':(q.arrived?'وصلت للمكان، تم تسليم الطلب ✓':'توجّه إلى '+(q.destination||'البقالة')+' بالطريق · المكافأة '+q.reward+' م');d.innerHTML='<b>📌 '+q.name+'</b><span>'+q.msg+'</span><div class="phrow" style="margin-top:7px"><span class="phnote">'+status+'</span></div>';root.appendChild(d);});
+    } else if(phoneState.tab==='goals'){
+      var head=document.createElement('div');head.className='phstat';head.innerHTML='<span>🏁 تحديات ومكافآت</span><b>أنجز واجمع فلوس</b>';root.appendChild(head);
+      phoneChallenges.forEach(function(c){var progress=Math.min(c.goal,Math.max(0,c.progress())),claimed=(phoneState.claimedChallenges||[]).indexOf(c.id)>=0,ready=progress>=c.goal;var d=document.createElement('div');d.className='phmsg';d.innerHTML='<b>'+c.title+'</b><span>'+c.desc+'</span><div class="phstat"><span>التقدم</span><b>'+progress+' / '+c.goal+'</b></div><div class="phrow"><span class="phnote">🎁 المكافأة '+c.reward+' م</span>'+(claimed?'<span class="phnote">✓ استلمتها</span>':(ready?'<button class="phaction" data-claimchallenge="'+c.id+'">استلم المكافأة</button>':'<span class="phnote">كمّل التحدي أول</span>'))+'</div>';root.appendChild(d);});
+      var ach=document.createElement('div');ach.className='phmsg';ach.innerHTML='<b>🏆 الإنجازات</b><span>تفتح تلقائيًا كل ما تتقدم في اللعبة.</span>';root.appendChild(ach);phoneAchievements.forEach(function(a){var unlocked=a.test(),d=document.createElement('div');d.className='phmsg';d.innerHTML='<b>'+(unlocked?'✅ ':'🔒 ')+a.title+'</b><span>'+a.desc+'</span><span class="phnote">'+(unlocked?'تم فتح الإنجاز!':'لم يُفتح بعد')+'</span>';root.appendChild(d);});
+    } else {
+      var st=document.createElement('div');st.className='phstat';st.innerHTML='<span>👥 المتابعون</span><b>'+Number(phoneState.followers||0).toLocaleString('ar-SA')+'</b>';root.appendChild(st);
+      var controls=document.createElement('div');controls.className='phrow';controls.innerHTML=phoneState.stream?'<button class="phaction" id="endstream">إنهاء البث واستلام الدعم</button><span class="phnote">🔴 بثك شغّال الآن</span>':'<button class="phaction" id="startstream">🔴 ابدأ البث المباشر</button>';root.appendChild(controls);
+      var chat=document.createElement('div');chat.id='streamchat';(phoneState.messages||[]).slice(-14).forEach(function(m){var line=document.createElement('div');line.className='streamline';line.innerHTML='<b>'+m.name+'</b> '+m.text+(m.gift?'<div class="donate">🎁 دعم '+m.gift+' م وصل لرصيدك!</div>':'');chat.appendChild(line);});if(!chat.children.length){chat.innerHTML='<div class="phnote">ابدأ البث وبتدخل شخصيات افتراضية تتفاعل معك، وبعضها يرسل دعم بالفلوس 💸</div>'; }root.appendChild(chat);
+    }
+  }
+  $('phonebtn').addEventListener('click',phoneOpen); $('phoneclose').addEventListener('click',phoneClose);
+  $('phonepanel').addEventListener('click',function(e){if(e.target===$('phonepanel'))phoneClose();});
+  $('phfamily').addEventListener('click',function(){phoneState.tab='family';renderPhone();});
+  $('phstream').addEventListener('click',function(){phoneState.tab='stream';renderPhone();});
+  $('phgoals').addEventListener('click',function(){phoneState.tab='goals';renderPhone();});
+  $('phscreen').addEventListener('click',function(e){var t=e.target;
+    if(t.dataset.request!==undefined){var c=familyChats[Number(t.dataset.request)];var dest=pRand(['الصيدلية 💊','البقالة 🛒','المطعم 🍔']);phoneRequests.push({name:c.name,msg:c.msg,reward:c.reward,destination:dest,done:false,arrived:false});savePhone();renderPhone();toast('قبلت الطلب! توجّه إلى '+dest+' بالطريق');}
+    if(t.dataset.ignore!==undefined){toast('خليت الطلب لوقت ثاني');}
+    if(t.dataset.complete!==undefined){toast('لازم توصل للمكان المطلوب بالطريق عشان تسلّم الطلب!');}
+    if(t.dataset.claimchallenge){var ch=phoneChallenges.filter(function(c){return c.id===t.dataset.claimchallenge;})[0];if(ch&&ch.progress()>=ch.goal&&(phoneState.claimedChallenges||[]).indexOf(ch.id)<0){phoneState.claimedChallenges.push(ch.id);phoneEarn(ch.reward,'مكافأة التحدي');savePhone();checkPhoneAchievements();renderPhone();}}
+    if(t.id==='startstream'){phoneState.stream=true;phoneState.streams=(phoneState.streams||0)+1;phoneState.followers+=Math.floor(8+Math.random()*33);checkPhoneAchievements();phoneState.messages.push({name:pRand(streamNames),text:'دخلت البث! يعطيك العافية 👋'});savePhone();renderPhone();}
+    if(t.id==='endstream'){phoneState.stream=false;var gift=0;phoneState.messages.push({name:pRand(streamNames),text:pRand(streamLines)});if(Math.random()<.9){gift=Math.floor(35+Math.random()*166);phoneState.donations=(phoneState.donations||0)+gift;phoneState.messages.push({name:pRand(streamNames),text:'هذا دعم بسيط لك يا بطل ❤️',gift:gift});phoneEarn(gift,'دعم البث');checkPhoneAchievements();}else toast('انتهى البث! المرة الجاية يمكن يجيك دعم أكبر');phoneState.followers+=Math.floor(3+Math.random()*22);savePhone();renderPhone();}
+  });
+  var botTimer=0;
+  setInterval(function(){if(!phoneState.stream||$('phonepanel').hidden||phoneState.tab!=='stream')return;var chat=$('streamchat');if(!chat)return;var msg={name:pRand(streamNames),text:pRand(streamLines)};if(Math.random()<.22){msg.gift=Math.floor(10+Math.random()*71);phoneState.donations=(phoneState.donations||0)+msg.gift;phoneEarn(msg.gift,'دعم من '+msg.name);checkPhoneAchievements();}phoneState.messages.push(msg);if(phoneState.messages.length>40)phoneState.messages=phoneState.messages.slice(-40);savePhone();renderPhone();},8500);
+  savePhone();
 
   function frame(ts) {
     requestAnimationFrame(frame);
