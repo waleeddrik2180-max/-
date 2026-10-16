@@ -192,9 +192,19 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .escene .statgrid{width:100%}
 .escene p{margin:0;color:#d9e4de}
 .confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.bubble.mg{border-inline-start:5px solid #2d5b8a}.bubble.em{border-inline-start:5px solid #0b6e4f}
+.bubble .cur{display:inline-block;width:2px;height:1em;background:#17201b;margin-inline-start:2px;vertical-align:-2px;animation:blk .7s steps(1) infinite}
+@keyframes blk{50%{opacity:0}}
+.eprog{display:flex;gap:6px;align-items:center;justify-content:center}.eprog i{width:7px;height:7px;border-radius:50%;background:#3a4148}.eprog i.d{background:var(--plate)}
+.reward{width:100%;border-radius:14px;padding:12px 14px;background:linear-gradient(135deg,#ffc72c,#e39a12);color:#1a1a14;display:grid;gap:2px;box-shadow:0 0 0 3px #fff3 inset,0 6px 24px #ffc72c55;animation:pop .6s cubic-bezier(.2,1.6,.4,1) both}
+.reward b{font:400 34px var(--display);line-height:1}.reward span{font-size:13px;font-weight:700}
+.rank{width:100%;display:grid;gap:2px;background:var(--asphalt-2);border:2px dashed var(--plate);border-radius:12px;padding:8px 12px}
+.rank span{font-size:12px;color:var(--muted)}.rank b{font:400 22px var(--display);color:var(--plate)}
+.ebtns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
 .confetti i{position:absolute;top:-16px;width:8px;height:14px;opacity:.9;animation:cf 3.4s linear infinite}
 @keyframes cf{to{transform:translateY(105vh) rotate(540deg)}}
-@media (prefers-reduced-motion:reduce){.ch{transition:none}.confetti{display:none}}
+@media (prefers-reduced-motion:reduce){.ch{transition:none}.confetti{display:none}.reward{animation:none}.bubble .cur{animation:none}}
 #snapbtn[hidden],#roadname[hidden],#designpanel[hidden],#retrybtn[hidden],#calmhome[hidden],#photobtn[hidden],#radiobtn[hidden],#radiopanel[hidden],#shoppanel[hidden],#shopbtn[hidden]{display:none!important}
 #shoppanel{position:absolute;inset:0;z-index:8;background:rgba(10,14,22,.82);display:flex;align-items:center;justify-content:center;padding:10px;overflow-y:auto}
 .shopbox{width:min(340px,100%);max-height:calc(100% - 12px);overflow-y:auto;display:grid;gap:6px;background:var(--sign);border:2px solid #fff;border-radius:12px;padding:10px;color:#fff;font-size:14px}
@@ -313,12 +323,21 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
       wheelWin: function (v) { return 'ربحت ' + v + ' م!'; },
       endT: 'النهاية', endNext: 'التالي', endDone: 'تم', endMgr: 'المدير', endEmp: 'أنت', endSkip: 'تخطي', endBye: 'مع السلامة!', endSceneAria: 'مشهد النهاية',
       endReward: 'راتبك صار دبل!',
-      winT: 'مبروك! ختمت اللعبة', winD: 'وصلت للنهاية، وراتبك صار دبل من اليوم.', winBtn: 'كمّل اللعب',
+      winT: 'مبروك! ختمت اللعبة', winD: 'وصلت للنهاية، وراتبك صار دبل من اليوم.', winBtn: 'كمّل اللعب', winAgain: '🎬 شاهد النهاية مرة ثانية',
+      winRewardT: 'راتبك ×2', winRewardD: 'مكافأة نهاية الخدمة، تنحسب على كل رحلة من اليوم',
+      winRankL: 'لقبك', winRanks: ['موظف صابر', 'موظف مثالي', 'أسطورة الدوام', 'مدير الطريق'],
+      endScnM: 'بالتوفيق يا بطل!', endScnE: '×2 💰', endTitleCard: 'النهاية', endTitleSub: 'وصلت… وما عاد تحتاج توصل',
       winStats: ['أيام الدوام', 'مرات الوصول', 'مجموع الأرباح', 'أطول متتالية'],
       admT: 'وضع الأدمن', admEnd: 'عرض مشهد النهاية',
       endLines: [
-        ['m', 'انت الموظف الشريف صبرت هاذي الايام عشان الوظيفه لهذا السبب انت راح تكون ماتجيني بس راتبك راح يكون دبل حق الوظيفه'],
-        ['e', 'والله شكراً يا المدير حرفياً انا ماني مصدق بس مع السلامة']
+        ['m', 'أخيراً وصلت يا بعد حيي! تدري كم يوم داومت عندنا؟'],
+        ['e', 'والله ما عدت أحسبها يا مدير… الطريق هو اللي كان يحسبها علي'],
+        ['m', 'كل صبح أشوف سيارتك تدخل البوابة، حتى لما الطريق مزحوم والإبل واقفة فيه'],
+        ['e', 'الإبل؟! لا تذكرني، ذيك وقفتني نص ساعة وهي تناظرني'],
+        ['m', 'انت الموظف الشريف، صبرت هالأيام كلها عشان الوظيفة. عشان كذا ما راح تحتاج تجيني بعد اليوم'],
+        ['e', 'يعني… فصلتني يا مدير؟!'],
+        ['m', 'لا يا شيخ! بس راتبك من اليوم دبل، وانت مرتاح في بيتك'],
+        ['e', 'والله شكراً يا مدير، حرفياً أنا ماني مصدق… بس مع السلامة!']
       ],
       defBtn: 'بوري', bnAmbFar: 'قطاع طرق قدامك! جهّز البوري', bnAmbNow: 'قطاع طرق! اضغط البوري الحين!',
       ambOk: 'هربوا! مكافأة', ambCaught: 'مسكوك! خسرت فلوس', ambNone: 'ما عندك بوري!',
@@ -469,12 +488,21 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
       wheelWin: function (v) { return 'You won ' + v + ' m!'; },
       endT: 'The Ending', endNext: 'Next', endDone: 'Done', endMgr: 'Manager', endEmp: 'You', endSkip: 'Skip', endBye: 'Goodbye!', endSceneAria: 'Ending scene',
       endReward: 'Your salary is now double!',
-      winT: 'Congratulations! You beat the game', winD: 'You reached the end, and your salary is now double.', winBtn: 'Keep playing',
+      winT: 'Congratulations! You beat the game', winD: 'You reached the end, and your salary is now double.', winBtn: 'Keep playing', winAgain: '🎬 Watch the ending again',
+      winRewardT: 'Salary ×2', winRewardD: 'Retirement bonus, applied to every trip from today',
+      winRankL: 'Your title', winRanks: ['Patient Employee', 'Model Employee', 'Commute Legend', 'Road Boss'],
+      endScnM: 'Good luck, champ!', endScnE: '×2 💰', endTitleCard: 'The End', endTitleSub: 'You made it… and now you never have to again',
       winStats: ['Work days', 'Arrivals', 'Total earned', 'Best streak'],
       admT: 'Admin mode', admEnd: 'Show ending scene',
       endLines: [
-        ['m', 'You, the honest employee, stayed patient all these days for the job. For that reason, you will not need to come to me anymore, but your salary will be double the job pay.'],
-        ['e', 'Thank you so much, boss. Honestly, I cannot believe it. Anyway, goodbye.']
+        ['m', 'You finally made it! Do you know how many days you have worked here?'],
+        ['e', 'Honestly boss, I stopped counting. The road was counting for me.'],
+        ['m', 'Every morning I watched your car roll through the gate, even when the road was jammed and camels blocked it.'],
+        ['e', 'Camels?! Do not remind me. One stared at me for half an hour.'],
+        ['m', 'You are the honest employee. You stayed patient all these days for the job. For that reason, you will not need to come to me anymore.'],
+        ['e', 'Wait… are you firing me, boss?!'],
+        ['m', 'No, no! Your salary is now double, and you get to stay home.'],
+        ['e', 'Thank you so much, boss. Honestly, I cannot believe it. Anyway, goodbye!']
       ],
       defBtn: 'Siren', bnAmbFar: 'Bandits ahead! Get the siren ready', bnAmbNow: 'Bandits! Hit the siren now!',
       ambOk: 'They fled! Bonus', ambCaught: 'Robbed! You lost money', ambNone: 'No siren left!',
@@ -919,15 +947,37 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
   var employeeSVG = '<svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="12" fill="#0b6e4f"/><path d="M8 64c0-16 10-23 24-23s24 7 24 23z" fill="#f4f6f8"/><path d="M32 42l4 4-2 14-2 3-2-3-2-14z" fill="#c0322e"/><circle cx="32" cy="28" r="11" fill="#d9a67c"/><path d="M20 27c0-10 5-15 12-15s12 5 12 15c-2-4-6-6-12-6s-10 2-12 6z" fill="#2a1d16"/><circle cx="27.5" cy="29" r="1.5" fill="#2a1c12"/><circle cx="36.5" cy="29" r="1.5" fill="#2a1c12"/><path d="M26 34q6 5 12 0" fill="none" stroke="#3a2a1c" stroke-width="2"/></svg>';
   var ENDING = null, endRaf = 0;
   function reducedMotion() { return !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); }
-  function playEnding(real) { ENDING = { real: !!real, st: 'dialog', i: 0 }; $('ending').hidden = false; renderEnding(); }
+  function playEnding(real) { ENDING = { real: !!real, st: 'dialog', i: 0, tm: 0, full: '' }; $('ending').hidden = false; renderEnding(); }
+  function finishTyping() {
+    var E = ENDING; if (!E || !E.tm) return false;
+    clearInterval(E.tm); E.tm = 0; var bub = $('ending').querySelector('.bubble'); if (bub) bub.textContent = E.full; return true;
+  }
+  function typeLine(bub, text) {
+    var E = ENDING; E.full = text; clearInterval(E.tm); E.tm = 0;
+    if (reducedMotion()) { bub.textContent = text; return; }
+    var n = 0, chars = Array.from(text);
+    bub.innerHTML = '<span class="cur"></span>';
+    E.tm = setInterval(function () {
+      n++; bub.textContent = chars.slice(0, n).join('');
+      if (n >= chars.length) { clearInterval(E.tm); E.tm = 0; return; }
+      var cur = document.createElement('span'); cur.className = 'cur'; bub.appendChild(cur);
+      if (n % 4 === 0) sfx('tick');
+    }, 34);
+  }
+  function rankFor() {
+    var a = S.stats.arrivals, r = tx('winRanks');
+    return a >= 400 ? r[3] : a >= 150 ? r[2] : a >= 70 ? r[1] : r[0];
+  }
   function renderEnding() {
     var E = ENDING; if (!E) return;
-    cancelAnimationFrame(endRaf);
+    cancelAnimationFrame(endRaf); clearInterval(E.tm); E.tm = 0;
     var el = $('ending');
     if (E.st === 'dialog') {
-      var lines = tx('endLines'), L = lines[E.i], last = E.i === lines.length - 1, m = L[0] === 'm';
+      var lines = tx('endLines'), L = lines[E.i], last = E.i === lines.length - 1, m = L[0] === 'm', dots = '', d;
+      for (d = 0; d < lines.length; d++) dots += '<i' + (d <= E.i ? ' class="d"' : '') + '></i>';
       el.innerHTML = '<div class="escene"><h2>' + tx('endT') + '</h2><div class="chars"><div class="ch' + (m ? ' on' : '') + '">' + managerSVG + '<span>' + tx('endMgr') + '</span></div><div class="ch' + (m ? '' : ' on') + '">' + employeeSVG + '<span>' + tx('endEmp') + '</span></div></div>' +
-        '<div class="bubble" aria-live="polite">' + L[1] + '</div><div class="ebtns"><button class="buy" id="enext" type="button">' + tx(last ? 'endDone' : 'endNext') + '</button></div><div class="eprog">' + (E.i + 1) + ' / ' + lines.length + '</div></div>';
+        '<div class="bubble ' + (m ? 'mg' : 'em') + '" aria-live="polite"></div><div class="ebtns"><button class="buy" id="enext" type="button">' + tx(last ? 'endDone' : 'endNext') + '</button></div><div class="eprog" aria-label="' + (E.i + 1) + ' / ' + lines.length + '">' + dots + '</div></div>';
+      typeLine(el.querySelector('.bubble'), L[1]);
       $('enext').focus({ preventScroll: true });
     } else if (E.st === 'scene') {
       el.innerHTML = '<div class="escene wide"><canvas id="ecv" width="640" height="360" role="img" aria-label="' + tx('endSceneAria') + '"></canvas><div class="ebtns"><button class="buy use" id="eskip" type="button">' + tx('endSkip') + '</button></div></div>';
@@ -935,15 +985,20 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
       startScene();
     } else {
       var cf = '', cols = ['#ffc72c', '#e5484d', '#2f6fe0', '#5ed38a', '#ffffff', '#ff8a3d'], k;
-      for (k = 0; k < 44; k++) cf += '<i style="left:' + (k * 2.3 + (k * 37 % 5)).toFixed(1) + '%;background:' + cols[k % cols.length] + ';animation-delay:' + ((k * 0.37) % 3).toFixed(2) + 's;animation-duration:' + (2.6 + (k % 5) * .35).toFixed(2) + 's"></i>';
+      for (k = 0; k < 60; k++) cf += '<i style="left:' + (k * 1.7 + (k * 37 % 5)).toFixed(1) + '%;background:' + cols[k % cols.length] + ';animation-delay:' + ((k * 0.37) % 3).toFixed(2) + 's;animation-duration:' + (2.6 + (k % 5) * .35).toFixed(2) + 's"></i>';
       var sv = [Math.max(0, S.day - 1), S.stats.arrivals, S.stats.total, S.stats.bestStreak], wl = tx('winStats');
-      el.innerHTML = '<div class="confetti" aria-hidden="true">' + cf + '</div><div class="escene"><h2>' + tx('winT') + '</h2><p>' + tx('winD') + '</p><div class="statgrid">' + sv.map(function (v, i) { return '<div class="stat"><span>' + wl[i] + '</span><b>' + fmt(v) + (i === 2 ? ' ' + tx('unit') : '') + '</b></div>'; }).join('') + '</div><div class="ebtns"><button class="buy" id="ewin" type="button">' + tx('winBtn') + '</button></div></div>';
+      el.innerHTML = '<div class="confetti" aria-hidden="true">' + cf + '</div><div class="escene"><h2>' + tx('winT') + '</h2><p>' + tx('winD') + '</p>' +
+        '<div class="reward"><b>' + tx('winRewardT') + '</b><span>' + tx('winRewardD') + '</span></div>' +
+        '<div class="rank"><span>' + tx('winRankL') + '</span><b>' + rankFor() + '</b></div>' +
+        '<div class="statgrid">' + sv.map(function (v, i) { return '<div class="stat"><span>' + wl[i] + '</span><b>' + fmt(v) + (i === 2 ? ' ' + tx('unit') : '') + '</b></div>'; }).join('') + '</div>' +
+        '<div class="ebtns"><button class="buy" id="ewin" type="button">' + tx('winBtn') + '</button><button class="buy use" id="eagain" type="button">' + tx('winAgain') + '</button></div></div>';
       $('ewin').focus({ preventScroll: true }); sfx('win');
     }
   }
   function nextEnding() {
     var E = ENDING; if (!E) return;
     if (E.st === 'dialog') {
+      if (finishTyping()) return;
       if (E.i < tx('endLines').length - 1) { E.i++; sfx('click'); } else E.st = reducedMotion() ? 'win' : 'scene';
       renderEnding();
     } else if (E.st === 'scene') { E.st = 'win'; renderEnding(); }
@@ -951,15 +1006,20 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
   }
   function closeEnding() {
     var E = ENDING; if (!E) return;
-    cancelAnimationFrame(endRaf); $('ending').hidden = true; ENDING = null;
+    cancelAnimationFrame(endRaf); clearInterval(E.tm); $('ending').hidden = true; ENDING = null;
     if (E.real && !S.ends.won) { S.ends.won = 1; S.dbl = 1; save(); sfx('ach'); toast(tx('endReward')); }
     var st = $('home').scrollTop; renderHome(); $('home').scrollTop = st; refresh();
   }
-  $('ending').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b && (b.id === 'enext' || b.id === 'eskip' || b.id === 'ewin')) nextEnding(); });
+  $('ending').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.id === 'eagain') { ENDING.st = 'dialog'; ENDING.i = 0; sfx('click'); renderEnding(); }
+    else if (b.id === 'enext' || b.id === 'eskip' || b.id === 'ewin') nextEnding();
+  });
 
   function startScene() {
     var cvs = $('ecv'), c = cvs.getContext('2d'), t0 = performance.now(), prev = t0, GY = 292, hr = rng(11);
-    var car = { x: 330, v: 0, popped: false, wx: 0, wv: 0, wrot: 0, tilt: 0, stopT: 0, popT: 0, entered: false };
+    var car = { x: 330, v: 0, popped: false, wx: 0, wv: 0, wrot: 0, tilt: 0, stopT: 0, popT: 0, entered: false }, TW0 = 1.8, TW1 = 4.0, TGO = 4.3;
+    function mixc(a, b, u) { return 'rgb(' + a.map(function (v, i) { return Math.round(v + (b[i] - v) * u); }).join(',') + ')'; }
     var col = paintCol(VEH[S.veh]), looks = hr();
     function rr(x, y, w, h, r) { c.beginPath(); if (c.roundRect) c.roundRect(x, y, w, h, r); else c.rect(x, y, w, h); }
     function bubble(x, y, text, size) {
@@ -1025,9 +1085,11 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
       c.restore();
     }
     function draw(t) {
-      var W2 = 640, H2 = 360, sky = c.createLinearGradient(0, 0, 0, GY); sky.addColorStop(0, '#7ec8ee'); sky.addColorStop(1, '#fde7b8');
+      var W2 = 640, H2 = 360, dp = clamp((t - TW1) / 9, 0, 1), sky = c.createLinearGradient(0, 0, 0, GY);
+      sky.addColorStop(0, mixc([126, 200, 238], [38, 40, 92], dp)); sky.addColorStop(1, mixc([253, 231, 184], [255, 140, 80], dp));
       c.fillStyle = sky; c.fillRect(0, 0, W2, H2);
-      c.fillStyle = '#ffd36b'; c.beginPath(); c.arc(540, 74, 22, 0, 6.3); c.fill();
+      if (dp > .55) { c.fillStyle = 'rgba(255,255,255,' + ((dp - .55) * 1.6).toFixed(2) + ')'; for (var si = 0; si < 26; si++) c.fillRect((si * 97) % 640, (si * 53) % 110, 2, 2); }
+      c.fillStyle = mixc([255, 211, 107], [255, 120, 60], dp); c.beginPath(); c.arc(540, 74 + dp * 150, 22 + dp * 6, 0, 6.3); c.fill();
       c.fillStyle = 'rgba(255,255,255,.6)'; c.beginPath(); c.ellipse(130 + t * 3, 60, 44, 11, 0, 0, 6.3); c.ellipse(430 - t * 2, 44, 36, 9, 0, 0, 6.3); c.fill();
       c.fillStyle = '#a6bbd0'; for (var k = 0; k < 11; k++) { var bh = 50 + hs(k + 3) * 70; c.fillRect(200 + k * 40, GY - 6 - bh, 30, bh); }
       c.fillStyle = '#2d5b8a'; c.fillRect(10, GY - 176, 170, 170); c.fillStyle = '#1d4468'; c.fillRect(170, GY - 176, 10, 170);
@@ -1041,18 +1103,31 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
       camel(570, GY - 4, t, look);
       if (car.popped && t > car.popT + .4 && t < car.popT + 2.6) bubble(600, GY - 112, '؟!', 18);
       person(120, GY - 6, 0, true, t * 6);
-      if (t < 2.8) { var ex = lerp(106, 308, clamp((t - .3) / 2.4, 0, 1)); person(ex, GY - 4, t * 9, false); }
-      var bounce = t > 2.8 && t < 3.15 ? Math.sin((t - 2.8) * 18) * -3 : 0;
+      if (t < TW1) { var ex = lerp(170, 308, clamp((t - TW0) / (TW1 - TW0), 0, 1)); person(ex, GY - 4, t < TW0 ? 0 : t * 9, false); }
+      if (t < TW0) {
+        for (var ci = 0; ci < 6; ci++) { var cu = clamp((t - .5 - ci * .14) / .6, 0, 1); if (cu > 0 && cu < 1) { c.fillStyle = '#ffc72c'; c.strokeStyle = '#b8860b'; c.lineWidth = 2; c.beginPath(); c.arc(lerp(140, 172, cu), GY - 92 - Math.sin(cu * Math.PI) * 34 + cu * 30, 6, 0, 6.3); c.fill(); c.stroke(); } }
+        if (t > .2 && t < 1.7) bubble(120, GY - 108, tx('endScnM'), 17);
+        if (t > .9) bubble(228, GY - 88, tx('endScnE'), 19);
+      }
+      var bounce = t > TW1 && t < TW1 + .35 ? Math.sin((t - TW1) * 18) * -3 : 0;
       sceneCar(t, 0, bounce);
       if (car.popped && car.wx < 720) { var wb = Math.abs(Math.sin((t - car.popT) * 9)) * 12 * Math.max(0, 1 - (t - car.popT) / 4); wheel(car.wx, GY - 15 - wb, 15, car.wrot); }
-      if (car.stopT && t > car.stopT + .5) bubble(car.x + 20, GY - 108, tx('endBye'), 20);
+      if (car.stopT && t > car.stopT + .5 && t < car.stopT + 3.4) bubble(car.x + 20, GY - 108, tx('endBye'), 20);
+      if (car.stopT) {
+        var ft = t - (car.stopT + 3.0);
+        if (ft > 0) {
+          var al = Math.min(1, ft / 1.2); c.fillStyle = 'rgba(10,12,16,' + al.toFixed(2) + ')'; c.fillRect(0, 0, W2, H2);
+          c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = 'rgba(255,199,44,' + al.toFixed(2) + ')'; c.font = '700 46px "IBM Plex Sans Arabic", sans-serif'; c.fillText(tx('endTitleCard'), W2 / 2, H2 / 2 - 14);
+          if (ft > .8) { c.fillStyle = 'rgba(230,236,232,' + Math.min(1, (ft - .8) / .8).toFixed(2) + ')'; c.font = '500 18px "IBM Plex Sans Arabic", sans-serif'; c.fillText(tx('endTitleSub'), W2 / 2, H2 / 2 + 32); }
+        }
+      }
     }
     function frame(now) {
       if (!ENDING || ENDING.st !== 'scene') return;
       var dt = Math.min(.05, (now - prev) / 1000), t = (now - t0) / 1000; prev = now;
-      if (t >= 2.8 && !car.entered) { car.entered = true; sfx('click'); }
+      if (t >= TW1 && !car.entered) { car.entered = true; sfx('click'); }
       if (!car.popped) {
-        if (t >= 3.1) { car.v = Math.min(270, car.v + 150 * dt); car.x += car.v * dt; if (car.x >= 430) { car.popped = true; car.popT = t; car.wx = car.x - 38; car.wv = car.v + 110; sfx('boing'); } }
+        if (t >= TGO) { car.v = Math.min(270, car.v + 150 * dt); car.x += car.v * dt; if (car.x >= 430) { car.popped = true; car.popT = t; car.wx = car.x - 38; car.wv = car.v + 110; sfx('boing'); } }
       } else {
         car.v = Math.max(0, car.v - 160 * dt); car.x += car.v * dt;
         car.wx += car.wv * dt; car.wv *= 1 - .18 * dt; car.wrot += car.wv * dt / 15;
@@ -1060,7 +1135,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
         if (car.v === 0 && !car.stopT) { car.stopT = t; sfx('honk'); }
       }
       draw(t);
-      if (t > 9.6) { ENDING.st = 'win'; renderEnding(); return; }
+      if ((car.stopT && t > car.stopT + 6.4) || t > 22) { ENDING.st = 'win'; renderEnding(); return; }
       endRaf = requestAnimationFrame(frame);
     }
     endRaf = requestAnimationFrame(frame);
